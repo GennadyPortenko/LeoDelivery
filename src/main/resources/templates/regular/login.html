@@ -1,13 +1,16 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <thymeleaf th:replace="/include/resources :: resources"></thymeleaf>
+
     <title>Regular login page</title>
-    <link href="/static/css/styles.css" th:href="@{../css/styles.css}" rel="stylesheet" media="screen"/>
 </head>
 <body>
+<div class="container">
+<div th:replace="/include/fragments :: menu"></div>
 <h2>Welcome to regular login page!</h2>
-<form th:action="@{/regular/login}" method="post">
+<form th:action="@{/regular/login}" meechod="post">
     <div id="loginTable">
         <table>
             <tbody>
@@ -46,5 +49,6 @@
         </table>
     </div>
 </form>
+</div>
 </body>
 </html>

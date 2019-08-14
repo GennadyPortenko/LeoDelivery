@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,7 +19,6 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
  */
 @Configuration
 public class SecurityConfig {
-
     @Configuration
     public static class ContractorSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -39,7 +39,19 @@ public class SecurityConfig {
                     .logoutUrl("/contractor/logout")
                     .permitAll();
         }
+
+        /*
+        // FIXME: breaks logging in
+        @Override
+        public void configure(WebSecurity web) {
+            web
+                    .ignoring()
+                    .antMatchers("/css/**", "/fonts/**", "/img/**", "/js/**", "/vendor/**");
+        }
+        */
+
     }
+
 
     @Configuration
     @Order(1)

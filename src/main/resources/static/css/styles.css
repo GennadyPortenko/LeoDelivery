@@ -11,3 +11,13 @@
     color: #31708f;
     background-color: #d9edf7;
 }
+
+.topbar-link {
+  margin:10px 0 20px 0;
+}
+
+.topbar-link {
+  display:inline-block;
+  margin-right: 20px;
+  color:black;
+}

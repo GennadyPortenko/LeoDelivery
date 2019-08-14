@@ -3,9 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <thymeleaf th:replace="/include/resources :: resources"></thymeleaf>
+
     <title>Page does not exist</title>
 </head>
 <body>
-  Page does not exist
+    <div class="container">
+        <div th:replace="/include/fragments :: menu"></div>
+        <h1>Page does not exist</h1>
+    </div>
 </body>
 </html>
