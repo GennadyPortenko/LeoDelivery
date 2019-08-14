@@ -33,15 +33,16 @@ public class WebSecurityTest {
                 .andExpect(redirectedUrl("http://localhost/regular/login"));
     }
 
+    /*
     @Test
-    public void testIfSpecialHomePageIsSecured() throws Exception {
-        final ResultActions resultActions = mockMvc.perform(get("/special/home"));
+    public void testIfHomePageIsSecured() throws Exception {
+        final ResultActions resultActions = mockMvc.perform(get("//home"));
         resultActions
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("http://localhost/special/login"));
+                .andExpect(redirectedUrl("http://localhost/regular/login"));
     }
+    */
 
-    /*
     @Test
     @WithMockUser
     public void testIfLoggedUserHasAccessToRegularHomePage() throws Exception {
@@ -50,15 +51,14 @@ public class WebSecurityTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("regular/home"));
     }
-    */
 
     @Test
-    @WithMockUser(username="admin", password="adminPass", roles="ADMIN")
-    public void testIfLoggedUserHasAccessToSpecialHomePage() throws Exception {
-        final ResultActions resultActions = mockMvc.perform(get("/special/home"));
+    @WithMockUser(username="rest", password="rest", roles="CONTRACTOR")
+    public void testIfLoggedUserHasAccessToContractorHomePage() throws Exception {
+        final ResultActions resultActions = mockMvc.perform(get("/contractor/home"));
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(view().name("special/home"));
+                .andExpect(view().name("contractor/home"));
     }
 
 }

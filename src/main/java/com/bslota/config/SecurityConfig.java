@@ -20,29 +20,29 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 public class SecurityConfig {
 
     @Configuration
-    @Order(1)
-    public static class SpecialSecurityConfig extends WebSecurityConfigurerAdapter {
+    public static class ContractorSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
-                .antMatcher("/special/**")
+                .antMatcher("/contractor/**")
                 .authorizeRequests()
                     .anyRequest()
-                    .hasRole("ADMIN")
+                    .hasRole("CONTRACTOR")
                     .and()
                 .formLogin()
-                    .loginPage("/special/login")
-                    .defaultSuccessUrl("/special/home")
+                    .loginPage("/contractor/login")
+                    .defaultSuccessUrl("/contractor/home")
                     .permitAll()
                     .and()
                 .logout()
-                    .logoutUrl("/special/logout")
+                    .logoutUrl("/contractor/logout")
                     .permitAll();
         }
     }
 
     @Configuration
+    @Order(1)
     public static class RegularSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
@@ -59,7 +59,6 @@ public class SecurityConfig {
                     .and()
                 .formLogin()
                     .loginPage("/regular/login")
-                    .defaultSuccessUrl("/regular/home")
                     .permitAll()
                     .and()
                 .logout()
@@ -73,14 +72,14 @@ public class SecurityConfig {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User
                 .withUsername("user")
-                .password(encoder().encode("userPass"))
+                .password(encoder().encode("user"))
                 .roles("USER")
                 .build());
 
         manager.createUser(User
-                .withUsername("admin")
-                .password(encoder().encode("adminPass"))
-                .roles("ADMIN")
+                .withUsername("rest")
+                .password(encoder().encode("rest"))
+                .roles("CONTRACTOR")
                 .build());
 
         return manager;

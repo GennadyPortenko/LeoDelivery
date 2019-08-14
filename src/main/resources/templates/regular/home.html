@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
+<!-- <head th:replace="/include/resources :: resources"> -->
+<head >
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <thymeleaf th:replace="/include/resources :: resources"></thymeleaf>
+
     <title>Regular home page</title>
 </head>
 <body>
-<h1>Welcome to regular home page!</h1>
-<form th:action="@{/regular/logout}" method="post">
-    <input type="submit" value="Sign Out"/>
-</form>
+    <div class="container">
+        <h1>Welcome to regular home page!</h1>
+        <form th:action="@{/regular/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+    </div>
 </body>
 </html>
