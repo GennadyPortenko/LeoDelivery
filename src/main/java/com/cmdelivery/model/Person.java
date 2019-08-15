@@ -1,4 +1,4 @@
-package com.bslota.model;
+package com.cmdelivery.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -14,10 +14,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Contractor {
+public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int contractorId;
+    int personId;
     @NonNull
     @NotEmpty
     @Email
@@ -31,6 +31,6 @@ public class Contractor {
     int active;
     @ToString.Exclude
     @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name = "contractor_role", joinColumns = @JoinColumn(name = "contractor_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "person_role", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     Set<Role> roles = new HashSet<>();
 }

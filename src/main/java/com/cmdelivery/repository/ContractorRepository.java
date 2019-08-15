@@ -1,6 +1,6 @@
-package com.bslota.repository;
+package com.cmdelivery.repository;
 
-import com.bslota.model.Contractor;
+import com.cmdelivery.model.Contractor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
-package com.bslota.config.component;
+package com.cmdelivery.config.component;
 
-import com.bslota.repository.PersonRepository;
+import com.cmdelivery.repository.ContractorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -17,9 +17,9 @@ import java.security.Principal;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
-public class PersonAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class ContractorAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final HttpSession session;
-    private final PersonRepository repository;
+    private final ContractorRepository repository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -32,11 +32,11 @@ public class PersonAuthenticationSuccessHandler implements AuthenticationSuccess
         }else {
             userName = ((User)authentication.getPrincipal()).getUsername();
         }
-        //HttpSession session = request.getSession();
+        // HttpSession session = request.getSession();
         session.setAttribute("username", userName);
 
         // Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-        response.sendRedirect("/");
+        response.sendRedirect("/contractor/cabinet");
 
     }
 

@@ -1,4 +1,4 @@
-package com.bslota.model;
+package com.cmdelivery.model;
 
 import lombok.AccessLevel;
 import lombok.Data;

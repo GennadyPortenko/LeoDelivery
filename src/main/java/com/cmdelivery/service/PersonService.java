@@ -1,9 +1,9 @@
-package com.bslota.service;
+package com.cmdelivery.service;
 
-import com.bslota.model.Person;
-import com.bslota.model.Role;
-import com.bslota.repository.PersonRepository;
-import com.bslota.repository.RoleRepository;
+import com.cmdelivery.model.Person;
+import com.cmdelivery.model.Role;
+import com.cmdelivery.repository.PersonRepository;
+import com.cmdelivery.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

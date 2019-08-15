@@ -1,57 +1,55 @@
-package com.bslota.config;
+package com.cmdelivery.config;
 
+import com.cmdelivery.config.component.ContractorAuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import com.bslota.config.component.PersonAuthenticationSuccessHandler;
 
 import javax.sql.DataSource;
 
 @Configuration
-@Order(1)
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
-public class RegularSecurityConfig extends WebSecurityConfigurerAdapter {
+class ContractorSecurityConfig extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final DataSource dataSource;
-    private final PersonAuthenticationSuccessHandler personAuthenticationSuccessHandler;
-    @Value("${spring.queries.person-query}")
-    private String personQuery;
-    @Value("${spring.queries.roles-person-query}")
-    private String rolesPersonQuery;
+    private final ContractorAuthenticationSuccessHandler contractorAuthenticationSuccessHandler;
+    @Value("${spring.queries.contractor-query}")
+    private String contractorQuery;
+    @Value("${spring.queries.roles-contractor-query}")
+    private String rolesContractorQuery;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.
-            jdbcAuthentication()
-            .usersByUsernameQuery(personQuery)
-            .authoritiesByUsernameQuery(rolesPersonQuery)
-            .dataSource(dataSource)
-            .passwordEncoder(bCryptPasswordEncoder);
+                jdbcAuthentication()
+                .usersByUsernameQuery(contractorQuery)
+                .authoritiesByUsernameQuery(rolesContractorQuery)
+                .dataSource(dataSource)
+                .passwordEncoder(bCryptPasswordEncoder);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .antMatcher("/regular/**")
+            .antMatcher("/contractor/**")
             .authorizeRequests()
                 .anyRequest()
-                .hasRole("USER")
+                .hasRole("CONTRACTOR")
                 .and()
             .formLogin()
-                .loginPage("/regular/login")
-                .loginProcessingUrl("/regular/login")
-                .defaultSuccessUrl("/regular/home")
-                .failureUrl("/regular/login?error")
-                .permitAll().successHandler(personAuthenticationSuccessHandler)
+                .loginPage("/contractor/login")
+                .loginProcessingUrl("/contractor/login")
+                .defaultSuccessUrl("/contractor/cabinet")
+                .failureUrl("/contractor/login?error")
+                .permitAll().successHandler(contractorAuthenticationSuccessHandler)
                 .and()
             .logout()
-                .logoutUrl("/regular/logout")
+                .logoutUrl("/contractor/logout")
                 .permitAll();
     }
 

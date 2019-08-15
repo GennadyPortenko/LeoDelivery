@@ -1,17 +1,16 @@
-package com.bslota.controller;
+package com.cmdelivery.controller;
 
-import com.bslota.model.Contractor;
-import com.bslota.model.Person;
-import com.bslota.repository.ContractorRepository;
-import com.bslota.repository.PersonRepository;
-import com.bslota.repository.RoleRepository;
-import com.bslota.service.ContractorService;
-import com.bslota.service.PersonService;
-import com.bslota.service.SecurityService;
+import com.cmdelivery.model.Contractor;
+import com.cmdelivery.model.Person;
+import com.cmdelivery.repository.ContractorRepository;
+import com.cmdelivery.repository.PersonRepository;
+import com.cmdelivery.repository.RoleRepository;
+import com.cmdelivery.service.ContractorService;
+import com.cmdelivery.service.PersonService;
+import com.cmdelivery.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 

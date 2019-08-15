@@ -1,4 +1,4 @@
-package com.bslota.service;
+package com.cmdelivery.service;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
