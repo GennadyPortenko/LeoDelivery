@@ -42,6 +42,6 @@ CREATE TABLE contractor_role (
 -- roles initialization
 
 INSERT INTO role (role_id, role)
-VALUES (1, 'ADMIN'), (2, 'USER'), (3, 'CONTRACTOR')
+VALUES (1, 'ROLE_ADMIN'), (2, 'ROLE_USER'), (3, 'ROLE_CONTRACTOR')
 ON CONFLICT (role_id) DO UPDATE
   SET role = excluded.role;

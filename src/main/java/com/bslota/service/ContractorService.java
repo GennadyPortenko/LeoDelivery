@@ -24,7 +24,7 @@ public class ContractorService {
     public Contractor registerNewContractor(Contractor contractor) {
         contractor.setPassword(bCryptPasswordEncoder.encode(contractor.getPassword()));
         contractor.setActive(1);
-        Role contractorRole = roleRepository.findByRole("CONTRACTOR");
+        Role contractorRole = roleRepository.findByRole("ROLE_CONTRACTOR");
         contractor.setRoles(new HashSet<>(Arrays.asList(contractorRole)));
         return contractorRepository.save(contractor);
     }

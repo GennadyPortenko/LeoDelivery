@@ -54,7 +54,7 @@ public class WebSecurityTest {
     }
 
     @Test
-    @WithMockUser(username="rest", password="rest", roles="CONTRACTOR")
+    @WithMockUser(username="rest", password="rest", roles="ROLE_CONTRACTOR")
     public void testIfLoggedUserHasAccessToContractorHomePage() throws Exception {
         final ResultActions resultActions = mockMvc.perform(get("/contractor/cabinet"));
         resultActions

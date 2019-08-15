@@ -40,7 +40,6 @@ class ContractorSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .antMatcher("/contractor/**")
             .authorizeRequests()
-                // .antMatchers("/contractor/cabinet").permitAll() //hasRole("CONTRACTOR")
                 .anyRequest()
                 .hasRole("CONTRACTOR")
                 .and()

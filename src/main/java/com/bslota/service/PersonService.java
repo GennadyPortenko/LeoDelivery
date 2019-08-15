@@ -24,7 +24,7 @@ public class PersonService {
     public Person registerNewPerson(Person person) {
         person.setPassword(bCryptPasswordEncoder.encode(person.getPassword()));
         person.setActive(1);
-        Role personRole = roleRepository.findByRole("USER");
+        Role personRole = roleRepository.findByRole("ROLE_USER");
         person.setRoles((new HashSet<>(Arrays.asList(personRole))));
         return personRepository.save(person);
     }
