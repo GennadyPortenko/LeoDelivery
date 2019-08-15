@@ -38,17 +38,16 @@ class ContractorSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            // .csrf().disable()
             .antMatcher("/contractor/**")
             .authorizeRequests()
-                // .antMatchers("/contractor/home").permitAll() //hasRole("CONTRACTOR")
+                // .antMatchers("/contractor/cabinet").permitAll() //hasRole("CONTRACTOR")
                 .anyRequest()
                 .hasRole("CONTRACTOR")
                 .and()
             .formLogin()
                 .loginPage("/contractor/login")
                 .loginProcessingUrl("/contractor/login")
-                .defaultSuccessUrl("/contractor/home")
+                .defaultSuccessUrl("/contractor/cabinet")
                 .failureUrl("/contractor/login?error")
                 .permitAll().successHandler(contractorAuthenticationSuccessHandler)
                 .and()

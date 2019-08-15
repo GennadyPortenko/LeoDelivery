@@ -38,18 +38,11 @@ public class RegularSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            // .csrf().disable()
             .antMatcher("/regular/**")
             .authorizeRequests()
                 .anyRequest()
                 .hasRole("USER")
                 .and()
-                /*
-            .authorizeRequests()
-                .antMatchers("/css/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                */
             .formLogin()
                 .loginPage("/regular/login")
                 .loginProcessingUrl("/regular/login")
@@ -61,15 +54,6 @@ public class RegularSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/regular/logout")
                 .permitAll();
     }
-
-    /*
-    @Override
-    public void configure(WebSecurity web) {
-        web
-                .ignoring()
-                .antMatchers("/css/**", "/fonts/**", "/img/**", "/js/**", "/vendor/**");
-    }
-    */
 
 }
 

@@ -56,10 +56,10 @@ public class WebSecurityTest {
     @Test
     @WithMockUser(username="rest", password="rest", roles="CONTRACTOR")
     public void testIfLoggedUserHasAccessToContractorHomePage() throws Exception {
-        final ResultActions resultActions = mockMvc.perform(get("/contractor/home"));
+        final ResultActions resultActions = mockMvc.perform(get("/contractor/cabinet"));
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(view().name("contractor/home"));
+                .andExpect(view().name("contractor/cabinet"));
     }
     */
 

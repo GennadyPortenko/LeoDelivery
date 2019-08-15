@@ -35,6 +35,9 @@ public class PersonAuthenticationSuccessHandler implements AuthenticationSuccess
         //HttpSession session = request.getSession();
         session.setAttribute("username", userName);
 
+        // Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        response.sendRedirect("/");
+
     }
 
 }

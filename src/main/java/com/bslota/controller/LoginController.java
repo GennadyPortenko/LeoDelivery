@@ -70,9 +70,9 @@ public class LoginController {
         return modelAndView;
     }
 
-    @GetMapping(value="/contractor/home")
+    @GetMapping(value="/contractor/cabinet")
     public ModelAndView contractorHome() {
-        ModelAndView modelAndView = new ModelAndView("contractor/home");
+        ModelAndView modelAndView = new ModelAndView("contractor/cabinet");
         modelAndView.addObject("username", securityService.getCurrentUserName());
         return modelAndView;
     }
