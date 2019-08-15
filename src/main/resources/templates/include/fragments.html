@@ -1,4 +1,6 @@
 <div th:fragment="menu" class="topbar-menu">
+    <div th:text="'session.username = ' + ${session.username}"></div>
+
     <a th:href="@{/regular/login}" class="topbar-link">enter</a>
     <a th:href="@{/regular/home}" class="topbar-link">home</a>
     <a th:href="@{/contractor/login}" class="topbar-link">enter as a contractor</a>
