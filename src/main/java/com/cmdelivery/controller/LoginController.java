@@ -50,30 +50,22 @@ public class LoginController {
 
     @GetMapping(value="/regular/login")
     public ModelAndView regularLogin() {
-        ModelAndView modelAndView =  new ModelAndView("regular/login");
-        modelAndView.addObject("username", securityService.getCurrentUserName());
-        return modelAndView;
+        return new ModelAndView("regular/login");
     }
 
     @GetMapping(value="/contractor/login")
     public ModelAndView contractorLogin() {
-        ModelAndView modelAndView = new ModelAndView("contractor/login");
-        modelAndView.addObject("username", securityService.getCurrentUserName());
-        return modelAndView;
+        return new ModelAndView("contractor/login");
     }
 
     @GetMapping(value="/regular/home")
     public ModelAndView regularHome() {
-        ModelAndView modelAndView = new ModelAndView("regular/home");
-        modelAndView.addObject("username", securityService.getCurrentUserName());
-        return modelAndView;
+        return new ModelAndView("regular/home");
     }
 
     @GetMapping(value="/contractor/cabinet")
     public ModelAndView contractorHome() {
-        ModelAndView modelAndView = new ModelAndView("contractor/cabinet");
-        modelAndView.addObject("username", securityService.getCurrentUserName());
-        return modelAndView;
+        return new ModelAndView("contractor/cabinet");
     }
 
 }
