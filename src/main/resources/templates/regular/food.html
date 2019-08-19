@@ -11,9 +11,9 @@
 <body>
     <div class="container">
         <div th:text="#{greeting}"></div>
-        <div th:replace="/include/fragments :: menu"></div>
+        <div th:replace="/include/menu :: menu"></div>
         <h1>Welcome to regular home page!</h1>
-        <form th:action="@{/regular/logout}" method="post">
+        <form th:action="@{/food/logout}" method="post">
             <input type="submit" value="Sign Out"/>
         </form>
     </div>

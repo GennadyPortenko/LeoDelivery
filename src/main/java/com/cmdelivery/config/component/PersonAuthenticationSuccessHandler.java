@@ -1,6 +1,5 @@
 package com.cmdelivery.config.component;
 
-import com.cmdelivery.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,7 +18,6 @@ import java.security.Principal;
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class PersonAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final HttpSession session;
-    private final PersonRepository repository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -34,9 +32,10 @@ public class PersonAuthenticationSuccessHandler implements AuthenticationSuccess
         }
         //HttpSession session = request.getSession();
         session.setAttribute("username", userName);
+        session.setAttribute("role", "PERSON");
 
         // Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-        response.sendRedirect("/");
+        response.sendRedirect("/food");
 
     }
 

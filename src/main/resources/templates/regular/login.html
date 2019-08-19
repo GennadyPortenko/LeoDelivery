@@ -8,9 +8,9 @@
 </head>
 <body>
 <div class="container">
-<div th:replace="/include/fragments :: menu"></div>
+<div th:replace="/include/menu :: menu"></div>
 <h2>Welcome to regular login page!</h2>
-<form th:action="@{/regular/login}" method="post">
+<form th:action="@{/food/login}" method="post">
     <div id="loginTable">
         <table>
             <tbody>
@@ -37,10 +37,10 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <div class="error" th:if="${param.error}">
+                    <div class="loginError" th:if="${param.error}">
                         Invalid username and/or password.
                     </div>
-                    <div class="info" th:if="${param.logout}">
+                    <div class="loginInfo" th:if="${param.logout}">
                         You have been logged out.
                     </div>
                 </td>

@@ -44,7 +44,6 @@ class ContractorSecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin()
                 .loginPage("/contractor/login")
                 .loginProcessingUrl("/contractor/login")
-                .defaultSuccessUrl("/contractor/cabinet")
                 .failureUrl("/contractor/login?error")
                 .permitAll().successHandler(contractorAuthenticationSuccessHandler)
                 .and()

@@ -38,20 +38,19 @@ public class RegularSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .antMatcher("/regular/**")
+            .antMatcher("/food/**")
             .authorizeRequests()
                 .anyRequest()
-                .hasRole("USER")
+                .permitAll() // .hasRole("USER")
                 .and()
             .formLogin()
-                .loginPage("/regular/login")
-                .loginProcessingUrl("/regular/login")
-                .defaultSuccessUrl("/regular/home")
-                .failureUrl("/regular/login?error")
+                .loginPage("/food/login")
+                .loginProcessingUrl("/food/login")
+                .failureUrl("/food/login?error")
                 .permitAll().successHandler(personAuthenticationSuccessHandler)
                 .and()
             .logout()
-                .logoutUrl("/regular/logout")
+                .logoutUrl("/food/logout")
                 .permitAll();
     }
 

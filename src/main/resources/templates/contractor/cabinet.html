@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container">
-    <div th:replace="/include/fragments :: menu"></div>
+    <div th:replace="/include/menu :: menu"></div>
     <h1>Welcome to contractor home page!</h1>
     <form th:action="@{/contractor/logout}" method="post">
         <input type="submit" value="Sign Out"/>

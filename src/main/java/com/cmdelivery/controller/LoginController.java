@@ -44,11 +44,11 @@ public class LoginController {
     }
 
     @GetMapping(value="/")
-    public String home() {
-            return "regular/home";
+    public ModelAndView home() {
+        return new ModelAndView("chooseCity");
     }
 
-    @GetMapping(value="/regular/login")
+    @GetMapping(value="/food/login")
     public ModelAndView regularLogin() {
         return new ModelAndView("regular/login");
     }
@@ -58,9 +58,9 @@ public class LoginController {
         return new ModelAndView("contractor/login");
     }
 
-    @GetMapping(value="/regular/home")
+    @GetMapping(value="/food")
     public ModelAndView regularHome() {
-        return new ModelAndView("regular/home");
+        return new ModelAndView("regular/food");
     }
 
     @GetMapping(value="/contractor/cabinet")

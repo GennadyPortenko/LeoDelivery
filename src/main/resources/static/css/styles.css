@@ -1,11 +1,10 @@
-.error {
+.loginError {
     padding: 15px;
     margin-bottom: 20px;
     color: #a94442;
     background-color: #f2dede;
 }
-
-.info {
+.loginInfo {
     padding: 15px;
     margin-bottom: 20px;
     color: #31708f;
@@ -14,10 +13,18 @@
 
 .topbar-link {
   margin:10px 0 20px 0;
-}
-
-.topbar-link {
   display:inline-block;
   margin-right: 20px;
   color:black;
+}
+
+.loginBlock .loginInput {
+  display:block;
+}
+
+.langSwitcher {
+
+}
+.langSwitcher . {
+
 }

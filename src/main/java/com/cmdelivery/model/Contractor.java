@@ -18,17 +18,21 @@ public class Contractor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int contractorId;
+
     @NonNull
     @NotEmpty
     @Email
     String email;
+
     @NonNull
     @NotEmpty
     String name;
+
     @NonNull
     @NotEmpty
     String password;
     int active;
+
     @ToString.Exclude
     @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name = "contractor_role", joinColumns = @JoinColumn(name = "contractor_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
