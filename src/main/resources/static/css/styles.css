@@ -1,3 +1,8 @@
+a:hover {
+  text-decoration:none;
+}
+
+
 .loginError {
     padding: 15px;
     margin-bottom: 20px;
@@ -11,11 +16,36 @@
     background-color: #d9edf7;
 }
 
+.topbar {
+  padding:15px 0;
+}
 .topbar-link {
-  margin:10px 0 20px 0;
   display:inline-block;
   margin-right: 20px;
   color:black;
+}
+.topbar-username {
+  color:green;
+}
+.topbar-enter {
+  color:green;
+}
+.topbar-logout-form {
+  display:inline-block;
+}
+.topbar-logout {
+  cursor:pointer;
+  color:green;
+  background:transparent;
+  border-radius:8px;
+  border:2px solid green;
+}
+.topbar-logout:hover {
+  background:green;
+  color:white;
+}
+.topbar-enter:hover {
+  color:green;
 }
 
 .loginBlock .loginInput {
@@ -23,8 +53,26 @@
 }
 
 .langSwitcher {
-
+  background:green;
+  color:white;
+  display:inline-block;
+  border-radius:8px;
+  overflow:hidden;
+  border:2px solid green;
 }
-.langSwitcher . {
-
+.langSwitcher .lang-btn {
+  background:white;
+  padding:0 10px;
+  display:inline-block;
+  margin:0;
+  cursor:pointer;
+  border:none;
+  color:#555;
+}
+.langSwitcher .lang-btn:hover {
+}
+.langSwitcher .lang-btn.active {
+  display:inline-block;
+  background:green;
+  color:white;
 }

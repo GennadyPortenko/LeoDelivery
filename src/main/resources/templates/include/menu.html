@@ -1,10 +1,20 @@
-<div th:fragment="menu" class="topbar-menu">
-    <div th:text="'session.username = ' + ${session.username}"></div>
+<div th:fragment="menu" class="topbar">
 
-    <a th:href="@{/food/login}" class="topbar-link">enter</a>
     <a th:href="@{/food}" class="topbar-link">home</a>
-    <a th:href="@{/contractor/login}" class="topbar-link">enter as a contractor</a>
-    <a th:href="@{/contractor/cabinet}" class="topbar-link">contractor home</a>
+    <!-- <a th:href="@{/contractor/login}" class="topbar-link">enter as a contractor</a> -->
+    <a th:href="@{/contractor/cabinet}" class="topbar-link">cabinet</a>
 
-    <div th:if="${#locale = 'en'}">en, en</div>
+    <a th:if="${session.username} == null" th:href="@{/food/login}" class="topbar-link topbar-enter">enter</a>
+    <form th:if="${session.username} != null" th:action="@{/food/logout}" method="post" class="topbar-logout-form">
+        <input class="topbar-logout" type="submit" value="Sign Out"/>
+    </form>
+    <span th:if="${session.username} != null" th:text=${session.username} class="topbar-link topbar-username"></span>
+    <div class="langSwitcher">
+        <a th:classappend="#{locale} != '??locale_fr_FR??' ? active: notActive"
+           th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
+           th:href="${urlBuilder.replaceQueryParam('lang', 'en_US').toUriString()}" th:text="#{lang.eng}" class="lang-btn"></a>
+        <a th:classappend="#{locale} == '??locale_fr_FR??' ? active: notActive"
+           th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
+           th:href="${urlBuilder.replaceQueryParam('lang', 'fr_FR').toUriString()}" th:text="#{lang.fr}" class="lang-btn"></a>
+    </div>
 </div>

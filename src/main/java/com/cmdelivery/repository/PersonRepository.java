@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository()
 public interface PersonRepository extends JpaRepository<Person, Long> {
     void deleteAll();
-    Person findByName(String name);
+    Person findByPhone(String phone);
 }

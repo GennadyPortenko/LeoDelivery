@@ -18,13 +18,11 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int personId;
-    @NonNull
-    @NotEmpty
     @Email
     String email;
     @NonNull
     @NotEmpty
-    String name;
+    String phone;
     @NonNull
     @NotEmpty
     String password;

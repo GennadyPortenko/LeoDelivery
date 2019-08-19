@@ -11,42 +11,16 @@
 <div th:replace="/include/menu :: menu"></div>
 <h2>Welcome to regular login page!</h2>
 <form th:action="@{/food/login}" method="post">
-    <div id="loginTable">
-        <table>
-            <tbody>
-            <tr>
-                <td>
-                    <label for="username">Username:</label>
-                </td>
-                <td>
-                    <input id="username" type="text" name="username"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="password">Password:</label>
-                </td>
-                <td>
-                    <input id="password" type="password" name="password"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="submit" value="Sign In"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="loginError" th:if="${param.error}">
-                        Invalid username and/or password.
-                    </div>
-                    <div class="loginInfo" th:if="${param.logout}">
-                        You have been logged out.
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="loginBlock">
+        <input class="loginInput" id="phone" type="text" name="phone" placeholder="phone"/>
+        <input class="loginInput" id="password" type="password" name="password" placeholder="password"/>
+        <input type="submit" value="Sign In"/>
+        <div class="loginError" th:if="${param.error}">
+            Invalid phone and/or password.
+        </div>
+        <div class="loginInfo" th:if="${param.logout}">
+            You have been logged out.
+        </div>
     </div>
 </form>
 </div>

@@ -46,6 +46,8 @@ public class RegularSecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin()
                 .loginPage("/food/login")
                 .loginProcessingUrl("/food/login")
+                .usernameParameter("phone")
+                .passwordParameter("password")
                 .failureUrl("/food/login?error")
                 .permitAll().successHandler(personAuthenticationSuccessHandler)
                 .and()

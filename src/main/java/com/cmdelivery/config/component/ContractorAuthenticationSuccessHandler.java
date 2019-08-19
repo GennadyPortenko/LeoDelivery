@@ -34,6 +34,7 @@ public class ContractorAuthenticationSuccessHandler implements AuthenticationSuc
         }
         // HttpSession session = request.getSession();
         session.setAttribute("username", userName);
+        session.setAttribute("role", "CONTRACTOR");
 
         // Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         response.sendRedirect("/contractor/cabinet");

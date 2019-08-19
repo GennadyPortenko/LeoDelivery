@@ -32,14 +32,13 @@ public class LoginController {
         final String CONTRACTOR_USERNAME = "rest";
         final String CONTRACTOR_EMAIL= "rest@rest.com";
         final String CONTRACTOR_PASSWORD= "rest";
-        final String PERSON_USERNAME = "user";
-        final String PERSON_EMAIL = "user@user.com";
+        final String PERSON_PHONE= "1111111111";
         final String PERSON_PASSWORD= "user";
         if (contractorRepository.findByName(CONTRACTOR_USERNAME) == null) {
             contractorService.registerNewContractor(new Contractor(CONTRACTOR_EMAIL, CONTRACTOR_USERNAME, CONTRACTOR_PASSWORD));
         }
-        if (personRepository.findByName(PERSON_USERNAME) == null) {
-            personService.registerNewPerson(new Person(PERSON_EMAIL, PERSON_USERNAME, PERSON_PASSWORD));
+        if (personRepository.findByPhone(PERSON_PHONE) == null) {
+            personService.registerNewPerson(new Person(PERSON_PHONE, PERSON_PASSWORD));
         }
     }
 
