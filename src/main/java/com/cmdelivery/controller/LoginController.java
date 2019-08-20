@@ -1,17 +1,21 @@
 package com.cmdelivery.controller;
 
+import com.cmdelivery.dto.OTPResponse;
 import com.cmdelivery.model.Contractor;
 import com.cmdelivery.model.Person;
 import com.cmdelivery.repository.ContractorRepository;
 import com.cmdelivery.repository.PersonRepository;
 import com.cmdelivery.repository.RoleRepository;
-import com.cmdelivery.service.ContractorService;
-import com.cmdelivery.service.PersonService;
-import com.cmdelivery.service.SecurityService;
+import com.cmdelivery.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.PostConstruct;
@@ -26,6 +30,8 @@ public class LoginController {
     private final PersonRepository personRepository;
     private final SecurityService securityService;
     private final RoleRepository roleRepository;
+    private final OTPService otpService;
+    private final SmsService smsService;
 
     @PostConstruct
     public void init() {
@@ -65,6 +71,13 @@ public class LoginController {
     @GetMapping(value="/contractor/cabinet")
     public ModelAndView contractorHome() {
         return new ModelAndView("contractor/cabinet");
+    }
+
+    @ResponseBody
+    @PostMapping(value="/login/otp/{phone}")
+    public ResponseEntity<?> otpRequest(@PathVariable String phone) {
+        smsService.sendOTP(otpService.generateOTP(DtoService.parsePhone(phone)));
+        return new ResponseEntity<>(new OTPResponse(true), HttpStatus.OK);
     }
 
 }

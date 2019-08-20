@@ -8,6 +8,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 
 @Service
+// OTP - one time password
 public class OTPService { //cache based on username and OPT MAX 8
     private static final Integer EXPIRE_MINS = 1;
     private LoadingCache<String, Integer> otpCache;

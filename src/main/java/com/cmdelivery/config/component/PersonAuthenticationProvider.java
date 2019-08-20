@@ -2,6 +2,8 @@ package com.cmdelivery.config.component;
 
 import com.cmdelivery.model.Person;
 import com.cmdelivery.repository.PersonRepository;
+import com.cmdelivery.service.DtoService;
+import com.cmdelivery.service.OTPService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,24 +20,25 @@ import java.util.ArrayList;
 public class PersonAuthenticationProvider implements AuthenticationProvider {
 
     private final PersonRepository personRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final OTPService otpService;
 
     @Override
     public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {
 
-        String phone = authentication.getName();
+        String phone = DtoService.parsePhone(authentication.getName());
         String password = authentication.getCredentials().toString();
 
-        if ( true /* shouldAuthenticateAgainstThirdPartySystem() */ ) {
-            Person person = personRepository.findByPhone(phone);
-            if (person == null)
-                return null;
-            String password_db = person.getPassword();
-            if (bCryptPasswordEncoder.matches(password, password_db)) {
-                return new UsernamePasswordAuthenticationToken(phone, password, new ArrayList<>());
-            }
+        Person person = personRepository.findByPhone(phone);
+        if (person == null) {
+            return null;
         }
+
+        if (password.equals(Integer.toString(otpService.getOtp(phone)))) {
+            otpService.clearOTP(phone);
+            return new UsernamePasswordAuthenticationToken(phone, password, new ArrayList<>());
+        }
+
         return null;
     }
 

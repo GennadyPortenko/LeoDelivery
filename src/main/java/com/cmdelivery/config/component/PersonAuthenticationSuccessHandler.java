@@ -1,5 +1,6 @@
 package com.cmdelivery.config.component;
 
+import com.cmdelivery.service.DtoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,7 +23,6 @@ public class PersonAuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        // TODO Auto-generated method stub
         String userName = "";
         if(authentication.getPrincipal() instanceof Principal) {
             userName = ((Principal)authentication.getPrincipal()).getName();
@@ -31,10 +31,9 @@ public class PersonAuthenticationSuccessHandler implements AuthenticationSuccess
             userName = (String)authentication.getPrincipal();
         }
         //HttpSession session = request.getSession();
-        session.setAttribute("username", userName);
+        session.setAttribute("username", DtoService.toMaskedPhone(userName));
         session.setAttribute("role", "PERSON");
 
-        // Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         response.sendRedirect("/food");
 
     }

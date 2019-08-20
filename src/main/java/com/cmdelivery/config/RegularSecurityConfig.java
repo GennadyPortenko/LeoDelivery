@@ -30,17 +30,6 @@ public class RegularSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private PersonAuthenticationProvider personAuthProvider;
 
-
-    /*
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.
-            jdbcAuthentication()
-            .usersByUsernameQuery(personQuery)
-            .authoritiesByUsernameQuery(rolesPersonQuery)
-            .dataSource(dataSource)
-            .passwordEncoder(bCryptPasswordEncoder);
-    } */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(personAuthProvider);
