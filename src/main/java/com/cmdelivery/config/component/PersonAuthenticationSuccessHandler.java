@@ -28,7 +28,7 @@ public class PersonAuthenticationSuccessHandler implements AuthenticationSuccess
             userName = ((Principal)authentication.getPrincipal()).getName();
 
         }else {
-            userName = ((User)authentication.getPrincipal()).getUsername();
+            userName = (String)authentication.getPrincipal();
         }
         //HttpSession session = request.getSession();
         session.setAttribute("username", userName);

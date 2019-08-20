@@ -1,5 +1,6 @@
 package com.cmdelivery.config;
 
+import com.cmdelivery.config.component.PersonAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,12 @@ public class RegularSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${spring.queries.roles-person-query}")
     private String rolesPersonQuery;
 
+
+    @Autowired
+    private PersonAuthenticationProvider personAuthProvider;
+
+
+    /*
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.
@@ -33,6 +40,10 @@ public class RegularSecurityConfig extends WebSecurityConfigurerAdapter {
             .authoritiesByUsernameQuery(rolesPersonQuery)
             .dataSource(dataSource)
             .passwordEncoder(bCryptPasswordEncoder);
+    } */
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(personAuthProvider);
     }
 
     @Override
