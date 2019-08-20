@@ -12,7 +12,7 @@
         <input class="topbar-logout" type="submit" value="Sign Out"/>
     </form>
     <span th:if="${session.username} != null" th:text=${session.username} class="topbar-link topbar-username"></span>
-    <div class="langSwitcher">
+    <div th:if="not ${hideLangSwitcher}" class="langSwitcher">
         <a th:classappend="#{locale} != '??locale_fr_FR??' ? active: notActive"
            th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
            th:href="${urlBuilder.replaceQueryParam('lang', 'en_US').toUriString()}" th:text="#{lang.eng}" class="lang-btn"></a>

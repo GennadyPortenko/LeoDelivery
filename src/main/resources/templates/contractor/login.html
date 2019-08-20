@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="container">
-<div th:replace="/include/menu :: menu"></div>
+<div th:replace="/include/menu :: menu (hideLangSwitcher = true)"></div>
 <h2>Please log in to enter your cabinet</h2>
 <form th:action="@{/contractor/login}" method="post">
     <div class="loginBlock">
