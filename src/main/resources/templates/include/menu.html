@@ -30,6 +30,7 @@
                             <div class="loginBlock">
                                 <input class="loginInput" id="loginPhoneInput" type="text" name="phone" placeholder="phone"/>
                                 <input class="loginInput" id="loginPasswordInput" type="text" name="password" placeholder="password"/>
+                                <span id="loginTimer"></span>
                                 <button id="loginSubmitBtn" class="loginSubmitBtn" value="Sign In">Send</button>
                                 <div class="loginError" th:if="${param.error}">
                                     Invalid phone and/or password.

@@ -5,23 +5,24 @@ $(document).ready(function() {
   var phoneMask = '+7 (999) 999-9999';
   var passwordMask = '999999';
 
-  $("#loginSubmitBtn").click(function(){
-    console.log("aa");
-    $.each(loginForm.elements, function(k, elem) {
-      console.log(elem)
-    });
-    // loginForm.submit();
-  });
+  loginPhoneInput.focus(function() { loginPhoneInput.val('') });
+  loginPasswordInput.focus(function() { loginPasswordInput.val('') });
 
-  loginPasswordInput.mask(passwordMask);
+  loginPasswordInput.mask(passwordMask, { autoclear : false });
 
   loginPhoneInput.mask(phoneMask, { autoclear : false, completed : function() {
     var phoneValue = loginPhoneInput.val();
     console.log('sending an OTP request for phone ' + phoneValue);
     sendOTPRequest(phoneValue,
-      function(data) {
-        if (data.sent) {
-
+      function(response) {
+        if (response.sent) {
+          loginPhoneInput.prop('disabled', true);
+          $('#loginTimer').countdown({
+	        'seconds': 60,
+            'on-stop' : function() {
+                          loginPhoneInput.prop('disabled', false);
+                        }
+	      });
         }
       },
       function() { console.log('error') },
