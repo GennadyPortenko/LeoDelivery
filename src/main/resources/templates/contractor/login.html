@@ -8,19 +8,16 @@
 </head>
 <body>
 <div class="container">
-<div th:replace="/include/menu :: menu (hideLangSwitcher = true)"></div>
+<div th:replace="/include/menu :: menu (option_hideLoggingIn = true, option_hideLangSwitcher = true)"></div>
 <h2>Please log in to enter your cabinet</h2>
 <form th:action="@{/contractor/login}" method="post">
     <div class="loginBlock">
         <input class="loginInput" type="text" name="username" placeholder="name"/>
         <input class="loginInput" type="password" name="password" placeholder="password"/>
-        <input type="submit" value="Sign In"/>
-        <div class="loginErrorr" th:if="${param.error}">
+        <div class="loginError" th:if="${param.error}">
             Invalid username and/or password.
         </div>
-        <div class="loginInfo" th:if="${param.logout}">
-            You have been logged out.
-        </div>
+        <input class="btn" type="submit" value="Sign In"/>
     </div>
 </form>
 </div>

@@ -1,18 +1,10 @@
 <div th:fragment="menu" class="topbar">
 
-    <a th:href="@{/food}" class="topbar-link">home</a>
-    <!-- <a th:href="@{/contractor/login}" class="topbar-link">enter as a contractor</a> -->
-    <a th:href="@{/contractor/cabinet}" class="topbar-link">cabinet</a>
+    <a th:href="@{/food}" class="topbarElem">home</a>
+    <a th:href="@{/contractor/cabinet}" class="topbarElem">cabinet</a>
 
-    <a th:if="${session.username} == null" th:href="@{/food/login}" class="topbar-link topbar-enter"
-       data-toggle="modal" data-target="#personLoginModal">
-        enter
-    </a>
-    <form th:if="${session.username} != null" th:action="@{/food/logout}" method="post" class="topbar-logout-form">
-        <input class="topbar-logout" type="submit" value="Sign Out"/>
-    </form>
-    <span th:if="${session.username} != null" th:text=${session.username} class="topbar-link topbar-username"></span>
-    <div th:if="not ${hideLangSwitcher}" class="langSwitcher">
+
+    <div th:if="not ${option_hideLangSwitcher}" class="topbarElem topbarElemRight langSwitcher">
         <a th:classappend="#{locale} != '??locale_fr_FR??' ? active: notActive"
            th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
            th:href="${urlBuilder.replaceQueryParam('lang', 'en_US').toUriString()}" th:text="#{lang.eng}" class="lang-btn"></a>
@@ -21,20 +13,42 @@
            th:href="${urlBuilder.replaceQueryParam('lang', 'fr_FR').toUriString()}" th:text="#{lang.fr}" class="lang-btn"></a>
     </div>
 
-    <div class="modal" id="personLoginModal">
+    <div th:classappend="${session.username} != null ? '' : hidden"
+         th:if="not ${option_hideLoggingIn}" th:text=${session.username} class="topbarElem topbarElemRight topbarUsername"></div>
+    <div class="topbarElem topbarElemRight">
+        <form th:if="${session.role} != 'CONTRACTOR'and not ${option_hideLoggingIn}"
+              th:classappend="${session.username} != null ? '' : hidden"
+              th:action="@{/food/logout}" method="post" class="topbarElem topbarElemRight topbarLogoutForm">
+            <input class="topbarLogout" type="submit" value="Sign Out"/>
+        </form>
+    </div>
+    <div class="topbarElem topbarElemRight">
+        <form th:if="${session.role} == 'CONTRACTOR' and not ${option_hideLoggingIn}"
+              th:classappend="${session.username} != null ? '' : hidden"
+              th:action="@{/contractor/logout}" method="post" class="topbarElem topbarElemRight topbarLogoutForm">
+            <input class="topbarLogout" type="submit" value="Sign Out"/>
+        </form>
+    </div>
+
+    <a th:classappend="${session.username} == null ? '' : hidden" th:href="@{/food/login}" class="topbarElem topbarElemRight topbarEnter"
+       th:if="not ${option_hideLoggingIn}" data-toggle="modal" data-target="#personLoginModal">
+        enter
+    </a>
+
+
+    <div th:if="not ${option_hideLoggingIn}" class="modal" id="personLoginModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <div id="personLoginContent">
-                        <form id="loginForm" th:action="@{/food/login}" method="post">
+                    <button class="closeBtn" data-dismiss="modal"><i class="fas fa-times"></i></button>
+                    <div class="personLoginContent">
+                        <form id="loginForm" class="loginForm" th:action="@{/food/login}" method="post">
                             <div class="loginBlock">
-                                <input class="loginInput" id="loginPhoneInput" type="text" name="phone" placeholder="phone"/>
-                                <input class="loginInput" id="loginPasswordInput" type="text" name="password" placeholder="password"/>
-                                <span id="loginTimer"></span>
-                                <button id="loginSubmitBtn" class="loginSubmitBtn" value="Sign In">Send</button>
-                                <div class="loginError" th:if="${param.error}">
-                                    Invalid phone and/or password.
-                                </div>
+                                <input class="loginInput" id="loginPhoneInput" type="text" name="phone" placeholder="Your phone"/>
+                                <input class="loginInput hidden" id="loginPasswordInput" type="text" name="password" placeholder="code"/>
+                                <span class="loginTimer" id="loginTimer"></span>
+                                <!-- <button id="loginSubmitBtn" class="loginSubmitBtn btn" value="Sign In">Send</button> -->
+                                <div class="loginWrongOtp hidden">Code is incorrect</div>
                             </div>
                         </form>
                     </div>

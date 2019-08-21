@@ -8,18 +8,15 @@
 </head>
 <body>
 <div class="container">
-<div th:replace="/include/menu :: menu"></div>
+<div th:replace="/include/menu :: menu (option_hideLoggingIn = true)"></div>
 <h2>Welcome to regular login page!</h2>
 <form th:action="@{/food/login}" method="post">
     <div class="loginBlock">
         <input class="loginInput" id="phone" type="text" name="phone" placeholder="phone"/>
         <input class="loginInput" id="password" type="password" name="password" placeholder="password"/>
-        <input type="submit" value="Sign In"/>
+        <input class="btn" type="submit" value="Sign In"/>
         <div class="loginError" th:if="${param.error}">
             Invalid phone and/or password.
-        </div>
-        <div class="loginInfo" th:if="${param.logout}">
-            You have been logged out.
         </div>
     </div>
 </form>

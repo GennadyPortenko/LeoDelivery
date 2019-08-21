@@ -53,6 +53,7 @@ public class RegularSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .logout()
                 .logoutUrl("/food/logout")
+                .logoutSuccessUrl("/food")
                 .permitAll();
     }
 

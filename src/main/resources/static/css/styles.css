@@ -2,10 +2,22 @@ a:hover {
   text-decoration:none;
 }
 
+.btn {
+  transition:all .1s ease;
+  background:white;
+  border:2px solid green;
+  border-radius:15px;
+  color:green;
+}
+.btn:hover {
+  background:green;
+  color:white;
+}
+
 
 .loginError {
     padding: 15px;
-    margin-bottom: 20px;
+    margin:15px 0;
     color: #a94442;
     background-color: #f2dede;
 }
@@ -18,38 +30,97 @@ a:hover {
 
 .topbar {
   padding:15px 0;
+  height:80px;
 }
-.topbar-link {
+.topbarElem {
   display:inline-block;
-  margin-right: 20px;
+  float:left;
   color:black;
+  margin-right: 20px;
 }
-.topbar-username {
+.topbarElemRight {
+  float:right;
+  margin-left: 20px;
+  margin-right:0;
+}
+.topbarUsername {
   color:green;
 }
-.topbar-enter {
+.topbarEnter {
   color:green;
 }
-.topbar-logout-form {
+.topbarEnter.hidden {
+  display:none;
+}
+.topbarEnter:hover {
+  color:green;
+}
+.topbarLogoutForm {
   display:inline-block;
 }
-.topbar-logout {
+.topbarLogoutForm.hidden {
+  display:none;
+}
+.topbarLogout {
   cursor:pointer;
   color:green;
   background:transparent;
   border-radius:8px;
   border:2px solid green;
 }
-.topbar-logout:hover {
+.topbarLogout:hover {
   background:green;
   color:white;
 }
-.topbar-enter:hover {
-  color:green;
-}
 
+.loginBlock {
+  padding-top:30px;
+  width:calc(100% - 30px);
+  margin-left:15px;
+}
 .loginBlock .loginInput {
+  text-align:center;
+  padding:0 10px;
   display:block;
+  width:calc(100% - 30px);
+  margin-left:15px;
+  margin-bottom:20px;
+  height:40px;
+  font-size:15px;
+  border:none;
+  border-bottom:1px solid #bbb;
+  color:black;
+}
+.loginBlock .loginInput:disabled {
+  background:white;
+  color:#888;
+}
+#loginPasswordInput {
+  display:inline-block;
+  width:80px;
+  color:green;
+  /*
+  border:1px solid #bbb;
+  border-radius:5px;
+  */
+}
+#loginPasswordInput.hidden {
+  display:none;
+}
+.loginBlock .loginSubmitBtn {
+  cursor:pointer;
+  border-radius:10px;
+  border:2px solid
+}
+.loginWrongOtp {
+  color:red;
+  font-size:12px;
+}
+.loginWrongOtp.hidden {
+  display:none;
+}
+.loginTimer {
+  color:#999;
 }
 
 .langSwitcher {
@@ -61,6 +132,7 @@ a:hover {
   border:2px solid green;
 }
 .langSwitcher .lang-btn {
+  transition:all .1s ease;
   background:white;
   padding:0 10px;
   display:inline-block;
@@ -70,9 +142,33 @@ a:hover {
   color:#555;
 }
 .langSwitcher .lang-btn:hover {
+  color:green;
 }
 .langSwitcher .lang-btn.active {
   display:inline-block;
   background:green;
   color:white;
 }
+
+.modal-dialog {
+  width:250px !important;
+}
+.modal-body {
+  padding-top:5px;
+}
+.modal .closeBtn {
+  position:absolute;
+  right:5px;
+  width:40px;
+  height:40px;
+  color:#aaa;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  font-size:19px;
+  line-height:20px;
+}
+.modal .closeBtn:hover {
+  color:green;
+}
+

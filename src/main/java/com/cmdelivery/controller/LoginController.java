@@ -1,5 +1,7 @@
 package com.cmdelivery.controller;
 
+import com.cmdelivery.config.component.PersonAuthenticationProvider;
+import com.cmdelivery.dto.LoginStatus;
 import com.cmdelivery.dto.OTPResponse;
 import com.cmdelivery.model.Contractor;
 import com.cmdelivery.model.Person;
@@ -11,14 +13,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
@@ -32,6 +36,7 @@ public class LoginController {
     private final RoleRepository roleRepository;
     private final OTPService otpService;
     private final SmsService smsService;
+    private final PersonAuthenticationProvider personAuthenticationProvider;
 
     @PostConstruct
     public void init() {
@@ -76,8 +81,26 @@ public class LoginController {
     @ResponseBody
     @PostMapping(value="/login/otp/{phone}")
     public ResponseEntity<?> otpRequest(@PathVariable String phone) {
+        System.out.println("phone : " + phone);
         smsService.sendOTP(otpService.generateOTP(DtoService.parsePhone(phone)));
         return new ResponseEntity<>(new OTPResponse(true), HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping(value="/login/otp/ajax")
+    public ResponseEntity<?> loginAJAX(@RequestBody LoginStatus data, HttpServletRequest request) {
+        System.out.println(data);
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(data.getPhone(), data.getOtp());
+        Authentication authentication = personAuthenticationProvider.authenticate(token);
+        if (authentication != null) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            HttpSession session = request.getSession();
+            session.setAttribute("username", DtoService.toMaskedPhone(authentication.getName()));
+            session.setAttribute("role", "PERSON");
+            return new ResponseEntity<>(new LoginStatus(data.getPhone(), data.getOtp(), true), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new LoginStatus(data.getPhone(), data.getOtp(), false), HttpStatus.OK);
+        }
     }
 
 }
