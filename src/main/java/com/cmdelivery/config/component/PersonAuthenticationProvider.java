@@ -29,11 +29,6 @@ public class PersonAuthenticationProvider implements AuthenticationProvider {
         String phone = DtoService.parsePhone(authentication.getName());
         String password = authentication.getCredentials().toString();
 
-        Person person = personRepository.findByPhone(phone);
-        if (person == null) {
-            return null;
-        }
-
         if (password.equals(Integer.toString(otpService.getOtp(phone)))) {
             otpService.clearOTP(phone);
             return new UsernamePasswordAuthenticationToken(phone, password, new ArrayList<>());

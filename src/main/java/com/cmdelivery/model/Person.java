@@ -23,9 +23,6 @@ public class Person {
     @NonNull
     @NotEmpty
     String phone;
-    @NonNull
-    @NotEmpty
-    String password;
     int active;
     @ToString.Exclude
     @ManyToMany(fetch=FetchType.LAZY)

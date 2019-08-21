@@ -6,7 +6,6 @@ CREATE TABLE person (
   person_id SERIAL PRIMARY KEY
 , phone VARCHAR(50) NOT NULL
 , email VARCHAR(150)
-, password VARCHAR(200) NOT NULL
 , active INTEGER NOT NULL
 );
 

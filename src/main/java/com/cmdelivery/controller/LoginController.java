@@ -44,12 +44,11 @@ public class LoginController {
         final String CONTRACTOR_EMAIL= "rest@rest.com";
         final String CONTRACTOR_PASSWORD= "rest";
         final String PERSON_PHONE= "1111111111";
-        final String PERSON_PASSWORD= "user";
         if (contractorRepository.findByName(CONTRACTOR_USERNAME) == null) {
             contractorService.registerNewContractor(new Contractor(CONTRACTOR_EMAIL, CONTRACTOR_USERNAME, CONTRACTOR_PASSWORD));
         }
         if (personRepository.findByPhone(PERSON_PHONE) == null) {
-            personService.registerNewPerson(new Person(PERSON_PHONE, PERSON_PASSWORD));
+            personService.registerNewPerson(new Person(PERSON_PHONE));
         }
     }
 
@@ -90,16 +89,24 @@ public class LoginController {
     @PostMapping(value="/login/otp/ajax")
     public ResponseEntity<?> loginAJAX(@RequestBody LoginStatus data, HttpServletRequest request) {
         System.out.println(data);
+        ResponseEntity<?> failedResponse = new ResponseEntity<>(new LoginStatus(data.getPhone(), data.getOtp(), false), HttpStatus.OK);
+
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(data.getPhone(), data.getOtp());
         Authentication authentication = personAuthenticationProvider.authenticate(token);
         if (authentication != null) {
+            Person person = personRepository.findByPhone(authentication.getName());
+            if (person == null) {
+                if (personService.registerNewPerson(new Person(DtoService.parsePhone(data.getPhone()))) == null) {
+                    return failedResponse;
+                }
+            }
             SecurityContextHolder.getContext().setAuthentication(authentication);
             HttpSession session = request.getSession();
             session.setAttribute("username", DtoService.toMaskedPhone(authentication.getName()));
             session.setAttribute("role", "PERSON");
             return new ResponseEntity<>(new LoginStatus(data.getPhone(), data.getOtp(), true), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new LoginStatus(data.getPhone(), data.getOtp(), false), HttpStatus.OK);
+            return failedResponse;
         }
     }
 

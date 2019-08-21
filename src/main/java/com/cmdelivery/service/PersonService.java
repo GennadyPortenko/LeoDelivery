@@ -22,7 +22,6 @@ public class PersonService {
 
     @Transactional
     public Person registerNewPerson(Person person) {
-        person.setPassword(bCryptPasswordEncoder.encode(person.getPassword()));
         person.setActive(1);
         Role personRole = roleRepository.findByRole("ROLE_USER");
         person.setRoles((new HashSet<>(Arrays.asList(personRole))));
