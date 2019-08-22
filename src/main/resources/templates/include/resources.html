@@ -2,6 +2,10 @@
 <head xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
            th:fragment="resources" th:remove="tag">
 
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <link rel="stylesheet" th:href="@{/vendor/bootstrap/css/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/vendor/perfect-scrollbar/css/perfect-scrollbar.css}">
     <link rel="stylesheet" th:href="@{/vendor/fontawesome-free-5.9.0-web/css/all.css}">
@@ -15,5 +19,7 @@
     <script th:src="@{/js/sendOTPRequest.js}"></script>
     <script th:src="@{/js/sendLoginRequest.js}"></script>
     <script th:src="@{/js/enter.js}"></script>
+
+    <script th:if="${option_contractorCabinet}" th:src="@{/js/cabinet/sendRemoveSectionRequest.js}"></script>
 
 </head>

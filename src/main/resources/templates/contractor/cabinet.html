@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <thymeleaf th:replace="/include/resources :: resources"></thymeleaf>
+    <thymeleaf th:replace="/include/resources :: resources (option_contractorCabinet = true)"></thymeleaf>
+    <script th:src="@{/js/cabinet/main.js}"></script>
 
     <title>Contractor home page</title>
 </head>
@@ -11,6 +12,16 @@
 <div class="container">
     <div th:replace="/include/menu :: menu"></div>
     <h2>Cabinet</h2>
+    <div class="cabinet_panel">
+        <a th:href="@{/contractor/cabinet/new_section}" class="btn cabinet_AddSectionBtn">Add section</a>
+    </div>
+    <section class="cabinet_sectionsBlock">
+        <div class="cabinet_empty" th:classappend="${#arrays.length(sections)} != 0 ? hidden : ''">No sections yet</div>
+        <div th:each="section : ${sections}" th:attr = "data-section-id = ${section.id}" class="sectionBlock">
+            <div th:text="${section.name}" class="cabinet_sectionName"></div>
+            <button th:if="${section.name} != ${defaultSectionName}" class="btn cabinet_removeBtn cabinet_removeSectionBtn" title="remove"><i class="fas fa-times"></i></button>
+        </div>
+    </section>
 </div>
 </body>
 </html>

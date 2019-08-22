@@ -38,6 +38,22 @@ CREATE TABLE contractor_role (
 , CONSTRAINT contractor_role_pkey PRIMARY KEY (contractor_id, role_id)
 );
 
+DROP TABLE IF EXISTS section CASCADE;
+CREATE TABLE section (
+  section_id SERIAL PRIMARY KEY
+, name VARCHAR(50) NOT NULL
+, description TEXT
+, contractor_fk INTEGER REFERENCES contractor(contractor_id) -- ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS product CASCADE;
+CREATE TABLE product (
+  product_id SERIAL PRIMARY KEY
+, name VARCHAR(50) NOT NULL
+, description TEXT
+, section_fk INTEGER REFERENCES section(section_id) -- ON UPDATE CASCADE ON DELETE CASCADE
+);
+
 -- roles initialization
 
 INSERT INTO role (role_id, role)

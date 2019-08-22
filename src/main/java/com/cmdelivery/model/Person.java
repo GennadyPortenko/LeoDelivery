@@ -18,12 +18,16 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int personId;
+
     @Email
     String email;
+
     @NonNull
     @NotEmpty
     String phone;
+
     int active;
+
     @ToString.Exclude
     @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name = "person_role", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

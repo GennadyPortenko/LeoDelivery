@@ -5,9 +5,11 @@ import com.cmdelivery.dto.LoginStatus;
 import com.cmdelivery.dto.OTPResponse;
 import com.cmdelivery.model.Contractor;
 import com.cmdelivery.model.Person;
+import com.cmdelivery.model.Section;
 import com.cmdelivery.repository.ContractorRepository;
 import com.cmdelivery.repository.PersonRepository;
 import com.cmdelivery.repository.RoleRepository;
+import com.cmdelivery.repository.SectionRepository;
 import com.cmdelivery.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
@@ -37,19 +42,28 @@ public class LoginController {
     private final OTPService otpService;
     private final SmsService smsService;
     private final PersonAuthenticationProvider personAuthenticationProvider;
+    private final SectionService sectionService;
+    private final SectionRepository sectionRepository;
 
     @PostConstruct
     public void init() {
         final String CONTRACTOR_USERNAME = "rest";
         final String CONTRACTOR_EMAIL= "rest@rest.com";
         final String CONTRACTOR_PASSWORD= "rest";
-        final String PERSON_PHONE= "1111111111";
+        final String CONTRACTOR2_USERNAME = "rest2";
+        final String CONTRACTOR2_EMAIL= "rest@rest.com";
+        final String CONTRACTOR2_PASSWORD= "rest2";
+
         if (contractorRepository.findByName(CONTRACTOR_USERNAME) == null) {
-            contractorService.registerNewContractor(new Contractor(CONTRACTOR_EMAIL, CONTRACTOR_USERNAME, CONTRACTOR_PASSWORD));
+            Contractor contractor = new Contractor(CONTRACTOR_EMAIL, CONTRACTOR_USERNAME, CONTRACTOR_PASSWORD);
+            contractorService.registerNewContractor(contractor);
         }
-        if (personRepository.findByPhone(PERSON_PHONE) == null) {
-            personService.registerNewPerson(new Person(PERSON_PHONE));
+
+        if (contractorRepository.findByName(CONTRACTOR2_USERNAME) == null) {
+            Contractor contractor = new Contractor(CONTRACTOR2_EMAIL, CONTRACTOR2_USERNAME, CONTRACTOR2_PASSWORD);
+            contractorService.registerNewContractor(contractor);
         }
+
     }
 
     @GetMapping(value="/")
@@ -70,11 +84,6 @@ public class LoginController {
     @GetMapping(value="/food")
     public ModelAndView regularHome() {
         return new ModelAndView("regular/food");
-    }
-
-    @GetMapping(value="/contractor/cabinet")
-    public ModelAndView contractorHome() {
-        return new ModelAndView("contractor/cabinet");
     }
 
     @ResponseBody

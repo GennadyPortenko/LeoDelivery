@@ -1,8 +1,6 @@
 package com.cmdelivery.model;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
@@ -10,14 +8,21 @@ import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Data
+@RequiredArgsConstructor
 @NoArgsConstructor
-@Table(name="role")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Role {
+public class Section {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int roleId;
+    int sectionId;
 
+    @NonNull
     @NotEmpty
-    String role;
+    String name;
+
+    String description;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="contractor_fk")
+    Contractor contractor;
 }
