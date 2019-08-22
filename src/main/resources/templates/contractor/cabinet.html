@@ -14,12 +14,19 @@
     <h2>Cabinet</h2>
     <div class="cabinet_panel">
         <a th:href="@{/contractor/cabinet/new_section}" class="btn cabinet_AddSectionBtn">Add section</a>
+        <a th:href="@{/contractor/cabinet/new_product}" class="btn cabinet_AddProductBtn">Add product</a>
     </div>
     <section class="cabinet_sectionsBlock">
         <div class="cabinet_empty" th:classappend="${#arrays.length(sections)} != 0 ? hidden : ''">No sections yet</div>
         <div th:each="section : ${sections}" th:attr = "data-section-id = ${section.id}" class="sectionBlock">
             <div th:text="${section.name}" class="cabinet_sectionName"></div>
             <button th:if="${section.name} != ${defaultSectionName}" class="btn cabinet_removeBtn cabinet_removeSectionBtn" title="remove"><i class="fas fa-times"></i></button>
+            <div class="cabinet_sectionProducts row">
+                <div th:each="product : ${section.products}" th:attr = "data-product-id = ${product.id}" class="product col-12 col-sm-4">
+                    <div th:text="${product.name}" class="productName"></div>
+                    <div th:text="${product.description}" class="productName"></div>
+                </div>
+            </div>
         </div>
     </section>
 </div>

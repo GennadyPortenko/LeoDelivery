@@ -1,13 +1,17 @@
 package com.cmdelivery.service;
 
 import com.cmdelivery.dto.ContractorDto;
+import com.cmdelivery.dto.ProductDto;
 import com.cmdelivery.dto.SectionDto;
 import com.cmdelivery.model.Contractor;
+import com.cmdelivery.model.Product;
 import com.cmdelivery.model.Section;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
@@ -22,9 +26,21 @@ public class DtoService {
         return "+7 (" + phone.substring(0, 3) + ") " + phone.substring(3, 6) + "-" + phone.substring(6, 10);
     }
 
+    public ProductDto convertToDto(Product product) {
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        productDto.setId(product.getProductId());
+        return productDto;
+    }
+
+    public Product convertToProduct(ProductDto productDto) {
+        Product product = modelMapper.map(productDto, Product.class);
+        return product;
+    }
+
     public SectionDto convertToDto(Section section) {
         SectionDto sectionDto = modelMapper.map(section, SectionDto.class);
         sectionDto.setId(section.getSectionId());
+        sectionDto.setProducts(section.getProducts().stream().map(this::convertToDto).collect(Collectors.toList()));
         return sectionDto;
     }
 

@@ -1,11 +1,15 @@
 package com.cmdelivery.controller;
 
+import com.cmdelivery.dto.ProductDto;
 import com.cmdelivery.dto.SectionDto;
 import com.cmdelivery.model.Contractor;
+import com.cmdelivery.model.Product;
 import com.cmdelivery.model.Section;
 import com.cmdelivery.repository.ContractorRepository;
+import com.cmdelivery.repository.ProductRepository;
 import com.cmdelivery.repository.SectionRepository;
 import com.cmdelivery.service.DtoService;
+import com.cmdelivery.service.ProductService;
 import com.cmdelivery.service.SectionService;
 import com.cmdelivery.service.SecurityService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +34,8 @@ public class CabinetController {
     private final DtoService dtoService;
     private final SectionService sectionService;
     private final SectionRepository sectionRepository;
+    private final ProductService productService;
+    private final ProductRepository productRepository;
 
     @GetMapping(value="/contractor/cabinet")
     public ModelAndView contractorHome(HttpServletRequest request) {
@@ -71,7 +76,6 @@ public class CabinetController {
             errorModelAndView.addObject("errorMsg", "Error occured while creating section with name " + sectionDto.getName());
             return errorModelAndView;
         }
-
         ModelAndView modelAndView = new ModelAndView("redirect:/contractor/cabinet");
         return modelAndView;
     }
@@ -89,6 +93,35 @@ public class CabinetController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(sectionId, HttpStatus.OK);
+    }
+
+    @GetMapping(value="/contractor/cabinet/new_product")
+    public ModelAndView newProduct() {
+        ModelAndView modelAndView = new ModelAndView("contractor/new_product");
+        modelAndView.addObject("productDto", new ProductDto());
+        return modelAndView;
+    }
+
+    @PostMapping(value="/contractor/cabinet/add_product")
+    public ModelAndView addProduct(@ModelAttribute ProductDto productDto, BindingResult bindingResult) {
+        String currentContractor = securityService.getCurrentUserName();
+        if (currentContractor == null) {
+            return new ModelAndView("redirect:/contractor/cabinet");
+        }
+        if (productRepository.findByName(productDto.getName()) != null) {
+            ModelAndView errorModelAndView = new ModelAndView("redirect:/contractor/cabinet/new_product");
+            errorModelAndView.addObject("errorMsg", "Product with name " + productDto.getName() + " already exists");
+            return errorModelAndView;
+        }
+        Product newProduct = dtoService.convertToProduct(productDto);
+        Product registeredProduct = productService.registerNewProduct(newProduct);
+        if (registeredProduct == null) {
+            ModelAndView errorModelAndView = new ModelAndView("redirect:/contractor/cabinet/new_product");
+            errorModelAndView.addObject("errorMsg", "Error occured while creating product with name " + productDto.getName());
+            return errorModelAndView;
+        }
+        ModelAndView modelAndView = new ModelAndView("redirect:/contractor/cabinet");
+        return modelAndView;
     }
 
 }

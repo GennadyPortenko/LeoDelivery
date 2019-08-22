@@ -14,6 +14,9 @@ public class SectionService {
     public static String defaultSectionName() { return "Other"; }
 
     public Section registerNewSection(Section section) {
+        if (section.getName().equals(SectionService.defaultSectionName())) {
+            return null;
+        }
         return sectionRepository.save(section);
     }
 

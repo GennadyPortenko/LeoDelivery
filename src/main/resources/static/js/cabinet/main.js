@@ -8,7 +8,6 @@ function bindRemoveBtns() {
       var sectionId = $(this).parent().attr('data-section-id');
       sendRemoveSectionRequest(parseInt(sectionId, 10),
                                function() {
-                                 console.log($(this).parent());
                                  removeSection(sectionId);
                                },
                                function() {},
