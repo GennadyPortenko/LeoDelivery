@@ -181,6 +181,18 @@ public class CabinetController {
         return new ResponseEntity<>(sectionId, HttpStatus.OK);
     }
 
+    @ResponseBody
+    @PostMapping(value="/contractor/cabinet/remove_product/{productId}")
+    public ResponseEntity<?> removeProduct(@PathVariable Integer productId) {
+        Product product = productRepository.findByProductId(productId);
+        Contractor productContractor = product.getSection().getContractor();
+        if (!(productContractor.getName().equals(securityService.getCurrentUserName()))) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        productRepository.delete(product);
+        return new ResponseEntity<>(productId, HttpStatus.OK);
+    }
+
     @GetMapping(value="/contractor/cabinet/new_product")
     public ModelAndView newProduct() {
         ModelAndView modelAndView = new ModelAndView("contractor/new_product");

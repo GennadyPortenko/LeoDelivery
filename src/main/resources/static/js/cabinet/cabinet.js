@@ -31,6 +31,18 @@ function bindRemoveBtns() {
                                hostURL);
     });
   });
+
+  $('.cabinet_removeProductBtn').each(function(index) {
+    $(this).click(function() {
+      var productId = $(this).parent().attr('data-product-id');
+      sendRemoveProductRequest(parseInt(productId, 10),
+                               function() {
+                                 $('[data-product-id=' + productId +']').remove();
+                               },
+                               function() {},
+                               hostURL);
+    });
+  });
 }
 
 function removeSection(id) {
