@@ -1,5 +1,6 @@
 package com.cmdelivery.service;
 
+import com.cmdelivery.dto.ProductDto;
 import com.cmdelivery.model.Product;
 import com.cmdelivery.model.Section;
 import com.cmdelivery.repository.ContractorRepository;
@@ -8,8 +9,6 @@ import com.cmdelivery.repository.SectionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.security.Security;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
@@ -25,6 +24,11 @@ public class ProductService {
                                                       contractorRepository.findByName(securityService.getCurrentUserName()).getContractorId());
         product.setSection(defaultSection);
         return productRepository.save(product);
+    }
+
+    public void modifyProduct (Product product, ProductDto newProductDto) {
+        product.setName(newProductDto.getName());
+        product.setDescription(newProductDto.getDescription());
     }
 
 }

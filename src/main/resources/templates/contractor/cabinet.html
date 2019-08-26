@@ -48,6 +48,9 @@
                 <div th:each="product : ${section.products}" th:attr = "data-product-id = ${product.id}" class="product col-12 col-sm-4">
                     <div th:text="${product.name}" class="productName"></div>
                     <div th:text="${product.description}" class="productName"></div>
+                    <a th:href="@{/contractor/cabinet/modify_product/} + ${product.id}" class="cabinet_modifyBtn" title="modify">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
                 </div>
             </div>
         </div>

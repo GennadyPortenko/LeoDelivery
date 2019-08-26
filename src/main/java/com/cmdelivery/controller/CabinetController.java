@@ -26,10 +26,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -70,6 +68,39 @@ public class CabinetController {
     public ModelAndView newSection() {
         ModelAndView modelAndView = new ModelAndView("contractor/new_section");
         modelAndView.addObject("sectionDto", new SectionDto());
+        return modelAndView;
+    }
+
+    @GetMapping(value="/contractor/cabinet/modify_product/{productId}")
+    public ModelAndView modifyProduct(@PathVariable long productId) {
+        ModelAndView modelAndView = new ModelAndView("contractor/modify_product");
+        Optional<Product> product = productRepository.findById(productId);
+        if (!product.isPresent()) {
+            throw new Error404Exception();
+        }
+        if (!product.get().getSection().getContractor().getName().equals(securityService.getCurrentUserName())) {
+            throw new Error403Exception();
+        }
+        modelAndView.addObject("productDto", dtoService.convertToDto(product.get()));
+        return modelAndView;
+    }
+
+    @PostMapping(value="/contractor/cabinet/modify_product/{productId}")
+    public ModelAndView modifyProductPost(@PathVariable long productId, @ModelAttribute ProductDto productDto) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/contractor/cabinet");
+        Product product = productRepository.findByProductId(productId);
+        if ((product == null)) {
+            modelAndView.addObject("errorMsg", "Failed to modify product");
+            return modelAndView;
+        }
+        if (!product.getSection().getContractor().getName().equals(securityService.getCurrentUserName())) {
+            throw new Error403Exception();
+        }
+        productService.modifyProduct(product, productDto);
+        if (productRepository.save(product) == null) {
+            modelAndView.addObject("errorMsg", "Failed to modify product");
+            return modelAndView;
+        }
         return modelAndView;
     }
 

@@ -5,19 +5,19 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <thymeleaf th:replace="/include/resources :: resources"></thymeleaf>
 
-    <title>Edit section</title>
+    <title>Edit product</title>
 </head>
 <body>
 <div class="container">
     <div th:replace="/include/menu :: menu"></div>
-    <h2>Section editing</h2>
+    <h2>Product editing</h2>
     <div th:if="${param.errorMsg != null}" class="cabinet_errorBlock">
         <div th:text="${param.errorMsg}" class="cabinet_errorMsg"></div>
     </div>
-    <form action="#" th:action="@{/contractor/cabinet/modify_section/} + ${sectionDto.id}" th:object="${sectionDto}" method="post"
+    <form action="#" th:action="@{/contractor/cabinet/modify_product/} + ${productDto.id}" th:object="${productDto}" method="post"
           data-toggle="validator" required="true" role="form" class="cabinet_addForm">
-        <input th:field="*{name}" class="login-form-input" id="sectionName" required placeholder="Name" name="login">
-        <input th:field="*{description}" class="login-form-input" id="sectionDescription" required placeholder="Description" name="login">
+        <input th:field="*{name}" class="login-form-input" id="productName" required placeholder="Name" name="login">
+        <input th:field="*{description}" class="login-form-input" id="productDescription" required placeholder="Description" name="login">
         <input type="submit" class="btn submitBtn" value="Save">
     </form>
 </div>
