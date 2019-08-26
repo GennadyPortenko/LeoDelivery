@@ -3,7 +3,7 @@
 
 DROP TABLE IF EXISTS person CASCADE;
 CREATE TABLE person (
-  person_id SERIAL PRIMARY KEY
+  person_id BIGSERIAL PRIMARY KEY
 , phone VARCHAR(50) NOT NULL
 , email VARCHAR(150)
 , active INTEGER NOT NULL
@@ -11,9 +11,10 @@ CREATE TABLE person (
 
 DROP TABLE IF EXISTS contractor CASCADE;
 CREATE TABLE contractor (
-  contractor_id SERIAL PRIMARY KEY
+  contractor_id BIGSERIAL PRIMARY KEY
 , name VARCHAR(50) NOT NULL
 , email VARCHAR(150) NOT NULL
+, image VARCHAR(150)
 , password VARCHAR(200) NOT NULL
 , active INTEGER NOT NULL
 );
@@ -40,7 +41,7 @@ CREATE TABLE contractor_role (
 
 DROP TABLE IF EXISTS section CASCADE;
 CREATE TABLE section (
-  section_id SERIAL PRIMARY KEY
+  section_id BIGSERIAL PRIMARY KEY
 , name VARCHAR(50) NOT NULL
 , description TEXT
 , contractor_fk INTEGER REFERENCES contractor(contractor_id) -- ON UPDATE CASCADE ON DELETE CASCADE
@@ -48,9 +49,9 @@ CREATE TABLE section (
 
 DROP TABLE IF EXISTS product CASCADE;
 CREATE TABLE product (
-  product_id SERIAL PRIMARY KEY
+  product_id BIGSERIAL PRIMARY KEY
 , name VARCHAR(50) NOT NULL
-, description TEXT
+, description TEXT NOT NULL
 , section_fk INTEGER REFERENCES section(section_id) -- ON UPDATE CASCADE ON DELETE CASCADE
 );
 

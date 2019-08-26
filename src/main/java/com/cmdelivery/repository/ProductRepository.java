@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     void deleteAll();
     Product findByName(String name);
-    Product findByProductId(int id);
+    Product findByProductId(long id);
 }

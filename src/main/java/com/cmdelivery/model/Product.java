@@ -14,12 +14,14 @@ import javax.validation.constraints.NotEmpty;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int productId;
+    long productId;
 
     @NonNull
     @NotEmpty
     String name;
 
+    @NonNull
+    @NotEmpty
     String description;
 
     @ManyToOne(fetch=FetchType.LAZY)

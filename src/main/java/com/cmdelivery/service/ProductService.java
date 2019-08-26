@@ -26,4 +26,5 @@ public class ProductService {
         product.setSection(defaultSection);
         return productRepository.save(product);
     }
+
 }

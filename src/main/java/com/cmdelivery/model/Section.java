@@ -17,7 +17,7 @@ import java.util.Set;
 public class Section {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int sectionId;
+    long sectionId;
 
     @NonNull
     @NotEmpty

@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SectionDto {
-    int id;
+    long id;
     String name;
     String description;
     List<ProductDto> products;

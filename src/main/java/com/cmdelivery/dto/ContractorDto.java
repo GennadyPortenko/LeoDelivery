@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ContractorDto {
-    int id;
+    long id;
     String name;
     String email;
     Set<SectionDto> sections;

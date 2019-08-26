@@ -5,11 +5,9 @@ import com.cmdelivery.dto.LoginStatus;
 import com.cmdelivery.dto.OTPResponse;
 import com.cmdelivery.model.Contractor;
 import com.cmdelivery.model.Person;
+import com.cmdelivery.model.Product;
 import com.cmdelivery.model.Section;
-import com.cmdelivery.repository.ContractorRepository;
-import com.cmdelivery.repository.PersonRepository;
-import com.cmdelivery.repository.RoleRepository;
-import com.cmdelivery.repository.SectionRepository;
+import com.cmdelivery.repository.*;
 import com.cmdelivery.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,7 +43,9 @@ public class LoginController {
     private final PersonAuthenticationProvider personAuthenticationProvider;
     private final SectionService sectionService;
     private final SectionRepository sectionRepository;
+    private final ProductRepository productRepository;
 
+    @Transactional
     @PostConstruct
     public void init() {
         final String CONTRACTOR_USERNAME = "rest";
@@ -57,6 +58,26 @@ public class LoginController {
         if (contractorRepository.findByName(CONTRACTOR_USERNAME) == null) {
             Contractor contractor = new Contractor(CONTRACTOR_EMAIL, CONTRACTOR_USERNAME, CONTRACTOR_PASSWORD);
             contractorService.registerNewContractor(contractor);
+            Section defaultSection = sectionRepository.findByNameAndContractor(SectionService.defaultSectionName(), contractor.getContractorId());
+            Set<Product> defaultProducts = new HashSet<>();
+
+            Product product1 = new Product("Cheese cake", "Wonderful tasty cheese cake.");
+            product1.setSection(defaultSection);
+            productRepository.save(product1);
+
+            Product product2 = new Product("Sushi", "Perfect sushi.");
+            product2.setSection(defaultSection);
+            productRepository.save(product2);
+
+            Section pizza = new Section("Pizza");
+            pizza.setDescription("Different pizzas");
+            pizza.setContractor(contractor);
+            sectionRepository.save(pizza);
+
+            Product product3 = new Product("Pizza", "Wonderful tasty pizza.");
+            product3.setSection(pizza);
+            productRepository.save(product3);
+
         }
 
         if (contractorRepository.findByName(CONTRACTOR2_USERNAME) == null) {

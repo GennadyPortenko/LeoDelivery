@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <thymeleaf th:replace="/include/resources :: resources"></thymeleaf>
+
+    <title>New section</title>
+</head>
+<body>
+<div class="container">
+    <div th:replace="/include/menu :: menu"></div>
+    <h2>Section editing</h2>
+    <div th:if="${param.errorMsg != null}" class="cabinet_errorBlock">
+        <div th:text="${param.errorMsg}" class="cabinet_errorMsg"></div>
+    </div>
+    <form action="#" th:action="@{/contractor/cabinet/modify_section/} + ${sectionDto.id}" th:object="${sectionDto}" method="post"
+          data-toggle="validator" required="true" role="form" class="cabinet_addForm">
+        <input th:field="*{name}" class="login-form-input" id="sectionName" required placeholder="Name" name="login">
+        <input th:field="*{description}" class="login-form-input" id="sectionDescription" required placeholder="Description" name="login">
+        <input type="submit" class="btn submitBtn" value="Save">
+    </form>
+</div>
+</body>
+</html>

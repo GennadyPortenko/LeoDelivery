@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 public interface SectionRepository extends JpaRepository<Section, Long> {
     void deleteAll();
     Section findByName(String name);
-    Section findBySectionId(int id);
-    Integer deleteBySectionId(int id);
+    Section findBySectionId(long id);
+    Integer deleteBySectionId(long id);
 
     @Query(nativeQuery = true, value = "SELECT * FROM section WHERE name = ?1 AND contractor_fk = ?2")
-    Section findByNameAndContractor(String name, Integer contractorId);
+    Section findByNameAndContractor(String name, Long contractorId);
 }

@@ -1,0 +1,15 @@
+<div th:fragment="confirmModal">
+
+    <div th:if="not ${option_hideLoggingIn}" class="modal confirmModal" id="confirmModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="confirmModal_message"></div>
+                    <button class="btn" id="confirmModalYes">Yes</button>
+                    <button class="btn" id="confirmModalNo">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

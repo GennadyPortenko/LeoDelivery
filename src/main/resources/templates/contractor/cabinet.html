@@ -4,24 +4,47 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <thymeleaf th:replace="/include/resources :: resources (option_contractorCabinet = true)"></thymeleaf>
-    <script th:src="@{/js/cabinet/main.js}"></script>
+    <script th:src="@{/js/cabinet/cabinet.js}"></script>
 
     <title>Contractor home page</title>
 </head>
 <body>
+<div th:replace="/include/confirmModal:: confirmModal"></div>
 <div class="container">
     <div th:replace="/include/menu :: menu"></div>
     <h2>Cabinet</h2>
-    <div class="cabinet_panel">
+    <section class="cabinet_panel">
         <a th:href="@{/contractor/cabinet/new_section}" class="btn cabinet_AddSectionBtn">Add section</a>
         <a th:href="@{/contractor/cabinet/new_product}" class="btn cabinet_AddProductBtn">Add product</a>
-    </div>
+    </section>
+
+    <section>
+        <div class="cabinet_blockTitle">Image</div>
+        <div class="cabinet_image">
+            <img th:src="@{${imagePath}}" alt="">
+        </div>
+        <div class="cabinet_imageUploadTitle">Upload new image</div>
+        <form method="POST" enctype="multipart/form-data" name="loadContractorImageForm" th:action="@{/contractor/cabinet/upload_image}">
+            <input type="file" name="file" id="loadContractorImageInput">
+            <button type="submit" class="btn" id="loadContractorImageBtn">Upload</button>
+        </form>
+    </section>
+
     <section class="cabinet_sectionsBlock">
+        <div class="cabinet_blockTitle">Sections</div>
         <div class="cabinet_empty" th:classappend="${#arrays.length(sections)} != 0 ? hidden : ''">No sections yet</div>
-        <div th:each="section : ${sections}" th:attr = "data-section-id = ${section.id}" class="sectionBlock">
+        <div th:each="section : ${sections}" th:attr = "data-section-id = ${section.id}"
+             th:attrappend = "default-section = ${section.name == defaultSectionName ? true : false}" class="sectionBlock">
+
             <div th:text="${section.name}" class="cabinet_sectionName"></div>
-            <button th:if="${section.name} != ${defaultSectionName}" class="btn cabinet_removeBtn cabinet_removeSectionBtn" title="remove"><i class="fas fa-times"></i></button>
+            <button th:if="${section.name} != ${defaultSectionName}" class="cabinet_removeBtn cabinet_removeSectionBtn" title="remove">
+                <i class="fas fa-times"></i>
+            </button>
+            <a th:href="@{/contractor/cabinet/modify_section/} + ${section.id}" th:if="${section.name} != ${defaultSectionName}" class="cabinet_modifyBtn" title="modify">
+               <i class="fas fa-pencil-alt"></i>
+            </a>
             <div class="cabinet_sectionProducts row">
+                <div class="cabinet_empty" th:classappend="${#arrays.length(section.products)} != 0 ? hidden : ''">No products</div>
                 <div th:each="product : ${section.products}" th:attr = "data-product-id = ${product.id}" class="product col-12 col-sm-4">
                     <div th:text="${product.name}" class="productName"></div>
                     <div th:text="${product.description}" class="productName"></div>
@@ -30,5 +53,27 @@
         </div>
     </section>
 </div>
+
+<div class="modal" id="personLoginModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button class="closeBtn" data-dismiss="modal"><i class="fas fa-times"></i></button>
+                <div class="personLoginContent">
+                    <form id="loginForm" class="loginForm" th:action="@{/food/login}" method="post">
+                        <div class="loginBlock">
+                            <input class="loginInput" id="loginPhoneInput" type="text" name="phone" placeholder="Your phone"/>
+                            <input class="loginInput hidden" id="loginPasswordInput" type="text" name="password" placeholder="code"/>
+                            <span class="loginTimer" id="loginTimer"></span>
+                            <!-- <button id="loginSubmitBtn" class="loginSubmitBtn btn" value="Sign In">Send</button> -->
+                            <div class="loginWrongOtp hidden">Code is incorrect</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

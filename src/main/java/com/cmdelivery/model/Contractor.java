@@ -18,7 +18,7 @@ import java.util.Set;
 public class Contractor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int contractorId;
+    long contractorId;
 
     @NonNull
     @NotEmpty
@@ -28,6 +28,8 @@ public class Contractor {
     @NonNull
     @NotEmpty
     String name;
+
+    String image;
 
     @NonNull
     @NotEmpty

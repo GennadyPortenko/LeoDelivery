@@ -5,6 +5,7 @@ import com.cmdelivery.model.Role;
 import com.cmdelivery.model.Section;
 import com.cmdelivery.repository.ContractorRepository;
 import com.cmdelivery.repository.RoleRepository;
+import com.cmdelivery.repository.SectionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,7 @@ public class ContractorService {
     private final RoleRepository roleRepository;
     private final ContractorRepository contractorRepository;
     private final SectionService sectionService;
+    private final SectionRepository sectionRepository;
 
 
     @Transactional
@@ -32,12 +34,17 @@ public class ContractorService {
         contractor.setRoles(new HashSet<>(Arrays.asList(contractorRole)));
         Contractor savedContractor = contractorRepository.save(contractor);
 
-        Section defaultSection = new Section(SectionService.defaultSectionName());
+        Section defaultSection = new Section();
         defaultSection.setContractor(contractor);
-        if (sectionService.registerNewSection(defaultSection) == null) {
+        if (sectionService.registerNewDefaultSection(defaultSection) == null) {
             return null;
         }
 
         return savedContractor;
     }
+
+    public Section getDefaultSection(long contractorId) {
+        return sectionRepository.findByNameAndContractor(SectionService.defaultSectionName(), contractorId);
+    }
+
 }

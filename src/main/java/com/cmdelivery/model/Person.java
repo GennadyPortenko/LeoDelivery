@@ -17,7 +17,7 @@ import java.util.Set;
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int personId;
+    long personId;
 
     @Email
     String email;

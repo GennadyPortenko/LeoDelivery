@@ -1,13 +1,9 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
+*.swo
+*.swp
+uploads/
 
 ### IntelliJ IDEA ###
 .idea
