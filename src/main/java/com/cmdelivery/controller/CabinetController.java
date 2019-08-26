@@ -78,11 +78,9 @@ public class CabinetController {
         ModelAndView modelAndView = new ModelAndView("contractor/modify_section");
         Optional<Section> section = sectionRepository.findById(sectionId);
         if (!section.isPresent()) {
-            System.out.println("default");
             throw new Error404Exception();
         }
         if (sectionService.isDefault(section.get())) {
-            System.out.println("default");
             throw new Error404Exception();
         }
         if (!section.get().getContractor().getName().equals(securityService.getCurrentUserName())) {

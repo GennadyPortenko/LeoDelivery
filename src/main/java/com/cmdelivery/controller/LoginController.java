@@ -110,7 +110,6 @@ public class LoginController {
     @ResponseBody
     @PostMapping(value="/login/otp/{phone}")
     public ResponseEntity<?> otpRequest(@PathVariable String phone) {
-        System.out.println("phone : " + phone);
         smsService.sendOTP(otpService.generateOTP(DtoService.parsePhone(phone)));
         return new ResponseEntity<>(new OTPResponse(true), HttpStatus.OK);
     }
@@ -118,7 +117,6 @@ public class LoginController {
     @ResponseBody
     @PostMapping(value="/login/otp/ajax")
     public ResponseEntity<?> loginAJAX(@RequestBody LoginStatus data, HttpServletRequest request) {
-        System.out.println(data);
         ResponseEntity<?> failedResponse = new ResponseEntity<>(new LoginStatus(data.getPhone(), data.getOtp(), false), HttpStatus.OK);
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(data.getPhone(), data.getOtp());
