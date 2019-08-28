@@ -13,7 +13,7 @@
         <div th:text="#{greeting}"></div>
         <div class="row food_categories">
             <th:block th:each="category: ${categories}">
-                <div class="btn food_category" th:text="${category.name}"></div>
+                <div class="btn food_category" th:text="${category.nameEn}"></div>
             </th:block>
         </div>
         <div class="row food_row">

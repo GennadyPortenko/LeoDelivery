@@ -10,6 +10,7 @@ function sendOTPRequest(phone , onSuccess, onError, hostURL) {
       onSuccess(data);
     },
     error: function(response, textStatus, errorThrown) {
+      console.log(JSON.parse(response.responseText));
       onError();
     }
   });

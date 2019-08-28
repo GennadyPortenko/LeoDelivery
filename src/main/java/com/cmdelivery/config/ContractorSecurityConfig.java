@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.sql.DataSource;
 
 @Configuration
+@Order(2)
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 class ContractorSecurityConfig extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -42,6 +44,8 @@ class ContractorSecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasRole("CONTRACTOR")
                 .and()
             .formLogin()
+                // .usernameParameter("email")
+                // .passwordParameter("password")
                 .loginPage("/contractor/login")
                 .loginProcessingUrl("/contractor/login")
                 .failureUrl("/contractor/login?error")

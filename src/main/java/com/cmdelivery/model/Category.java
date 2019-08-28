@@ -23,9 +23,9 @@ public class Category {
 
     @NonNull
     @NotEmpty
-    String name;
+    String nameEn;
 
     @NonNull
     @NotEmpty
-    String frenchName;
+    String nameFr;
 }

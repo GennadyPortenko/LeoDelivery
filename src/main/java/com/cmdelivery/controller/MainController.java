@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +24,16 @@ public class MainController {
     private final CategoryRepository categoryRepository;
 
     @GetMapping(value="/food")
-    public ModelAndView regularHome() {
+    public ModelAndView food() {
+        ModelAndView modelAndView = new ModelAndView("regular/food");
+        modelAndView.addObject("restaurants", contractorRepository.findAll());
+        modelAndView.addObject("categories", categoryRepository.findAll());
+        return modelAndView;
+    }
+
+    @PostMapping(value="/food")
+    public ModelAndView foodPost(@RequestParam Integer districtId) {
+        System.out.println(districtId);
         ModelAndView modelAndView = new ModelAndView("regular/food");
         modelAndView.addObject("restaurants", contractorRepository.findAll());
         modelAndView.addObject("categories", categoryRepository.findAll());

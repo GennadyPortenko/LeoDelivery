@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 @Configuration
 @Order(1)
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
-public class RegularSecurityConfig extends WebSecurityConfigurerAdapter {
+public class ClientSecurityConfig extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final DataSource dataSource;
     private final ClientAuthenticationSuccessHandler clientAuthenticationSuccessHandler;

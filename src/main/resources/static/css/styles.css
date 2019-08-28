@@ -179,17 +179,41 @@ a:hover {
   font-size:28px;
   margin:20px 0;
 }
-.chooseCity_btns {
+.chooseLocation_row {
   padding:20px 0;
 }
-.chooseCity_btn {
+.chooseLocation_message {
+  font-size:30px;
+  margin-top:20px;
+}
+.chooseLocation_city {
+  width:48%;
+}
+.chooseLocation_city.wide {
+  width:100%;
+}
+.chooseLocation_btn {
   width:90%;
   margin-left:5%;
   margin-bottom:20px;
   font-size:20px;
-  padding:20px 10px;;
+  padding:40px 10px;;
   border-radius:5px;
   cursor:pointer;
+}
+.chooseLocation_back {
+  background:transparent;
+  color:green;
+  border:none;
+  font-size:20px;
+  cursor:pointer;
+  margin-left:20px;
+}
+.chooseLocation_back:hover {
+  color:#2a2;
+}
+.chooseLocation_back .icon {
+  margin-right:10px;
 }
 
 /* cabinet */

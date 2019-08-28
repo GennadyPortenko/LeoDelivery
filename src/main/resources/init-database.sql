@@ -28,15 +28,15 @@ CREATE TABLE role (
 DROP TABLE IF EXISTS city CASCADE;
 CREATE TABLE city (
   city_id SERIAL PRIMARY KEY
-, name VARCHAR(50) NOT NULL
-, french_name VARCHAR(50) NOT NULL
+, name_en VARCHAR(50) NOT NULL
+, name_fr VARCHAR(50) NOT NULL
 );
 
 DROP TABLE IF EXISTS district CASCADE;
 CREATE TABLE district (
   district_id SERIAL PRIMARY KEY
-, name VARCHAR(50) NOT NULL
-, french_name VARCHAR(50) NOT NULL
+, name_en VARCHAR(50) NOT NULL
+, name_fr VARCHAR(50) NOT NULL
 , city_fk INTEGER REFERENCES city(city_id) -- ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -73,36 +73,28 @@ CREATE TABLE product (
 DROP TABLE IF EXISTS category CASCADE;
 CREATE TABLE category (
   category_id SERIAL PRIMARY KEY
-, name VARCHAR(50) NOT NULL
-, french_name VARCHAR(50) NOT NULL
+, name_en VARCHAR(50) NOT NULL
+, name_fr VARCHAR(50) NOT NULL
 );
 
 
 -- roles initialization
 
 INSERT INTO role (role_id, role)
-VALUES (1, 'ROLE_ADMIN'), (2, 'ROLE_USER'), (3, 'ROLE_CONTRACTOR')
-ON CONFLICT (role_id) DO UPDATE
-  SET role = excluded.role;
+VALUES (1, 'ROLE_ADMIN'), (2, 'ROLE_USER'), (3, 'ROLE_CONTRACTOR');
 
 
 -- categories initialization
 
-INSERT INTO category (category_id, name, french_name)
-VALUES (1, 'Pizza', 'Pizza'), (2, 'Sushi', 'Sushi')
-ON CONFLICT (category_id) DO UPDATE
-  SET name = excluded.name, french_name = excluded.french_name;
+INSERT INTO category (category_id, name_en, name_fr)
+VALUES (1, 'Pizza', 'Pizza'), (2, 'Sushi', 'Sushi');
 
 
 -- cities / districts initialization
 
-INSERT INTO city (city_id, name, french_name)
-VALUES (1, 'Douala', 'Douala'), (2, 'Yaounde', 'Yaoundé')
-ON CONFLICT (city_id) DO UPDATE
-  SET name = excluded.name, french_name = excluded.french_name;
+INSERT INTO city (city_id, name_en, name_fr)
+VALUES (1, 'Douala', 'Douala'), (2, 'Yaounde', 'Yaoundé');
 
-INSERT INTO district (district_id, name, french_name, city_fk)
+INSERT INTO district (district_id, name_en, name_fr, city_fk)
 VALUES (1, 'Akwa', 'Akwa', 1), (2, 'Bassa', 'Bassa', 1),
-       (3, 'Etoudi', 'Etoudi', 2), (4, 'Bastos', 'Bastos', 2)
-ON CONFLICT (district_id) DO UPDATE
-  SET name = excluded.name, french_name = excluded.french_name;
+       (3, 'Etoudi', 'Etoudi', 2), (4, 'Bastos', 'Bastos', 2);

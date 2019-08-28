@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <thymeleaf th:replace="/include/resources :: resources"></thymeleaf>
+    <script th:src="@{/js/chooseLocation.js}"></script>
+
+    <title th:text="#{choose.city.message}"></title>
+</head>
+<body>
+    <div class="container">
+        <section class="chooseCity">
+            <div class="chooseCity_greeting" th:text="#{greeting}"></div>
+            <div th:replace="/include/langSwitcher :: langSwitcher"></div>
+            <div class="chooseLocation_message chooseCityMessage" th:text="#{choose.city.message}"></div>
+            <div class="chooseLocation_message chooseDistrictMessage hidden" th:text="#{choose.district.message}"></div>
+
+            <div class="row chooseLocation_row">
+                <div th:each="city : ${cities}" class="chooseLocation_city">
+                    <th:block th:switch="#{locale}">
+                        <button th:case="'??locale_fr_FR??'" class="btn chooseLocation_btn chooseCityBtn" th:text="${city.nameFr}"></button>
+                        <button th:case="*" class="btn chooseLocation_btn chooseCityBtn" th:text="${city.nameEn}"></button>
+                    </th:block>
+                    <div class="row chooseLocation_disctricts">
+                        <div th:each="district: ${city.districts}" class="chooseLocation_district hidden col-12 col-sm-6">
+                            <form th:switch="#{locale}" th:action="@{/food}" method="post">
+                                <input class="chooseLocation_input" type="hidden" name="districtId" th:value="${district.districtId}"/>
+                                <input type="submit" th:case="'??locale_fr_FR??'" class="btn chooseLocation_btn" th:value="${district.nameFr}"/>
+                                <input type="submit" th:case="*" class="btn chooseLocation_btn" th:value="${district.nameEn}"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </section>
+        <button class="chooseLocation_back hidden" id="chooseLocation_back">
+            <i class="icon fas fa-arrow-left"></i> <span th:text="#{choose.city.back}"></span>
+        </button>
+    </div>
+</body>
+</html>

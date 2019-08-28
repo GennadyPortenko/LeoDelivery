@@ -20,11 +20,11 @@ public class District {
 
     @NonNull
     @NotEmpty
-    String name;
+    String nameEn;
 
     @NonNull
     @NotEmpty
-    String frenchName;
+    String nameFr;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="city_fk")

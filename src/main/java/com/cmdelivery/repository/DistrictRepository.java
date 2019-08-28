@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DistrictRepository extends JpaRepository<District, Long> {
-    Role findByName(String name);
 }

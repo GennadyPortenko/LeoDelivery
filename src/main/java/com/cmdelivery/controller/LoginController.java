@@ -72,6 +72,7 @@ public class LoginController {
 
             Product product2 = new Product("Sushi", "Perfect sushi.");
             product2.setSection(defaultSection);
+
             productRepository.save(product2);
 
             Section pizza = new Section("Pizza");
@@ -94,32 +95,8 @@ public class LoginController {
 
     @GetMapping(value="/")
     public ModelAndView home() {
-        ModelAndView modelAndView = new ModelAndView("chooseCity");
+        ModelAndView modelAndView = new ModelAndView("chooseLocation");
         modelAndView.addObject("cities", cityRepository.findAll());
-        return modelAndView;
-    }
-
-    @GetMapping(value="/choose_district")
-    public ModelAndView chooseDistrict(@RequestParam String city) {
-        ModelAndView modelAndView = new ModelAndView("chooseDistrict");
-
-        String city1 = messageSource.getMessage("choose.city.city1", null, LocaleContextHolder.getLocale());
-        String city2 = messageSource.getMessage("choose.city.city2", null, LocaleContextHolder.getLocale());
-        if (city.equals(city1)) {
-            modelAndView.addObject("city", city1);
-            modelAndView.addObject("districts", Arrays.asList(
-                    messageSource.getMessage("choose.district.city1.district1", null, LocaleContextHolder.getLocale()),
-                    messageSource.getMessage("choose.district.city1.district2", null, LocaleContextHolder.getLocale())
-            ));
-        } else if (city.equals(city2)) {
-            modelAndView.addObject("city", city2);
-            modelAndView.addObject("districts", Arrays.asList(
-                    messageSource.getMessage("choose.district.city2.district1", null, LocaleContextHolder.getLocale()),
-                    messageSource.getMessage("choose.district.city2.district2", null, LocaleContextHolder.getLocale())
-            ));
-        } else {
-           return new ModelAndView("redirect:/choose_city");
-        }
         return modelAndView;
     }
 
