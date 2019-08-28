@@ -3,6 +3,7 @@ package com.cmdelivery.model;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
@@ -12,11 +13,16 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Role {
+public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int roleId;
+    int cityId;
 
+    @NonNull
     @NotEmpty
-    String role;
+    String name;
+
+    @NonNull
+    @NotEmpty
+    String frenchName;
 }

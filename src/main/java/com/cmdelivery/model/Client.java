@@ -14,10 +14,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Person {
+public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long personId;
+    long clientId;
 
     @Email
     String email;
@@ -30,6 +30,6 @@ public class Person {
 
     @ToString.Exclude
     @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name = "person_role", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "client_role", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     Set<Role> roles = new HashSet<>();
 }

@@ -1,8 +1,8 @@
 package com.cmdelivery.service;
 
-import com.cmdelivery.model.Person;
+import com.cmdelivery.model.Client;
 import com.cmdelivery.model.Role;
-import com.cmdelivery.repository.PersonRepository;
+import com.cmdelivery.repository.ClientRepository;
 import com.cmdelivery.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +15,16 @@ import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
-public class PersonService {
+public class ClientService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RoleRepository roleRepository;
-    private final PersonRepository personRepository;
+    private final ClientRepository clientRepository;
 
     @Transactional
-    public Person registerNewPerson(Person person) {
-        person.setActive(1);
-        Role personRole = roleRepository.findByRole("ROLE_USER");
-        person.setRoles((new HashSet<>(Arrays.asList(personRole))));
-        return personRepository.save(person);
+    public Client registerNewClient(Client client) {
+        client.setActive(1);
+        Role clientRole = roleRepository.findByRole("ROLE_USER");
+        client.setRoles((new HashSet<>(Arrays.asList(clientRole))));
+        return clientRepository.save(client);
     }
 }

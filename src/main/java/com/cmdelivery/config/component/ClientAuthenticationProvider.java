@@ -1,7 +1,6 @@
 package com.cmdelivery.config.component;
 
-import com.cmdelivery.model.Person;
-import com.cmdelivery.repository.PersonRepository;
+import com.cmdelivery.repository.ClientRepository;
 import com.cmdelivery.service.DtoService;
 import com.cmdelivery.service.OTPService;
 import lombok.RequiredArgsConstructor;
@@ -10,16 +9,15 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
-public class PersonAuthenticationProvider implements AuthenticationProvider {
+public class ClientAuthenticationProvider implements AuthenticationProvider {
 
-    private final PersonRepository personRepository;
+    private final ClientRepository clientRepository;
     private final OTPService otpService;
 
     @Override

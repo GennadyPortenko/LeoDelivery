@@ -68,7 +68,7 @@ function processAjaxSuccessAuth(phone) {
   $('.topbarLogoutForm').removeClass('hidden');
   $('.topbarUsername').text(phone);
   $('.topbarUsername').removeClass('hidden');
-  $('#personLoginModal').modal('hide');
+  $('#clientLoginModal').modal('hide');
 }
 function processAjaxFailedAuth() {
   $('.loginWrongOtp').removeClass('hidden');

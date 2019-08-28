@@ -17,7 +17,7 @@ import java.security.Principal;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
-public class PersonAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class ClientAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final HttpSession session;
 
     @Override
@@ -32,7 +32,7 @@ public class PersonAuthenticationSuccessHandler implements AuthenticationSuccess
         }
         //HttpSession session = request.getSession();
         session.setAttribute("username", DtoService.toMaskedPhone(userName));
-        session.setAttribute("role", "PERSON");
+        session.setAttribute("role", "CLIENT");
 
         response.sendRedirect("/food");
 

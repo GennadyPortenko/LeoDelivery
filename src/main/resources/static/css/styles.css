@@ -3,7 +3,7 @@ a:hover {
 }
 
 .hidden {
-  display:none;
+  display:none !important;
 }
 
 .btn {
@@ -80,7 +80,7 @@ a:hover {
 .loginBlock .loginInput {
   padding:0 10px;
   display:block;
-  width:400px;
+  width:100%;
   margin-bottom:20px;
   height:40px;
   font-size:15px;
@@ -167,6 +167,31 @@ a:hover {
   margin-top:20px;
 }
 
+/* choose city / district */
+
+.chooseCity {
+  text-align:center;
+}
+.chooseCity_greeting {
+  margin:20px 0;
+}
+.chooseCity h1 {
+  font-size:28px;
+  margin:20px 0;
+}
+.chooseCity_btns {
+  padding:20px 0;
+}
+.chooseCity_btn {
+  width:90%;
+  margin-left:5%;
+  margin-bottom:20px;
+  font-size:20px;
+  padding:20px 10px;;
+  border-radius:5px;
+  cursor:pointer;
+}
+
 /* cabinet */
 
 .cabinet_panel {
@@ -236,4 +261,22 @@ a:hover {
 }
 .cabinet_image img {
   width:100%;
+}
+
+.food_row {
+  margin:20px 0;
+}
+.food_restaurant {
+  border:1px solid green;
+  border-radius:10px;
+  text-align:center;
+  padding:10px;
+}
+.food_categories {
+  margin:20px 0;
+}
+.food_category {
+  border-radius:5px;
+  padding:5px;
+  margin-right:10px;
 }

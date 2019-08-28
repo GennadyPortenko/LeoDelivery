@@ -8,6 +8,7 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
@@ -18,6 +19,7 @@ import org.apache.catalina.Context;
 import java.util.Locale;
 
 @Configuration
+@PropertySource(value = "classpath:messages_fr.properties", encoding = "UTF-8")
 public class AppConfig {
     @Bean
     public ModelMapper modelMapper() {

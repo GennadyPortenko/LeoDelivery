@@ -1,11 +1,11 @@
 package com.cmdelivery.repository;
 
-import com.cmdelivery.model.Person;
+import com.cmdelivery.model.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository()
-public interface PersonRepository extends JpaRepository<Person, Long> {
+public interface ClientRepository extends JpaRepository<Client, Long> {
     void deleteAll();
-    Person findByPhone(String phone);
+    Client findByPhone(String phone);
 }

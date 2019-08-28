@@ -1,6 +1,6 @@
 package com.cmdelivery.config;
 
-import com.cmdelivery.config.component.PersonAuthenticationProvider;
+import com.cmdelivery.config.component.ClientAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import com.cmdelivery.config.component.PersonAuthenticationSuccessHandler;
+import com.cmdelivery.config.component.ClientAuthenticationSuccessHandler;
 
 import javax.sql.DataSource;
 
@@ -20,19 +20,19 @@ import javax.sql.DataSource;
 public class RegularSecurityConfig extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final DataSource dataSource;
-    private final PersonAuthenticationSuccessHandler personAuthenticationSuccessHandler;
-    @Value("${spring.queries.person-query}")
-    private String personQuery;
-    @Value("${spring.queries.roles-person-query}")
-    private String rolesPersonQuery;
+    private final ClientAuthenticationSuccessHandler clientAuthenticationSuccessHandler;
+    @Value("${spring.queries.client-query}")
+    private String clientQuery;
+    @Value("${spring.queries.roles-client-query}")
+    private String rolesClientQuery;
 
 
     @Autowired
-    private PersonAuthenticationProvider personAuthProvider;
+    private ClientAuthenticationProvider clientAuthProvider;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(personAuthProvider);
+        auth.authenticationProvider(clientAuthProvider);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class RegularSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("phone")
                 .passwordParameter("password")
                 .failureUrl("/food/login?error")
-                .permitAll().successHandler(personAuthenticationSuccessHandler)
+                .permitAll().successHandler(clientAuthenticationSuccessHandler)
                 .and()
             .logout()
                 .logoutUrl("/food/logout")

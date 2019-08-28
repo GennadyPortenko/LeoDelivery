@@ -4,13 +4,15 @@
     <a th:href="@{/contractor/cabinet}" class="topbarElem">cabinet</a>
 
 
-    <div th:if="not ${option_hideLangSwitcher}" class="topbarElem topbarElemRight langSwitcher">
-        <a th:classappend="#{locale} != '??locale_fr_FR??' ? active: notActive"
-           th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
-           th:href="${urlBuilder.replaceQueryParam('lang', 'en_US').toUriString()}" th:text="#{lang.eng}" class="lang-btn"></a>
-        <a th:classappend="#{locale} == '??locale_fr_FR??' ? active: notActive"
-           th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
-           th:href="${urlBuilder.replaceQueryParam('lang', 'fr_FR').toUriString()}" th:text="#{lang.fr}" class="lang-btn"></a>
+    <div th:if="not ${option_hideLangSwitcher}" class="topbarElem topbarElemRight">
+        <div class="langSwitcher">
+            <a th:classappend="#{locale} != '??locale_fr_FR??' ? 'active hidden' : notActive"
+               th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
+               th:href="${urlBuilder.replaceQueryParam('lang', 'en_US').toUriString()}" th:text="#{lang.eng}" class="lang-btn"></a>
+            <a th:classappend="#{locale} == '??locale_fr_FR??' ? 'active hidden' : notActive"
+               th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
+               th:href="${urlBuilder.replaceQueryParam('lang', 'fr_FR').toUriString()}" th:text="#{lang.fr}" class="lang-btn"></a>
+        </div>
     </div>
 
     <div th:classappend="${session.username} != null ? '' : hidden"
@@ -31,17 +33,17 @@
     </div>
 
     <a th:classappend="${session.username} == null ? '' : hidden" th:href="@{/food/login}" class="topbarElem topbarElemRight topbarEnter"
-       th:if="${session.role} != 'CONTRACTOR' and not ${option_hideLoggingIn}" data-toggle="modal" data-target="#personLoginModal">
+       th:if="${session.role} != 'CONTRACTOR' and not ${option_hideLoggingIn}" data-toggle="modal" data-target="#clientLoginModal">
         enter
     </a>
 
 
-    <div th:if="not ${option_hideLoggingIn}" class="modal" id="personLoginModal">
+    <div th:if="not ${option_hideLoggingIn}" class="modal" id="clientLoginModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
                     <button class="closeBtn" data-dismiss="modal"><i class="fas fa-times"></i></button>
-                    <div class="personLoginContent">
+                    <div class="clientLoginContent">
                         <form id="loginForm" class="loginForm" th:action="@{/food/login}" method="post">
                             <div class="loginBlock">
                                 <input class="loginInput" id="loginPhoneInput" type="text" name="phone" placeholder="Your phone"/>

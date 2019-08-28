@@ -21,7 +21,8 @@
     <section>
         <div class="cabinet_blockTitle">Image</div>
         <div class="cabinet_image">
-            <img th:src="@{${imagePath}}" alt="">
+            <img th:if="${imagePath != null}" th:src="@{${imagePath}}" alt="contractor photo">
+            <img th:if="${imagePath == null}" th:src="@{/image/contractor_default.jpg}" alt="contractor photo">
         </div>
         <div class="cabinet_imageUploadTitle">Upload new image</div>
         <form method="POST" enctype="multipart/form-data" name="loadContractorImageForm" th:action="@{/contractor/cabinet/upload_image}">
@@ -60,12 +61,12 @@
     </section>
 </div>
 
-<div class="modal" id="personLoginModal">
+<div class="modal" id="clientLoginModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
                 <button class="closeBtn" data-dismiss="modal"><i class="fas fa-times"></i></button>
-                <div class="personLoginContent">
+                <div class="clientLoginContent">
                     <form id="loginForm" class="loginForm" th:action="@{/food/login}" method="post">
                         <div class="loginBlock">
                             <input class="loginInput" id="loginPhoneInput" type="text" name="phone" placeholder="Your phone"/>

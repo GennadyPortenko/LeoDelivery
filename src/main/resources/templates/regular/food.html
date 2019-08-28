@@ -11,6 +11,18 @@
     <div class="container">
         <div th:replace="/include/menu :: menu"></div>
         <div th:text="#{greeting}"></div>
+        <div class="row food_categories">
+            <th:block th:each="category: ${categories}">
+                <div class="btn food_category" th:text="${category.name}"></div>
+            </th:block>
+        </div>
+        <div class="row food_row">
+            <div th:each="restaurant : ${restaurants}" class="col-12 col-sm-4">
+                <div class="food_restaurant">
+                    <div th:text="${restaurant.name}" class="food_restaurantName"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
 
