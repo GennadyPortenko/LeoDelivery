@@ -22,7 +22,7 @@
         <div class="cabinet_blockTitle">Image</div>
         <div class="cabinet_image">
             <img th:if="${imagePath != null}" th:src="@{${imagePath}}" alt="contractor photo">
-            <img th:if="${imagePath == null}" th:src="@{/image/contractor_default.jpg}" alt="contractor photo">
+            <img th:if="${imagePath == null}" src="/images/contractor_default.jpg" alt="contractor photo">
         </div>
         <div class="cabinet_imageUploadTitle">Upload new image</div>
         <form method="POST" enctype="multipart/form-data" name="loadContractorImageForm" th:action="@{/contractor/cabinet/upload_image}">
