@@ -24,6 +24,8 @@ public class Product {
     @NotEmpty
     String description;
 
+    String image;
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="section_fk")
     Section section;

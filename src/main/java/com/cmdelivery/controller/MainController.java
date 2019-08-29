@@ -33,7 +33,6 @@ public class MainController {
 
     @PostMapping(value="/food")
     public ModelAndView foodPost(@RequestParam Integer districtId) {
-        System.out.println(districtId);
         ModelAndView modelAndView = new ModelAndView("regular/food");
         modelAndView.addObject("restaurants", contractorRepository.findAll());
         modelAndView.addObject("categories", categoryRepository.findAll());

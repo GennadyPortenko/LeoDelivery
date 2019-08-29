@@ -6,43 +6,53 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-        import org.springframework.core.io.UrlResource;
-        import org.springframework.stereotype.Service;
-        import org.springframework.util.FileSystemUtils;
-        import org.springframework.util.StringUtils;
-        import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-        import javax.annotation.PostConstruct;
-        import java.io.IOException;
-        import java.io.InputStream;
-        import java.net.MalformedURLException;
-        import java.nio.file.Files;
-        import java.nio.file.Path;
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-        import java.util.stream.Stream;
+import java.util.stream.Stream;
+
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class FileSystemStorageService implements IStorageService {
     @Value("${storage.location}")
     private String rootLocation;
+    @Value("${storage.image.contractor.location}")
+    private String contractorImageRootLocation;
+    @Value("${storage.image.product.location}")
+    private String productImageRootLocation;
 
     private Path rootPath;
+    private Path contractorImageRootPath;
+    private Path productImageRootPath;
 
     @Override
     @PostConstruct
     public void init() {
         try {
             rootPath = Paths.get(rootLocation);
+            contractorImageRootPath = Paths.get(contractorImageRootLocation);
+            productImageRootPath = Paths.get(productImageRootLocation);
             Files.createDirectories(rootPath);
+            Files.createDirectories(contractorImageRootPath);
+            Files.createDirectories(productImageRootPath);
         } catch (Exception e) {
             throw new StorageException("Could not initialize storage location", e);
         }
     }
 
     @Override
-    public String store(MultipartFile file, String filename) {
+    public String store(MultipartFile file, String filename, FileType fileType) {
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file " + filename);
@@ -54,8 +64,16 @@ public class FileSystemStorageService implements IStorageService {
                                 + filename);
             }
             try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, this.rootPath.resolve(filename),
-                        StandardCopyOption.REPLACE_EXISTING);
+                switch (fileType) {
+                    case MAIN_IMAGE:
+                        Files.copy(inputStream, this.contractorImageRootPath.resolve(filename),
+                            StandardCopyOption.REPLACE_EXISTING);
+                        break;
+                    case PRODUCT_IMAGE:
+                        Files.copy(inputStream, this.productImageRootPath.resolve(filename),
+                                StandardCopyOption.REPLACE_EXISTING);
+                        break;
+                }
             }
         }
         catch (IOException e) {
@@ -79,14 +97,20 @@ public class FileSystemStorageService implements IStorageService {
     }
 
     @Override
-    public Path load(String filename) {
-        return rootPath.resolve(filename);
+    public Path load(String filename, FileType fileType) {
+        switch (fileType) {
+            case MAIN_IMAGE:
+                return contractorImageRootPath.resolve(filename);
+            case PRODUCT_IMAGE:
+                return productImageRootPath.resolve(filename);
+        }
+        return null;
     }
 
     @Override
-    public Resource loadAsResource(String filename) {
+    public Resource loadAsResource(String filename, FileType fileType) {
         try {
-            Path file = load(filename);
+            Path file = load(filename, fileType);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
@@ -103,6 +127,7 @@ public class FileSystemStorageService implements IStorageService {
 
     @Override
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(rootPath.toFile());
+        FileSystemUtils.deleteRecursively(contractorImageRootPath.toFile());
+        FileSystemUtils.deleteRecursively(productImageRootPath.toFile());
     }
 }

@@ -67,6 +67,7 @@ CREATE TABLE product (
   product_id BIGSERIAL PRIMARY KEY
 , name VARCHAR(50) NOT NULL
 , description TEXT NOT NULL
+, image VARCHAR(150)
 , section_fk INTEGER REFERENCES section(section_id) -- ON UPDATE CASCADE ON DELETE CASCADE
 );
 

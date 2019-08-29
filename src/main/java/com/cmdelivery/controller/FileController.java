@@ -35,11 +35,23 @@ public class FileController {
         return "listFiles";
     }
 
-    @GetMapping("${contractor.image.url}/{filename:.+}")
+    @GetMapping("${contractor.image.url}{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> downloadFile(@PathVariable String filename) {
+    public ResponseEntity<Resource> downloadContractorImageFile(@PathVariable String filename) {
 
-        Resource resource = storageService.loadAsResource(filename);
+        Resource resource = storageService.loadAsResource(filename, IStorageService.FileType.MAIN_IMAGE);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    @GetMapping("${product.image.url}{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> downloadProductImageFile(@PathVariable String filename) {
+
+        Resource resource = storageService.loadAsResource(filename, IStorageService.FileType.PRODUCT_IMAGE);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,

@@ -45,9 +45,8 @@ public class CabinetController {
 
     @Value("${contractor.image.url}")
     private String contractorImageUrl;
-
-    @Value("${contractor.image.prefix}")
-    private String contractorImagePrefix;
+    @Value("${product.image.url}")
+    private String productImageUrl;
 
     @GetMapping(value="/contractor/cabinet")
     public ModelAndView contractorHome(HttpServletRequest request) {
@@ -58,7 +57,13 @@ public class CabinetController {
             return modelAndView;
         }
         List<SectionDto> sections = contractor.getSections().stream().map(dtoService::convertToDto).collect(Collectors.toList());
-        modelAndView.addObject("imagePath", contractor.getImage());
+        String contractorImage = contractor.getImage();
+        modelAndView.addObject("contractorImagePath",
+                                contractorImage == null ? null :
+                                ServletUriComponentsBuilder.fromCurrentContextPath()
+                                    .path(contractorImageUrl)
+                                    .path(contractorImage)
+                                    .toUriString());
         modelAndView.addObject("sections", sections);
         modelAndView.addObject("defaultSectionName", SectionService.defaultSectionName());
         return modelAndView;
@@ -82,6 +87,13 @@ public class CabinetController {
             throw new Error403Exception();
         }
         modelAndView.addObject("productDto", dtoService.convertToDto(product.get()));
+        String productImage = product.get().getImage();
+        modelAndView.addObject("productImagePath",
+                productImage == null ? null :
+                        ServletUriComponentsBuilder.fromCurrentContextPath()
+                                .path(productImageUrl)
+                                .path(productImage)
+                                .toUriString());
         return modelAndView;
     }
 
@@ -222,14 +234,14 @@ public class CabinetController {
         return modelAndView;
     }
 
-    @PostMapping(value = { "/contractor/cabinet/upload_image" })
+    @PostMapping(value = { "/contractor/cabinet/upload_image/main" })
     @ResponseBody
-    public ResponseEntity<?> uploadImage(@RequestParam("file") @ValidImage MultipartFile image) {
+    public ResponseEntity<?> uploadMainImage(@RequestParam("file") @ValidImage MultipartFile image) {
         String name;
         Contractor contractor = contractorRepository.findByName(securityService.getCurrentUserName());
-        String filename = contractorImagePrefix + contractor.getContractorId();
+        String filename = "" + contractor.getContractorId();
         try {
-            name = storageService.store(image, filename);
+            name = storageService.store(image, filename, IStorageService.FileType.MAIN_IMAGE);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(new FileUploadResponse(), HttpStatus.NO_CONTENT);
@@ -238,8 +250,30 @@ public class CabinetController {
                 .path(contractorImageUrl)
                 .path(filename)
                 .toUriString();
-        contractor.setImage(uri);
+        contractor.setImage(Long.toString(contractor.getContractorId()));
         contractorRepository.save(contractor);
+
+        return new ResponseEntity<>(new FileUploadResponse(name, uri, image.getContentType(), image.getSize()), HttpStatus.OK);
+    }
+
+    @PostMapping(value = { "/contractor/cabinet/upload_image/product/{productId}" })
+    @ResponseBody
+    public ResponseEntity<?> uploadProductImage(@RequestParam("file") @ValidImage MultipartFile image, @PathVariable long productId) {
+        String name;
+        Product product = productRepository.findByProductId(productId);
+        String filename = "" + product.getProductId();
+        try {
+            name = storageService.store(image, filename, IStorageService.FileType.PRODUCT_IMAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new FileUploadResponse(), HttpStatus.NO_CONTENT);
+        }
+        String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(productImageUrl)
+                .path(filename)
+                .toUriString();
+        product.setImage(Long.toString(product.getProductId()));
+        productRepository.save(product);
 
         return new ResponseEntity<>(new FileUploadResponse(name, uri, image.getContentType(), image.getSize()), HttpStatus.OK);
     }

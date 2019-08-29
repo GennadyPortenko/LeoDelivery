@@ -3,7 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <thymeleaf th:replace="/include/resources :: resources"></thymeleaf>
+    <thymeleaf th:replace="/include/resources :: resources (option_contractorCabinet = true)"></thymeleaf>
+    <script th:src="@{/js/cabinet/modifyProduct.js}"></script>
+
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+        var productId = /*[[${productDto.id}]]*/ 0;
+      /*]]>*/
+    </script>
 
     <title>Edit product</title>
 </head>
@@ -14,6 +21,18 @@
     <div th:if="${param.errorMsg != null}" class="cabinet_errorBlock">
         <div th:text="${param.errorMsg}" class="cabinet_errorMsg"></div>
     </div>
+
+    <div class="product_image">
+        <div th:text="${productImagePath}"></div>
+        <img th:if="${productImagePath != null}" th:src="@{${productImagePath}}" alt="product photo">
+        <img th:if="${productImagePath == null}" src="/images/product_default.jpg" alt="product photo">
+    </div>
+    <div class="cabinet_imageUploadTitle">Upload new image</div>
+    <form method="POST" enctype="multipart/form-data" name="loadProductImageForm" th:action="@{/contractor/cabinet/upload_image/product}">
+        <input type="file" name="file" id="loadProductImageInput">
+        <button type="submit" class="btn" id="loadProductImageBtn">Upload</button>
+    </form>
+
     <form action="#" th:action="@{/contractor/cabinet/modify_product/} + ${productDto.id}" th:object="${productDto}" method="post"
           data-toggle="validator" required="true" role="form" class="cabinet_addForm">
         <input th:field="*{name}" class="login-form-input" id="productName" required placeholder="Name" name="login">

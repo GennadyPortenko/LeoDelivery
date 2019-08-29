@@ -286,6 +286,12 @@ a:hover {
 .cabinet_image img {
   width:100%;
 }
+.product_image {
+}
+.product_image img {
+  width:300px;
+  height:auto;
+}
 
 .food_row {
   margin:20px 0;

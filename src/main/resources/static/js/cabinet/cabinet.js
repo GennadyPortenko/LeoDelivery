@@ -14,7 +14,8 @@ $(document).ready(function() {
                              location.reload();
                            },
                            function() {},
-                           hostURL
+                           hostURL,
+                           "main"
                           );
   });
 });

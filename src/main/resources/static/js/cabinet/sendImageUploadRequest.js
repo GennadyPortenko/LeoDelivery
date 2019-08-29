@@ -1,10 +1,10 @@
-function sendImageUploadRequest(data, onSuccess, onError, hostURL) {
+function sendImageUploadRequest(data, onSuccess, onError, hostURL, type) {
   $.ajax({
     headers: {
       'X-CSRF-TOKEN' : $('meta[name="_csrf"]').attr('content'),
     },
     type: "POST",
-    url: hostURL + "/contractor/cabinet/upload_image",
+    url: hostURL + "/contractor/cabinet/upload_image/" + type,
     data: data,
 
     enctype : 'multipart/form-data',

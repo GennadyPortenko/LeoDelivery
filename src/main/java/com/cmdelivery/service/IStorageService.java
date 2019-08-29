@@ -8,15 +8,19 @@ import java.util.stream.Stream;
 
 public interface IStorageService {
 
+    enum FileType{
+        MAIN_IMAGE, PRODUCT_IMAGE
+    }
+
     void init();
 
-    String store(MultipartFile file, String filename);
+    String store(MultipartFile file, String filename, FileType fileType);
 
     Stream<Path> loadAll();
 
-    Path load(String filename);
+    Path load(String filename, FileType fileType);
 
-    Resource loadAsResource(String filename);
+    Resource loadAsResource(String filename, FileType fileType);
 
     void deleteAll();
 
