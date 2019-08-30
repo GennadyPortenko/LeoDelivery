@@ -8,24 +8,27 @@
     <title>Regular home page</title>
 </head>
 <body>
-    <div class="container">
-        <div th:replace="/include/menu :: menu"></div>
-        <div th:text="#{greeting}"></div>
+<div th:replace="/include/menu :: menu"></div>
+<div class="container-fluid food_container-fluid">
+    <div class="container food_container">
         <div class="row food_categories">
             <th:block th:each="category: ${categories}">
                 <div class="btn food_category" th:text="${category.nameEn}"></div>
             </th:block>
         </div>
         <div class="row food_row">
-            <div th:each="restaurant : ${restaurants}" class="col-12 col-sm-4">
+            <div th:each="restaurant : ${restaurants}" class="col-12 col-sm-6 col-md-4">
                 <div class="food_restaurant">
+                    <div class="food_restaurantImage">
+                        <img th:if="${restaurant.image!= null}" th:src="@{${restaurant.image}}" alt="contractor photo">
+                        <img th:if="${restaurant.image == null}" src="/images/contractor_default.jpg" alt="contractor photo">
+                    </div>
                     <div th:text="${restaurant.name}" class="food_restaurantName"></div>
                 </div>
             </div>
         </div>
     </div>
 
-
-
+</div>
 </body>
 </html>

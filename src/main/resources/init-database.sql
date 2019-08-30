@@ -17,6 +17,9 @@ CREATE TABLE contractor (
 , image VARCHAR(150)
 , password VARCHAR(200) NOT NULL
 , active INTEGER NOT NULL
+, min_time INTEGER NOT NULL
+, max_time INTEGER NOT NULL
+, min_price INTEGER NOT NULL
 );
 
 DROP TABLE IF EXISTS role CASCADE;

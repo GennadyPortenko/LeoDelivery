@@ -14,7 +14,7 @@
     <div th:if="${param.errorMsg != null}" class="cabinet_errorBlock">
         <div th:text="${param.errorMsg}" class="cabinet_errorMsg"></div>
     </div>
-    <form action="#" th:action="@{/contractor/cabinet/add_product}" th:object="${productDto}" method="post"
+    <form action="#" th:action="@{/cabinet/add_product}" th:object="${productDto}" method="post"
           data-toggle="validator" required="true" role="form" class="cabinet_addForm">
         <input th:field="*{name}" class="login-form-input" id="productName" required placeholder="Name" name="login">
         <input th:field="*{description}" class="login-form-input" id="productDescription" required placeholder="Description" name="login">

@@ -32,6 +32,14 @@ public class Contractor {
     String image;
 
     @NonNull
+    int min_time;
+    @NonNull
+    int max_time;
+
+    @NonNull
+    int min_price;
+
+    @NonNull
     @NotEmpty
     String password;
     int active;

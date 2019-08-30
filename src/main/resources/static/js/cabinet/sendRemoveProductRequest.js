@@ -5,7 +5,7 @@ function sendRemoveProductRequest(productId, onSuccess, onError, hostURL) {
     },
     type: "POST",
     contentType: "application/json",
-    url: hostURL + "/contractor/cabinet/remove_product/" + productId,
+    url: hostURL + "/cabinet/remove_product/" + productId,
     data: {},
     dataType: "json",
     cache: false,

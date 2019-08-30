@@ -9,7 +9,9 @@ import com.cmdelivery.model.Section;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.stream.Collectors;
 
@@ -17,6 +19,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class DtoService {
     private final ModelMapper modelMapper;
+
+    @Value("${contractor.image.url}")
+    private String contractorImageUrl;
 
     public static String parsePhone(String phone) {
         return phone.replaceAll("[^\\d.]", "").substring(1);
@@ -52,6 +57,12 @@ public class DtoService {
     public ContractorDto convertToDto(Contractor contractor) {
         ContractorDto contractorDto = modelMapper.map(contractor, ContractorDto.class);
         contractorDto.setId(contractor.getContractorId());
+        String contractorImage = contractor.getImage();
+        contractorDto.setImage(contractorImage == null ? null :
+                                ServletUriComponentsBuilder.fromCurrentContextPath()
+                                    .path(contractorImageUrl)
+                                    .path(contractorImage)
+                                    .toUriString());
         return contractorDto;
     }
 

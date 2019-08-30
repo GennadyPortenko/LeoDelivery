@@ -2,6 +2,14 @@ a:hover {
   text-decoration:none;
 }
 
+.food_container-fluid {
+  background:#f5f5f5;
+}
+.food_container {
+  padding:0;
+  padding-bottom:20px;
+}
+
 .hidden {
   display:none !important;
 }
@@ -33,6 +41,7 @@ a:hover {
 }
 
 .topbar {
+  background:white;
   padding:15px 0;
   height:80px;
 }
@@ -294,16 +303,29 @@ a:hover {
 }
 
 .food_row {
-  margin:20px 0;
+  margin-top:20px auto;
 }
 .food_restaurant {
-  border:1px solid green;
   border-radius:10px;
-  text-align:center;
-  padding:10px;
+  overflow:hidden;
+  background:white;
 }
+.food_restaurantName {
+  font-size:20px;
+  margin:10px 0px 10px 10px;
+}
+.food_restaurantImage {
+  height:160px;
+  overflow:hidden;
+}
+.food_restaurantImage img {
+  width:100%;
+  height:auto;
+}
+
 .food_categories {
-  margin:20px 0;
+  padding:20px 0;
+  margin:auto;
 }
 .food_category {
   border-radius:5px;

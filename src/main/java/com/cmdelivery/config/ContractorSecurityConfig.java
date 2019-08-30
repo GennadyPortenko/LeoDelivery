@@ -38,7 +38,7 @@ class ContractorSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .antMatcher("/contractor/**")
+            .antMatcher("/cabinet/**")
             .authorizeRequests()
                 .anyRequest()
                 .hasRole("CONTRACTOR")
@@ -46,13 +46,13 @@ class ContractorSecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin()
                 // .usernameParameter("email")
                 // .passwordParameter("password")
-                .loginPage("/contractor/login")
-                .loginProcessingUrl("/contractor/login")
-                .failureUrl("/contractor/login?error")
+                .loginPage("/cabinet/login")
+                .loginProcessingUrl("/cabinet/login")
+                .failureUrl("/cabinet/login?error")
                 .permitAll().successHandler(contractorAuthenticationSuccessHandler)
                 .and()
             .logout()
-                .logoutUrl("/contractor/logout")
+                .logoutUrl("/cabinet/logout")
                 .permitAll();
     }
 

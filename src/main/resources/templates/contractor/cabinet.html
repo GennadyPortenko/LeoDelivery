@@ -14,8 +14,8 @@
     <div th:replace="/include/menu :: menu"></div>
     <h2>Cabinet</h2>
     <section class="cabinet_panel">
-        <a th:href="@{/contractor/cabinet/new_section}" class="btn cabinet_AddSectionBtn">Add section</a>
-        <a th:href="@{/contractor/cabinet/new_product}" class="btn cabinet_AddProductBtn">Add product</a>
+        <a th:href="@{/cabinet/new_section}" class="btn cabinet_AddSectionBtn">Add section</a>
+        <a th:href="@{/cabinet/new_product}" class="btn cabinet_AddProductBtn">Add product</a>
     </section>
 
     <section>
@@ -25,7 +25,7 @@
             <img th:if="${contractorImagePath == null}" src="/images/contractor_default.jpg" alt="contractor photo">
         </div>
         <div class="cabinet_imageUploadTitle">Upload new image</div>
-        <form method="POST" enctype="multipart/form-data" name="loadContractorImageForm" th:action="@{/contractor/cabinet/upload_image}">
+        <form method="POST" enctype="multipart/form-data" name="loadContractorImageForm" th:action="@{/cabinet/upload_image}">
             <input type="file" name="file" id="loadContractorImageInput">
             <button type="submit" class="btn" id="loadContractorImageBtn">Upload</button>
         </form>
@@ -41,7 +41,7 @@
             <button th:if="${section.name} != ${defaultSectionName}" class="cabinet_removeBtn cabinet_removeSectionBtn" title="remove">
                 <i class="fas fa-times"></i>
             </button>
-            <a th:href="@{/contractor/cabinet/modify_section/} + ${section.id}" th:if="${section.name} != ${defaultSectionName}" class="cabinet_modifyBtn" title="modify">
+            <a th:href="@{/cabinet/modify_section/} + ${section.id}" th:if="${section.name} != ${defaultSectionName}" class="cabinet_modifyBtn" title="modify">
                <i class="fas fa-pencil-alt"></i>
             </a>
             <div class="cabinet_sectionProducts row">
@@ -52,7 +52,7 @@
                     <button class="cabinet_removeBtn cabinet_removeProductBtn" title="remove">
                         <i class="fas fa-times"></i>
                     </button>
-                    <a th:href="@{/contractor/cabinet/modify_product/} + ${product.id}" class="cabinet_modifyBtn" title="modify">
+                    <a th:href="@{/cabinet/modify_product/} + ${product.id}" class="cabinet_modifyBtn" title="modify">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
                 </div>

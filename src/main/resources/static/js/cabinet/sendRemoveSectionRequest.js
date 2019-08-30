@@ -5,7 +5,7 @@ function sendRemoveSectionRequest(sectionId, onSuccess, onError, hostURL) {
     },
     type: "POST",
     contentType: "application/json",
-    url: hostURL + "/contractor/cabinet/remove_section/" + sectionId,
+    url: hostURL + "/cabinet/remove_section/" + sectionId,
     data: {},
     dataType: "json",
     cache: false,

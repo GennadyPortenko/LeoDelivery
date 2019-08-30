@@ -54,14 +54,14 @@ public class LoginController {
     @PostConstruct
     public void init() {
         final String CONTRACTOR_USERNAME = "rest";
-        final String CONTRACTOR_EMAIL= "rest@rest.com";
+        final String CONTRACTOR_EMAIL= "r@r.com";
         final String CONTRACTOR_PASSWORD= "rest";
         final String CONTRACTOR2_USERNAME = "rest2";
-        final String CONTRACTOR2_EMAIL= "rest@rest.com";
+        final String CONTRACTOR2_EMAIL= "r2@r2.com";
         final String CONTRACTOR2_PASSWORD= "rest2";
 
         if (contractorRepository.findByName(CONTRACTOR_USERNAME) == null) {
-            Contractor contractor = new Contractor(CONTRACTOR_EMAIL, CONTRACTOR_USERNAME, CONTRACTOR_PASSWORD);
+            Contractor contractor = new Contractor(CONTRACTOR_EMAIL, CONTRACTOR_USERNAME, 30, 60, 50, CONTRACTOR_PASSWORD);
             contractorService.registerNewContractor(contractor);
             Section defaultSection = sectionRepository.findByNameAndContractor(SectionService.defaultSectionName(), contractor.getContractorId());
             Set<Product> defaultProducts = new HashSet<>();
@@ -87,7 +87,7 @@ public class LoginController {
         }
 
         if (contractorRepository.findByName(CONTRACTOR2_USERNAME) == null) {
-            Contractor contractor = new Contractor(CONTRACTOR2_EMAIL, CONTRACTOR2_USERNAME, CONTRACTOR2_PASSWORD);
+            Contractor contractor = new Contractor(CONTRACTOR2_EMAIL, CONTRACTOR2_USERNAME, 30, 60, 50, CONTRACTOR2_PASSWORD);
             contractorService.registerNewContractor(contractor);
         }
 
@@ -105,7 +105,7 @@ public class LoginController {
         return new ModelAndView("regular/login");
     }
 
-    @GetMapping(value="/contractor/login")
+    @GetMapping(value="/cabinet/login")
     public ModelAndView contractorLogin() {
         return new ModelAndView("contractor/login");
     }

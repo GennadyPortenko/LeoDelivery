@@ -28,12 +28,12 @@
         <img th:if="${productImagePath == null}" src="/images/product_default.jpg" alt="product photo">
     </div>
     <div class="cabinet_imageUploadTitle">Upload new image</div>
-    <form method="POST" enctype="multipart/form-data" name="loadProductImageForm" th:action="@{/contractor/cabinet/upload_image/product}">
+    <form method="POST" enctype="multipart/form-data" name="loadProductImageForm" th:action="@{/cabinet/upload_image/product}">
         <input type="file" name="file" id="loadProductImageInput">
         <button type="submit" class="btn" id="loadProductImageBtn">Upload</button>
     </form>
 
-    <form action="#" th:action="@{/contractor/cabinet/modify_product/} + ${productDto.id}" th:object="${productDto}" method="post"
+    <form action="#" th:action="@{/cabinet/modify_product/} + ${productDto.id}" th:object="${productDto}" method="post"
           data-toggle="validator" required="true" role="form" class="cabinet_addForm">
         <input th:field="*{name}" class="login-form-input" id="productName" required placeholder="Name" name="login">
         <input th:field="*{description}" class="login-form-input" id="productDescription" required placeholder="Description" name="login">

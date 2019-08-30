@@ -4,7 +4,7 @@ function sendImageUploadRequest(data, onSuccess, onError, hostURL, type) {
       'X-CSRF-TOKEN' : $('meta[name="_csrf"]').attr('content'),
     },
     type: "POST",
-    url: hostURL + "/contractor/cabinet/upload_image/" + type,
+    url: hostURL + "/cabinet/upload_image/" + type,
     data: data,
 
     enctype : 'multipart/form-data',

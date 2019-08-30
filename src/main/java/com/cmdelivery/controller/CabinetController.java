@@ -48,7 +48,7 @@ public class CabinetController {
     @Value("${product.image.url}")
     private String productImageUrl;
 
-    @GetMapping(value="/contractor/cabinet")
+    @GetMapping(value="/cabinet")
     public ModelAndView contractorHome(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("contractor/cabinet");
         String username = securityService.getCurrentUserName();
@@ -69,14 +69,14 @@ public class CabinetController {
         return modelAndView;
     }
 
-    @GetMapping(value="/contractor/cabinet/new_section")
+    @GetMapping(value="/cabinet/new_section")
     public ModelAndView newSection() {
         ModelAndView modelAndView = new ModelAndView("contractor/new_section");
         modelAndView.addObject("sectionDto", new SectionDto());
         return modelAndView;
     }
 
-    @GetMapping(value="/contractor/cabinet/modify_product/{productId}")
+    @GetMapping(value="/cabinet/modify_product/{productId}")
     public ModelAndView modifyProduct(@PathVariable long productId) {
         ModelAndView modelAndView = new ModelAndView("contractor/modify_product");
         Optional<Product> product = productRepository.findById(productId);
@@ -90,16 +90,16 @@ public class CabinetController {
         String productImage = product.get().getImage();
         modelAndView.addObject("productImagePath",
                 productImage == null ? null :
-                        ServletUriComponentsBuilder.fromCurrentContextPath()
-                                .path(productImageUrl)
-                                .path(productImage)
-                                .toUriString());
+                ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path(productImageUrl)
+                        .path(productImage)
+                        .toUriString());
         return modelAndView;
     }
 
-    @PostMapping(value="/contractor/cabinet/modify_product/{productId}")
+    @PostMapping(value="/cabinet/modify_product/{productId}")
     public ModelAndView modifyProductPost(@PathVariable long productId, @ModelAttribute ProductDto productDto) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/contractor/cabinet");
+        ModelAndView modelAndView = new ModelAndView("redirect:/cabinet");
         Product product = productRepository.findByProductId(productId);
         if ((product == null)) {
             modelAndView.addObject("errorMsg", "Failed to modify product");
@@ -116,7 +116,7 @@ public class CabinetController {
         return modelAndView;
     }
 
-    @GetMapping(value="/contractor/cabinet/modify_section/{sectionId}")
+    @GetMapping(value="/cabinet/modify_section/{sectionId}")
     public ModelAndView modifySection(@PathVariable long sectionId) {
         ModelAndView modelAndView = new ModelAndView("contractor/modify_section");
         Optional<Section> section = sectionRepository.findById(sectionId);
@@ -133,9 +133,9 @@ public class CabinetController {
         return modelAndView;
     }
 
-    @PostMapping(value="/contractor/cabinet/modify_section/{sectionId}")
+    @PostMapping(value="/cabinet/modify_section/{sectionId}")
     public ModelAndView modifySectionPost(@PathVariable long sectionId, @ModelAttribute SectionDto sectionDto) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/contractor/cabinet");
+        ModelAndView modelAndView = new ModelAndView("redirect:/cabinet");
         Section section = sectionRepository.findBySectionId(sectionId);
         if ((section == null) || (sectionService.isDefault(section))) {
             modelAndView.addObject("errorMsg", "Failed to modify section");
@@ -152,14 +152,14 @@ public class CabinetController {
         return modelAndView;
     }
 
-    @PostMapping(value="/contractor/cabinet/add_section")
+    @PostMapping(value="/cabinet/add_section")
     public ModelAndView addSection(@ModelAttribute SectionDto sectionDto, BindingResult bindingResult) {
         String currentContractor = securityService.getCurrentUserName();
         if (currentContractor == null) {
-            return new ModelAndView("redirect:/contractor/cabinet");
+            return new ModelAndView("redirect:/cabinet");
         }
         if (sectionRepository.findByName(sectionDto.getName()) != null) {
-            ModelAndView errorModelAndView = new ModelAndView("redirect:/contractor/cabinet/new_section");
+            ModelAndView errorModelAndView = new ModelAndView("redirect:/cabinet/new_section");
             errorModelAndView.addObject("errorMsg", "Section with name " + sectionDto.getName() + " already exists");
             return errorModelAndView;
         }
@@ -167,16 +167,16 @@ public class CabinetController {
         newSection.setContractor(contractorRepository.findByName(currentContractor));
         Section registeredSection = sectionService.registerNewSection(newSection);
         if (registeredSection == null) {
-            ModelAndView errorModelAndView = new ModelAndView("redirect:/contractor/cabinet/new_section");
+            ModelAndView errorModelAndView = new ModelAndView("redirect:/cabinet/new_section");
             errorModelAndView.addObject("errorMsg", "Error occured while creating section with name " + sectionDto.getName());
             return errorModelAndView;
         }
-        ModelAndView modelAndView = new ModelAndView("redirect:/contractor/cabinet");
+        ModelAndView modelAndView = new ModelAndView("redirect:/cabinet");
         return modelAndView;
     }
 
     @ResponseBody
-    @PostMapping(value="/contractor/cabinet/remove_section/{sectionId}")
+    @PostMapping(value="/cabinet/remove_section/{sectionId}")
     public ResponseEntity<?> removeSection(@PathVariable Integer sectionId) {
         Section section = sectionRepository.findBySectionId(sectionId);
         Contractor sectionContractor = section.getContractor();
@@ -194,7 +194,7 @@ public class CabinetController {
     }
 
     @ResponseBody
-    @PostMapping(value="/contractor/cabinet/remove_product/{productId}")
+    @PostMapping(value="/cabinet/remove_product/{productId}")
     public ResponseEntity<?> removeProduct(@PathVariable Integer productId) {
         Product product = productRepository.findByProductId(productId);
         Contractor productContractor = product.getSection().getContractor();
@@ -205,36 +205,36 @@ public class CabinetController {
         return new ResponseEntity<>(productId, HttpStatus.OK);
     }
 
-    @GetMapping(value="/contractor/cabinet/new_product")
+    @GetMapping(value="/cabinet/new_product")
     public ModelAndView newProduct() {
         ModelAndView modelAndView = new ModelAndView("contractor/new_product");
         modelAndView.addObject("productDto", new ProductDto());
         return modelAndView;
     }
 
-    @PostMapping(value="/contractor/cabinet/add_product")
+    @PostMapping(value="/cabinet/add_product")
     public ModelAndView addProduct(@ModelAttribute ProductDto productDto, BindingResult bindingResult) {
         String currentContractor = securityService.getCurrentUserName();
         if (currentContractor == null) {
-            return new ModelAndView("redirect:/contractor/cabinet");
+            return new ModelAndView("redirect:/cabinet");
         }
         if (productRepository.findByName(productDto.getName()) != null) {
-            ModelAndView errorModelAndView = new ModelAndView("redirect:/contractor/cabinet/new_product");
+            ModelAndView errorModelAndView = new ModelAndView("redirect:/cabinet/new_product");
             errorModelAndView.addObject("errorMsg", "Product with name " + productDto.getName() + " already exists");
             return errorModelAndView;
         }
         Product newProduct = dtoService.convertToProduct(productDto);
         Product registeredProduct = productService.registerNewProduct(newProduct);
         if (registeredProduct == null) {
-            ModelAndView errorModelAndView = new ModelAndView("redirect:/contractor/cabinet/new_product");
+            ModelAndView errorModelAndView = new ModelAndView("redirect:/cabinet/new_product");
             errorModelAndView.addObject("errorMsg", "Error occured while creating product with name " + productDto.getName());
             return errorModelAndView;
         }
-        ModelAndView modelAndView = new ModelAndView("redirect:/contractor/cabinet");
+        ModelAndView modelAndView = new ModelAndView("redirect:/cabinet");
         return modelAndView;
     }
 
-    @PostMapping(value = { "/contractor/cabinet/upload_image/main" })
+    @PostMapping(value = { "/cabinet/upload_image/main" })
     @ResponseBody
     public ResponseEntity<?> uploadMainImage(@RequestParam("file") @ValidImage MultipartFile image) {
         String name;
@@ -256,7 +256,7 @@ public class CabinetController {
         return new ResponseEntity<>(new FileUploadResponse(name, uri, image.getContentType(), image.getSize()), HttpStatus.OK);
     }
 
-    @PostMapping(value = { "/contractor/cabinet/upload_image/product/{productId}" })
+    @PostMapping(value = { "/cabinet/upload_image/product/{productId}" })
     @ResponseBody
     public ResponseEntity<?> uploadProductImage(@RequestParam("file") @ValidImage MultipartFile image, @PathVariable long productId) {
         String name;

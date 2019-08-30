@@ -15,5 +15,6 @@ public class ContractorDto {
     long id;
     String name;
     String email;
+    String image;
     Set<SectionDto> sections;
 }

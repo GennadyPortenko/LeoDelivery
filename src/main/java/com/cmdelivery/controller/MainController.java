@@ -4,13 +4,12 @@ import com.cmdelivery.dto.SectionDto;
 import com.cmdelivery.model.Contractor;
 import com.cmdelivery.repository.CategoryRepository;
 import com.cmdelivery.repository.ContractorRepository;
+import com.cmdelivery.service.DtoService;
 import com.cmdelivery.service.SectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,19 +21,13 @@ import java.util.stream.Collectors;
 public class MainController {
     private final ContractorRepository contractorRepository;
     private final CategoryRepository categoryRepository;
+    private final DtoService dtoService;
 
-    @GetMapping(value="/food")
+    @RequestMapping(value="/food", method={ RequestMethod.GET, RequestMethod.POST })
     public ModelAndView food() {
         ModelAndView modelAndView = new ModelAndView("regular/food");
-        modelAndView.addObject("restaurants", contractorRepository.findAll());
-        modelAndView.addObject("categories", categoryRepository.findAll());
-        return modelAndView;
-    }
-
-    @PostMapping(value="/food")
-    public ModelAndView foodPost(@RequestParam Integer districtId) {
-        ModelAndView modelAndView = new ModelAndView("regular/food");
-        modelAndView.addObject("restaurants", contractorRepository.findAll());
+        modelAndView.addObject("restaurants",
+                contractorRepository.findAll().stream().map(dtoService::convertToDto).collect(Collectors.toList()));
         modelAndView.addObject("categories", categoryRepository.findAll());
         return modelAndView;
     }
