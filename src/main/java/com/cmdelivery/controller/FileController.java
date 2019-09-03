@@ -38,9 +38,7 @@ public class FileController {
     @GetMapping("${contractor.image.url}{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> downloadContractorImageFile(@PathVariable String filename) {
-
         Resource resource = storageService.loadAsResource(filename, IStorageService.FileType.MAIN_IMAGE);
-
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=\"" + resource.getFilename() + "\"")
@@ -50,9 +48,17 @@ public class FileController {
     @GetMapping("${product.image.url}{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> downloadProductImageFile(@PathVariable String filename) {
-
         Resource resource = storageService.loadAsResource(filename, IStorageService.FileType.PRODUCT_IMAGE);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
 
+    @GetMapping("${contractor.logo.url}{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> downloadContractorLogoFile(@PathVariable String filename) {
+        Resource resource = storageService.loadAsResource(filename, IStorageService.FileType.LOGO_IMAGE);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=\"" + resource.getFilename() + "\"")

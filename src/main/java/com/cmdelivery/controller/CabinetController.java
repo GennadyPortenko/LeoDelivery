@@ -1,5 +1,6 @@
 package com.cmdelivery.controller;
 
+import com.cmdelivery.dto.ContractorSettingsDto;
 import com.cmdelivery.dto.FileUploadResponse;
 import com.cmdelivery.dto.ProductDto;
 import com.cmdelivery.dto.SectionDto;
@@ -19,13 +20,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,24 +51,53 @@ public class CabinetController {
     @Value("${product.image.url}")
     private String productImageUrl;
 
+    private String contractorSettingsBindingResultString = "org.springframework.validation.BindingResult.contractorSettingsDto";
+
     @GetMapping(value="/cabinet")
-    public ModelAndView contractorHome(HttpServletRequest request) {
+    public ModelAndView contractorHome(ModelMap modelMap) {
         ModelAndView modelAndView = new ModelAndView("contractor/cabinet");
-        String username = securityService.getCurrentUserName();
-        Contractor contractor = contractorRepository.findByName(username);
+
+        // get ContractorSettingsDto object after redirect to this url from /cabinet/modify_contractor_settings to display Bindingresult errors
+        ContractorSettingsDto redirectContractorSettingsDto = (ContractorSettingsDto) modelMap.get("contractorSettingsDto");
+        BindingResult bindingResult = (BindingResult) modelMap.get(contractorSettingsBindingResultString);
+        if (bindingResult != null) {
+            if (bindingResult.hasErrors()) {
+                modelAndView.addObject("errorMessage", "Failed to update the settings. There are incorrect values.");
+            }
+        }
+
+        Contractor contractor = contractorRepository.findByName(securityService.getCurrentUserName());
+        if (contractor == null) {
+            return new ModelAndView("redirect:/cabinet/login");
+        }
+        modelAndView.addObject("contractor", dtoService.convertToDto(contractor));
+        modelAndView.addObject("defaultSectionName", SectionService.defaultSectionName());
+        modelAndView.addObject("contractorSettingsDto", redirectContractorSettingsDto != null ? redirectContractorSettingsDto
+                                                                                                          : dtoService.getContractorSettings(contractor));
+        return modelAndView;
+    }
+
+    @PostMapping(value="/cabinet/modify_contractor_settings")
+    public ModelAndView modifyContractorSettings(@ModelAttribute @Valid ContractorSettingsDto contractorSettingsDto, BindingResult bindingResult,
+                                                 RedirectAttributes redirectAttributes) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/cabinet");
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute(contractorSettingsBindingResultString, bindingResult);
+            redirectAttributes.addFlashAttribute("contractorSettingsDto", contractorSettingsDto);
+            return modelAndView;
+        }
+        Contractor contractor = contractorRepository.findByName(securityService.getCurrentUserName());
         if (contractor == null) {
             return modelAndView;
         }
-        List<SectionDto> sections = contractor.getSections().stream().map(dtoService::convertToDto).collect(Collectors.toList());
-        String contractorImage = contractor.getImage();
-        modelAndView.addObject("contractorImagePath",
-                                contractorImage == null ? null :
-                                ServletUriComponentsBuilder.fromCurrentContextPath()
-                                    .path(contractorImageUrl)
-                                    .path(contractorImage)
-                                    .toUriString());
-        modelAndView.addObject("sections", sections);
-        modelAndView.addObject("defaultSectionName", SectionService.defaultSectionName());
+        contractor.setMinTime(contractorSettingsDto.getMinTime());
+        contractor.setMaxTime(contractorSettingsDto.getMaxTime());
+        contractor.setMinPrice(contractorSettingsDto.getMinPrice());
+        Contractor savedContractor = contractorRepository.save(contractor);
+        if (savedContractor == null) {
+            modelAndView.addObject("errorMessage", "Failed to update the settings");
+        }
+
         return modelAndView;
     }
 
@@ -77,40 +109,46 @@ public class CabinetController {
     }
 
     @GetMapping(value="/cabinet/modify_product/{productId}")
-    public ModelAndView modifyProduct(@PathVariable long productId) {
+    public ModelAndView modifyProduct(@PathVariable long productId, ModelMap modelMap) {
+
         ModelAndView modelAndView = new ModelAndView("contractor/modify_product");
-        Optional<Product> product = productRepository.findById(productId);
-        if (!product.isPresent()) {
+
+        String errorMessage = (String) modelMap.get("errorMessage");
+        if (errorMessage != null) {
+            modelAndView.addObject("errorMessage", errorMessage);
+        }
+
+        Product product = productRepository.findByProductId(productId);
+        if (product == null) {
             throw new Error404Exception();
         }
-        if (!product.get().getSection().getContractor().getName().equals(securityService.getCurrentUserName())) {
+        if (!product.getSection().getContractor().getName().equals(securityService.getCurrentUserName())) {
             throw new Error403Exception();
         }
-        modelAndView.addObject("productDto", dtoService.convertToDto(product.get()));
-        String productImage = product.get().getImage();
-        modelAndView.addObject("productImagePath",
-                productImage == null ? null :
-                ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path(productImageUrl)
-                        .path(productImage)
-                        .toUriString());
+        modelAndView.addObject("product", dtoService.convertToDto(product));
         return modelAndView;
     }
 
     @PostMapping(value="/cabinet/modify_product/{productId}")
-    public ModelAndView modifyProductPost(@PathVariable long productId, @ModelAttribute ProductDto productDto) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/cabinet");
+    public ModelAndView modifyProductPost(@PathVariable long productId, @ModelAttribute ProductDto productDto,
+                                          BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/cabinet/modify_product/" + productId);
+        if (productRepository.findByName(productDto.getName()) != null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Product with name " + productDto.getName() + " already exists.");
+            return modelAndView;
+        }
         Product product = productRepository.findByProductId(productId);
         if ((product == null)) {
-            modelAndView.addObject("errorMsg", "Failed to modify product");
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to modify product. Product not found.");
             return modelAndView;
         }
         if (!product.getSection().getContractor().getName().equals(securityService.getCurrentUserName())) {
             throw new Error403Exception();
         }
         productService.modifyProduct(product, productDto);
-        if (productRepository.save(product) == null) {
-            modelAndView.addObject("errorMsg", "Failed to modify product");
+        Product savedProduct = productRepository.save(product);
+        if (savedProduct == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to save the product.");
             return modelAndView;
         }
         return modelAndView;
@@ -138,7 +176,7 @@ public class CabinetController {
         ModelAndView modelAndView = new ModelAndView("redirect:/cabinet");
         Section section = sectionRepository.findBySectionId(sectionId);
         if ((section == null) || (sectionService.isDefault(section))) {
-            modelAndView.addObject("errorMsg", "Failed to modify section");
+            modelAndView.addObject("errorMessage", "Failed to modify section");
             return modelAndView;
         }
         if (!section.getContractor().getName().equals(securityService.getCurrentUserName())) {
@@ -146,7 +184,7 @@ public class CabinetController {
         }
         sectionService.modifySection(section, sectionDto);
         if (sectionRepository.save(section) == null) {
-            modelAndView.addObject("errorMsg", "Failed to modify section");
+            modelAndView.addObject("errorMessage", "Failed to modify section");
             return modelAndView;
         }
         return modelAndView;
@@ -160,7 +198,7 @@ public class CabinetController {
         }
         if (sectionRepository.findByName(sectionDto.getName()) != null) {
             ModelAndView errorModelAndView = new ModelAndView("redirect:/cabinet/new_section");
-            errorModelAndView.addObject("errorMsg", "Section with name " + sectionDto.getName() + " already exists");
+            errorModelAndView.addObject("errorMessage", "Section with name " + sectionDto.getName() + " already exists");
             return errorModelAndView;
         }
         Section newSection = dtoService.convertToSection(sectionDto);
@@ -168,7 +206,7 @@ public class CabinetController {
         Section registeredSection = sectionService.registerNewSection(newSection);
         if (registeredSection == null) {
             ModelAndView errorModelAndView = new ModelAndView("redirect:/cabinet/new_section");
-            errorModelAndView.addObject("errorMsg", "Error occured while creating section with name " + sectionDto.getName());
+            errorModelAndView.addObject("errorMessage", "Error occured while creating section with name " + sectionDto.getName());
             return errorModelAndView;
         }
         ModelAndView modelAndView = new ModelAndView("redirect:/cabinet");
@@ -212,25 +250,24 @@ public class CabinetController {
         return modelAndView;
     }
 
-    @PostMapping(value="/cabinet/add_product")
+    @PostMapping(value="/cabinet/new_product")
     public ModelAndView addProduct(@ModelAttribute ProductDto productDto, BindingResult bindingResult) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/cabinet");
+        ModelAndView errorModelAndView = new ModelAndView("contractor/new_product");
         String currentContractor = securityService.getCurrentUserName();
         if (currentContractor == null) {
-            return new ModelAndView("redirect:/cabinet");
+            return modelAndView;
         }
         if (productRepository.findByName(productDto.getName()) != null) {
-            ModelAndView errorModelAndView = new ModelAndView("redirect:/cabinet/new_product");
-            errorModelAndView.addObject("errorMsg", "Product with name " + productDto.getName() + " already exists");
+            errorModelAndView.addObject("errorMessage", "Product with name " + productDto.getName() + " already exists");
             return errorModelAndView;
         }
         Product newProduct = dtoService.convertToProduct(productDto);
         Product registeredProduct = productService.registerNewProduct(newProduct);
         if (registeredProduct == null) {
-            ModelAndView errorModelAndView = new ModelAndView("redirect:/cabinet/new_product");
-            errorModelAndView.addObject("errorMsg", "Error occured while creating product with name " + productDto.getName());
+            errorModelAndView.addObject("errorMessage", "Error occured while creating product with name " + productDto.getName());
             return errorModelAndView;
         }
-        ModelAndView modelAndView = new ModelAndView("redirect:/cabinet");
         return modelAndView;
     }
 

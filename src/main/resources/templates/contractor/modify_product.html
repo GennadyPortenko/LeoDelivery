@@ -8,35 +8,33 @@
 
     <script th:inline="javascript">
       /*<![CDATA[*/
-        var productId = /*[[${productDto.id}]]*/ 0;
+        var productId = /*[[${product.id}]]*/ 0;
       /*]]>*/
     </script>
 
     <title>Edit product</title>
 </head>
 <body>
-<div class="container">
-    <div th:replace="/include/menu :: menu"></div>
+<div th:replace="/include/menu :: menu"></div>
+<div class="container-fluid cabinet-container-fluid">
     <h2>Product editing</h2>
-    <div th:if="${param.errorMsg != null}" class="cabinet_errorBlock">
-        <div th:text="${param.errorMsg}" class="cabinet_errorMsg"></div>
+    <div th:if="${errorMessage != null}" class="cabinet_errorBlock">
+        <div th:text="${errorMessage}" class="cabinet_errorMessage"></div>
     </div>
 
-    <div class="product_image">
-        <div th:text="${productImagePath}"></div>
-        <img th:if="${productImagePath != null}" th:src="@{${productImagePath}}" alt="product photo">
-        <img th:if="${productImagePath == null}" src="/images/product_default.jpg" alt="product photo">
+    <div class="product_image product_imageFixed">
+        <img th:if="${product.image != null}" th:src="@{${product.image}}" alt="product photo">
+        <img th:if="${product.image == null}" src="/images/product_default.jpg" alt="product photo">
     </div>
-    <div class="cabinet_imageUploadTitle">Upload new image</div>
-    <form method="POST" enctype="multipart/form-data" name="loadProductImageForm" th:action="@{/cabinet/upload_image/product}">
+    <form class="cabinet_imageUploadForm" method="POST" enctype="multipart/form-data" name="loadProductImageForm" th:action="@{/cabinet/upload_image/product}">
         <input type="file" name="file" id="loadProductImageInput">
         <button type="submit" class="btn" id="loadProductImageBtn">Upload</button>
     </form>
 
-    <form action="#" th:action="@{/cabinet/modify_product/} + ${productDto.id}" th:object="${productDto}" method="post"
-          data-toggle="validator" required="true" role="form" class="cabinet_addForm">
-        <input th:field="*{name}" class="login-form-input" id="productName" required placeholder="Name" name="login">
-        <input th:field="*{description}" class="login-form-input" id="productDescription" required placeholder="Description" name="login">
+    <form class="cabinet_form" action="#" th:action="@{/cabinet/modify_product/} + ${product.id}" th:object="${product}" method="post"
+          data-toggle="validator" required="true" role="form">
+        <input th:field="*{name}" class="cabinet_formInput" required placeholder="Name" name="name">
+        <input th:field="*{description}" class="cabinet_formInput" required placeholder="Description" name="description">
         <input type="submit" class="btn submitBtn" value="Save">
     </form>
 </div>

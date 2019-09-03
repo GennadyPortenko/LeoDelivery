@@ -13,4 +13,5 @@ public class ProductDto {
     long id;
     String name;
     String description;
+    String image;
 }

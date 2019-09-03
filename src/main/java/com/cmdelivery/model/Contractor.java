@@ -32,17 +32,22 @@ public class Contractor {
     String image;
 
     @NonNull
-    int min_time;
+    int minTime;
     @NonNull
-    int max_time;
+    int maxTime;
 
     @NonNull
-    int min_price;
+    int minPrice;
 
     @NonNull
     @NotEmpty
     String password;
     int active;
+
+    @NonNull
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="main_category_fk")
+    Category mainCategory;
 
     @ToString.Exclude
     @ManyToMany(fetch=FetchType.LAZY)

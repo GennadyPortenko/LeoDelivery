@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <thymeleaf th:replace="/include/resources :: resources"></thymeleaf>
+
+    <title>Regular home page</title>
+</head>
+<body>
+<div th:replace="/include/menu :: menu"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-sm-9 restaurant_mainArea">
+            <div class="row restaurant_info">
+
+                <div class="container">
+                    <div class="overlay"></div>
+                    <img th:if="${restaurant.image != null}" th:src="@{${restaurant.image}}" alt="contractor photo">
+                    <img th:if="${restaurant.image == null}" src="/images/contractor_default.jpg" alt="contractor photo">
+                    <a th:href="@{/food}" th:text="#{restaurant.link.food}" class="restaurant_info_link restaurant_info_back"></a>
+                    <div class="restaurant_info_name" th:text="${restaurant.name}"></div>
+                </div>
+            </div>
+
+            <div class="restaurant_sectionLinks">
+                <div class="restaurant_sectionLink" th:each="section : ${restaurant.sections}" th:attr = "data-section-id = ${section.id}">
+                    <a th:text="${section.name}" th:href="${'#section' + section.id}"></a>
+                </div>
+            </div>
+
+            <div class="row restaurant_sections">
+                <div class="restaurant_section container-fluid" th:each="section : ${restaurant.sections}" th:id="${'section' + section.id}" th:attr = "data-section-id = ${section.id}">
+                    <div class="restaurant_sectionTitle" th:text="${section.name}"></div>
+                    <div class="row restaurant_products">
+                        <div class="restaurant_empty" th:classappend="${#arrays.length(section.products)} != 0 ? hidden : ''">No products</div>
+                        <div th:each="product : ${section.products}" th:attr = "data-product-id = ${product.id}" class="product col-12 col-sm-3">
+                            <div class="product_image">
+                                <img th:if="${product.image != null}" th:src="@{${product.image}}" alt="dish photo">
+                                <img th:if="${product.image == null}" src="/images/product_default.jpg" alt="dish photo">
+                            </div>
+                            <div class="product_info">
+                                <div th:text="${product.name}" class="product_name"></div>
+                                <div th:text="${product.description}" class="product_description"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col col-sm-3 restaurant_shoppingCart">
+        </div>
+    </div>
+</div>
+</body>
+</html>

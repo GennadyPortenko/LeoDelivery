@@ -1,4 +1,4 @@
--- DROP SCHEMA IF EXISTS public CASCADE;
+-- ROP SCHEMA IF EXISTS public CASCADE;
 -- CREATE SCHEMA public;
 
 DROP TABLE IF EXISTS client CASCADE;
@@ -15,6 +15,8 @@ CREATE TABLE contractor (
 , name VARCHAR(50) NOT NULL
 , email VARCHAR(150) NOT NULL
 , image VARCHAR(150)
+, logo VARCHAR(150)
+, main_category_fk INTEGER REFERENCES category(category_id) NOT NULL -- ON UPDATE CASCADE ON DELETE CASCADE
 , password VARCHAR(200) NOT NULL
 , active INTEGER NOT NULL
 , min_time INTEGER NOT NULL
@@ -40,20 +42,20 @@ CREATE TABLE district (
   district_id SERIAL PRIMARY KEY
 , name_en VARCHAR(50) NOT NULL
 , name_fr VARCHAR(50) NOT NULL
-, city_fk INTEGER REFERENCES city(city_id) -- ON UPDATE CASCADE ON DELETE CASCADE
+, city_fk INTEGER REFERENCES city(city_id) NOT NULL -- ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS client_role CASCADE;
 CREATE TABLE client_role (
-  client_id INTEGER REFERENCES client(client_id)
-, role_id INTEGER REFERENCES role(role_id)
+  client_id INTEGER REFERENCES client(client_id) NOT NULL
+, role_id INTEGER REFERENCES role(role_id) NOT NULL
 , CONSTRAINT client_role_pkey PRIMARY KEY (client_id, role_id)
 );
 
 DROP TABLE IF EXISTS contractor_role CASCADE;
 CREATE TABLE contractor_role (
-  contractor_id INTEGER REFERENCES contractor(contractor_id)
-, role_id INTEGER REFERENCES role(role_id)
+  contractor_id INTEGER REFERENCES contractor(contractor_id) NOT NULL
+, role_id INTEGER REFERENCES role(role_id) NOT NULL
 , CONSTRAINT contractor_role_pkey PRIMARY KEY (contractor_id, role_id)
 );
 
@@ -62,7 +64,7 @@ CREATE TABLE section (
   section_id BIGSERIAL PRIMARY KEY
 , name VARCHAR(50) NOT NULL
 , description TEXT
-, contractor_fk INTEGER REFERENCES contractor(contractor_id) -- ON UPDATE CASCADE ON DELETE CASCADE
+, contractor_fk INTEGER REFERENCES contractor(contractor_id) NOT NULL -- ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS product CASCADE;
@@ -71,7 +73,7 @@ CREATE TABLE product (
 , name VARCHAR(50) NOT NULL
 , description TEXT NOT NULL
 , image VARCHAR(150)
-, section_fk INTEGER REFERENCES section(section_id) -- ON UPDATE CASCADE ON DELETE CASCADE
+, section_fk INTEGER REFERENCES section(section_id) NOT NULL -- ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS category CASCADE;
@@ -91,8 +93,10 @@ VALUES (1, 'ROLE_ADMIN'), (2, 'ROLE_USER'), (3, 'ROLE_CONTRACTOR');
 -- categories initialization
 
 INSERT INTO category (category_id, name_en, name_fr)
-VALUES (1, 'Pizza', 'Pizza'), (2, 'Sushi', 'Sushi');
-
+VALUES (1, 'Pizza', 'Pizza'), (2, 'Sushi', 'Sushi'),
+       (3, 'Burgers', 'Des Bamburgers'), (4, 'Meat', 'Moi à'),
+       (5, 'Pies', 'Tartes'), (6, 'Fast Food', 'Fast Food'),
+       (7, 'Asian', 'Asiatique'), (8, 'European', 'Européenne');
 
 -- cities / districts initialization
 
@@ -102,3 +106,4 @@ VALUES (1, 'Douala', 'Douala'), (2, 'Yaounde', 'Yaoundé');
 INSERT INTO district (district_id, name_en, name_fr, city_fk)
 VALUES (1, 'Akwa', 'Akwa', 1), (2, 'Bassa', 'Bassa', 1),
        (3, 'Etoudi', 'Etoudi', 2), (4, 'Bastos', 'Bastos', 2);
+

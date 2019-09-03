@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 public interface IStorageService {
 
     enum FileType{
-        MAIN_IMAGE, PRODUCT_IMAGE
+        MAIN_IMAGE, LOGO_IMAGE, PRODUCT_IMAGE
     }
 
     void init();

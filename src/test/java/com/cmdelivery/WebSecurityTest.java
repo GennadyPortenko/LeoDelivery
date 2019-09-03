@@ -26,11 +26,11 @@ public class WebSecurityTest {
 
     /*
     @Test
-    public void testIfRegularHomePageIsSecured() throws Exception {
-        final ResultActions resultActions = mockMvc.perform(get("/regular/home"));
+    public void testIfClientHomePageIsSecured() throws Exception {
+        final ResultActions resultActions = mockMvc.perform(get("/client/home"));
         resultActions
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("http://localhost/regular/login"));
+                .andExpect(redirectedUrl("http://localhost/client/login"));
     }
 
     @Test
@@ -38,16 +38,16 @@ public class WebSecurityTest {
         final ResultActions resultActions = mockMvc.perform(get("//home"));
         resultActions
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("http://localhost/regular/login"));
+                .andExpect(redirectedUrl("http://localhost/client/login"));
     }
 
     @Test
     @WithMockUser
     public void testIfLoggedUserHasAccessToRegularHomePage() throws Exception {
-        final ResultActions resultActions = mockMvc.perform(get("/regular/home"));
+        final ResultActions resultActions = mockMvc.perform(get("/client/home"));
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(view().name("regular/home"));
+                .andExpect(view().name("client/home"));
     }
 
     @Test

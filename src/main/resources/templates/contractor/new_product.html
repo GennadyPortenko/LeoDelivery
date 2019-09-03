@@ -8,18 +8,21 @@
     <title>New product</title>
 </head>
 <body>
-<div class="container">
-    <div th:replace="/include/menu :: menu"></div>
-    <h2>New Product</h2>
-    <div th:if="${param.errorMsg != null}" class="cabinet_errorBlock">
-        <div th:text="${param.errorMsg}" class="cabinet_errorMsg"></div>
-    </div>
-    <form action="#" th:action="@{/cabinet/add_product}" th:object="${productDto}" method="post"
-          data-toggle="validator" required="true" role="form" class="cabinet_addForm">
-        <input th:field="*{name}" class="login-form-input" id="productName" required placeholder="Name" name="login">
-        <input th:field="*{description}" class="login-form-input" id="productDescription" required placeholder="Description" name="login">
-        <input type="submit" class="btn submitBtn" value="Add">
-    </form>
+<div th:replace="/include/menu :: menu"></div>
+<div class="container-fluid cabinet-container-fluid">
+    <h1 class="cabinet_title">New Product</h1>
+    <section class="cabinet_errorMessageBlock" th:if="${errorMessage != null}" th:text="${errorMessage}">
+    </section>
+    <section>
+        <form class="cabinet_form" action="#" th:action="@{/cabinet/new_product}" th:object="${productDto}" method="post"
+              data-toggle="validator" required="true" role="form">
+            <div class="cabinet_formLabel">Name</div>
+            <input th:field="*{name}" class="cabinet_formInput" id="product_name" required name="name">
+            <div class="cabinet_formLabel">Description</div>
+            <input th:field="*{description}" class="cabinet_formInput" id="product_description" required name="description">
+            <input type="submit" class="btn submitBtn" value="Add">
+        </form>
+    </section>
 </div>
 </body>
 </html>

@@ -3,10 +3,7 @@ package com.cmdelivery.controller;
 import com.cmdelivery.config.component.ClientAuthenticationProvider;
 import com.cmdelivery.dto.LoginStatus;
 import com.cmdelivery.dto.OTPResponse;
-import com.cmdelivery.model.Contractor;
-import com.cmdelivery.model.Client;
-import com.cmdelivery.model.Product;
-import com.cmdelivery.model.Section;
+import com.cmdelivery.model.*;
 import com.cmdelivery.repository.*;
 import com.cmdelivery.service.*;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +44,7 @@ public class LoginController {
     private final SectionRepository sectionRepository;
     private final ProductRepository productRepository;
     private final CityRepository cityRepository;
+    private final CategoryRepository categoryRepository;
 
     private final MessageSource messageSource;
 
@@ -61,7 +59,7 @@ public class LoginController {
         final String CONTRACTOR2_PASSWORD= "rest2";
 
         if (contractorRepository.findByName(CONTRACTOR_USERNAME) == null) {
-            Contractor contractor = new Contractor(CONTRACTOR_EMAIL, CONTRACTOR_USERNAME, 30, 60, 50, CONTRACTOR_PASSWORD);
+            Contractor contractor = new Contractor(CONTRACTOR_EMAIL, CONTRACTOR_USERNAME, 30, 60, 50, CONTRACTOR_PASSWORD, categoryRepository.findByCategoryId(3));
             contractorService.registerNewContractor(contractor);
             Section defaultSection = sectionRepository.findByNameAndContractor(SectionService.defaultSectionName(), contractor.getContractorId());
             Set<Product> defaultProducts = new HashSet<>();
@@ -87,7 +85,7 @@ public class LoginController {
         }
 
         if (contractorRepository.findByName(CONTRACTOR2_USERNAME) == null) {
-            Contractor contractor = new Contractor(CONTRACTOR2_EMAIL, CONTRACTOR2_USERNAME, 30, 60, 50, CONTRACTOR2_PASSWORD);
+            Contractor contractor = new Contractor(CONTRACTOR2_EMAIL, CONTRACTOR2_USERNAME, 30, 60, 50, CONTRACTOR2_PASSWORD, categoryRepository.findByCategoryId(3));
             contractorService.registerNewContractor(contractor);
         }
 
@@ -101,8 +99,8 @@ public class LoginController {
     }
 
     @GetMapping(value="/food/login")
-    public ModelAndView regularLogin() {
-        return new ModelAndView("regular/login");
+    public ModelAndView clientLogin() {
+        return new ModelAndView("client/login");
     }
 
     @GetMapping(value="/cabinet/login")

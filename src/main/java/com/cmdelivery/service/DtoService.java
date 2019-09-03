@@ -1,6 +1,7 @@
 package com.cmdelivery.service;
 
 import com.cmdelivery.dto.ContractorDto;
+import com.cmdelivery.dto.ContractorSettingsDto;
 import com.cmdelivery.dto.ProductDto;
 import com.cmdelivery.dto.SectionDto;
 import com.cmdelivery.model.Contractor;
@@ -22,6 +23,8 @@ public class DtoService {
 
     @Value("${contractor.image.url}")
     private String contractorImageUrl;
+    @Value("${product.image.url}")
+    private String productImageUrl;
 
     public static String parsePhone(String phone) {
         return phone.replaceAll("[^\\d.]", "").substring(1);
@@ -34,6 +37,12 @@ public class DtoService {
     public ProductDto convertToDto(Product product) {
         ProductDto productDto = modelMapper.map(product, ProductDto.class);
         productDto.setId(product.getProductId());
+        String productImage = product.getImage();
+        productDto.setImage(productImage == null ? null :
+                                ServletUriComponentsBuilder.fromCurrentContextPath()
+                                    .path(productImageUrl)
+                                    .path(productImage)
+                                    .toUriString());
         return productDto;
     }
 
@@ -57,6 +66,7 @@ public class DtoService {
     public ContractorDto convertToDto(Contractor contractor) {
         ContractorDto contractorDto = modelMapper.map(contractor, ContractorDto.class);
         contractorDto.setId(contractor.getContractorId());
+        contractorDto.setSections(contractor.getSections().stream().map(this::convertToDto).collect(Collectors.toList()));
         String contractorImage = contractor.getImage();
         contractorDto.setImage(contractorImage == null ? null :
                                 ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -69,6 +79,10 @@ public class DtoService {
     public Contractor convertToContractor(ContractorDto contractorDto) {
         Contractor contractor = modelMapper.map(contractorDto, Contractor.class);
         return contractor;
+    }
+
+    public ContractorSettingsDto getContractorSettings(Contractor contractor) {
+        return new ContractorSettingsDto(contractor.getMinTime(), contractor.getMaxTime(), contractor.getMinPrice());
     }
 
 }

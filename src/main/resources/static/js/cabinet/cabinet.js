@@ -1,5 +1,7 @@
 $(document).ready(function() {
-  bindRemoveBtns();
+
+  bindProductBtns();
+  bindSectionBtns();
 
   $("#loadContractorImageBtn").click(function(e) {
     e.preventDefault();
@@ -20,33 +22,55 @@ $(document).ready(function() {
   });
 });
 
-function bindRemoveBtns() {
+function removeProduct(productId) {
+    sendRemoveProductRequest(productId,
+       function() {
+         var product = $('[data-product-id=' + productId +']');
+         var sectionProducts = $(product).parent()
+         $('[data-product-id=' + productId +']').remove();
+         console.log($(sectionProducts).find('.product'));
+         if ($(sectionProducts).find('.product').length == 0) {
+           $(sectionProducts).find('.cabinet_empty').removeClass('hidden');
+         }
+       },
+       function() {},
+       hostURL)
+}
+function removeSection (sectionId) {
+    sendRemoveSectionRequest(sectionId,
+       function() {
+         $('[data-section-id=' + sectionId +']').find('.cabinet_empty').remove();
+         $('[default-section=true]').find('.cabinet_sectionProducts').append($('[data-section-id=' + sectionId +']').find('.cabinet_sectionProducts').html());
+         $('[data-section-id=' + sectionId +']').remove();
+       },
+       function() {},
+       hostURL);
+}
+
+function bindSectionBtns() {
   $('.cabinet_removeSectionBtn').each(function(index) {
     $(this).click(function() {
       var sectionId = $(this).parent().attr('data-section-id');
-      sendRemoveSectionRequest(parseInt(sectionId, 10),
-                               function() {
-                                 removeSection(sectionId);
-                               },
-                               function() {},
-                               hostURL);
-    });
-  });
-
-  $('.cabinet_removeProductBtn').each(function(index) {
-    $(this).click(function() {
-      var productId = $(this).parent().attr('data-product-id');
-      sendRemoveProductRequest(parseInt(productId, 10),
-                               function() {
-                                 $('[data-product-id=' + productId +']').remove();
-                               },
-                               function() {},
-                               hostURL);
+      openConfirmModal(confirmModalDeleteSectionMessage + ' ' + sectionId + '?', removeSection, sectionId);
     });
   });
 }
 
-function removeSection(id) {
-  $('[default-section=true]').find('.cabinet_sectionProducts').append($('[data-section-id=' + id +']').find('.cabinet_sectionProducts').html());
-  $('[data-section-id=' + id +']').remove();
+function bindProductBtns() {
+  $('.cabinet_removeProductBtn').each(function(index) {
+    $(this).click(function() {
+      var productId = $(this).parent().attr('data-product-id');
+      openConfirmModal(confirmModalDeleteProductMessage + ' ' + productId + '?', removeProduct, productId);
+    });
+  });
+}
+
+function openConfirmModal(message, action, target) {
+  $('#cabinetConfirmModal').find('.message').text(message);
+  $('#cabinetConfirmModal').find('.yesBtn').off('click');
+  $('#cabinetConfirmModal').find('.yesBtn').click(function() {
+    action(target);
+    $('#cabinetConfirmModal').modal('hide');
+  });
+  $('#cabinetConfirmModal').modal('show');
 }

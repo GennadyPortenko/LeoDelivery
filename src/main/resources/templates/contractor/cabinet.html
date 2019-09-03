@@ -4,37 +4,47 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <thymeleaf th:replace="/include/resources :: resources (option_contractorCabinet = true)"></thymeleaf>
+
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+        var confirmModalDeleteProductMessage = /*[[#{cabinet.confirm.delete.product}]]*/ 0;
+        var confirmModalDeleteSectionMessage = /*[[#{cabinet.confirm.delete.section}]]*/ 0;
+      /*]]>*/
+    </script>
+
     <script th:src="@{/js/cabinet/cabinet.js}"></script>
 
-    <title>Contractor home page</title>
+    <title>Restaurant Cabinet</title>
 </head>
 <body>
-<div th:replace="/include/confirmModal:: confirmModal"></div>
-<div class="container">
-    <div th:replace="/include/menu :: menu"></div>
-    <h2>Cabinet</h2>
+<div th:replace="/include/cabinetConfirmModal:: cabinetConfirmModal"></div>
+<div th:replace="/include/menu :: menu"></div>
+<div class="container-fluid cabinet-container-fluid">
+    <h1 class="cabinet_title">Cabinet</h1>
     <section class="cabinet_panel">
         <a th:href="@{/cabinet/new_section}" class="btn cabinet_AddSectionBtn">Add section</a>
         <a th:href="@{/cabinet/new_product}" class="btn cabinet_AddProductBtn">Add product</a>
     </section>
 
+    <section class="cabinet_errorMessageBlock" th:if="${errorMessage != null}" th:text="${errorMessage}">
+    </section>
+
     <section>
-        <div class="cabinet_blockTitle">Image</div>
+        <div class="cabinet_blockTitle">Image & logo</div>
         <div class="cabinet_image">
-            <img th:if="${contractorImagePath != null}" th:src="@{${contractorImagePath}}" alt="contractor photo">
-            <img th:if="${contractorImagePath == null}" src="/images/contractor_default.jpg" alt="contractor photo">
+            <img th:if="${contractor.image != null}" th:src="@{${contractor.image}}" alt="contractor photo">
+            <img th:if="${contractor.image == null}" src="/images/contractor_default.jpg" alt="contractor photo">
         </div>
-        <div class="cabinet_imageUploadTitle">Upload new image</div>
-        <form method="POST" enctype="multipart/form-data" name="loadContractorImageForm" th:action="@{/cabinet/upload_image}">
+        <form class="cabinet_imageUploadForm" method="POST" enctype="multipart/form-data" name="loadContractorImageForm" th:action="@{/cabinet/upload_image}">
             <input type="file" name="file" id="loadContractorImageInput">
             <button type="submit" class="btn" id="loadContractorImageBtn">Upload</button>
         </form>
     </section>
 
     <section class="cabinet_sectionsBlock">
-        <div class="cabinet_blockTitle">Sections</div>
-        <div class="cabinet_empty" th:classappend="${#arrays.length(sections)} != 0 ? hidden : ''">No sections yet</div>
-        <div th:each="section : ${sections}" th:attr = "data-section-id = ${section.id}"
+        <div class="cabinet_blockTitle">Sections & dishes</div>
+        <div class="cabinet_empty" th:classappend="${#arrays.length(contractor.sections)} != 0 ? hidden : ''">No sections yet</div>
+        <div th:each="section : ${contractor.sections}" th:attr = "data-section-id = ${section.id}"
              th:attrappend = "default-section = ${section.name == defaultSectionName ? true : false}" class="sectionBlock">
 
             <div th:text="${section.name}" class="cabinet_sectionName"></div>
@@ -46,9 +56,15 @@
             </a>
             <div class="cabinet_sectionProducts row">
                 <div class="cabinet_empty" th:classappend="${#arrays.length(section.products)} != 0 ? hidden : ''">No products</div>
-                <div th:each="product : ${section.products}" th:attr = "data-product-id = ${product.id}" class="product col-12 col-sm-4">
-                    <div th:text="${product.name}" class="productName"></div>
-                    <div th:text="${product.description}" class="productName"></div>
+                <div th:each="product : ${section.products}" th:attr = "data-product-id = ${product.id}" class="product col-12 col-sm-3">
+                    <div class="product_image">
+                        <img th:if="${product.image != null}" th:src="@{${product.image}}" alt="dish photo">
+                        <img th:if="${product.image == null}" src="/images/product_default.jpg" alt="dish photo">
+                    </div>
+                    <div class="product_info">
+                        <div th:text="${product.name}" class="product_name"></div>
+                        <div th:text="${product.description}" class="product_description"></div>
+                    </div>
                     <button class="cabinet_removeBtn cabinet_removeProductBtn" title="remove">
                         <i class="fas fa-times"></i>
                     </button>
@@ -59,28 +75,30 @@
             </div>
         </div>
     </section>
-</div>
 
-<div class="modal" id="clientLoginModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <button class="closeBtn" data-dismiss="modal"><i class="fas fa-times"></i></button>
-                <div class="clientLoginContent">
-                    <form id="loginForm" class="loginForm" th:action="@{/food/login}" method="post">
-                        <div class="loginBlock">
-                            <input class="loginInput" id="loginPhoneInput" type="text" name="phone" placeholder="Your phone"/>
-                            <input class="loginInput hidden" id="loginPasswordInput" type="text" name="password" placeholder="code"/>
-                            <span class="loginTimer" id="loginTimer"></span>
-                            <!-- <button id="loginSubmitBtn" class="loginSubmitBtn btn" value="Sign In">Send</button> -->
-                            <div class="loginWrongOtp hidden">Code is incorrect</div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <section class="cabinet_sectionsBlock">
+        <div class="cabinet_blockTitle">Settings</div>
+        <form action="#" th:action="@{/cabinet/modify_contractor_settings}" th:object="${contractorSettingsDto}" method="post"
+          required="true" role="form" class="cabinet_form">
+            <div class="cabinet_formLabel">Minimum delivery time</div>
+            <ul class="cabinet_formErrors">
+                <li class="cabinet_formError" th:each="err : ${#fields.errors('minTime')}" th:text="${err}" ></li>
+            </ul>
+            <input class="cabinet_formInput" th:field="*{minTime}" required name="minTime">
+            <div class="cabinet_formLabel">Maximum delivery time</div>
+            <ul class="cabinet_formErrors">
+                <li class="cabinet_formError" th:each="err : ${#fields.errors('maxTime')}" th:text="${err}" ></li>
+            </ul>
+            <input class="cabinet_formInput" th:field="*{maxTime}" required name="maxTime">
+            <div class="cabinet_formLabel">Minimum order price</div>
+            <ul class="cabinet_formErrors">
+                <li class="cabinet_formError" th:each="err : ${#fields.errors('minPrice')}" th:text="${err}" ></li>
+            </ul>
+            <input class="cabinet_formInput" th:field="*{minPrice}" required name="minPrice">
+            <input type="submit" class="btn submitBtn" value="Save">
+        </form>
+    </section>
 </div>
-
 </body>
 </html>
+  

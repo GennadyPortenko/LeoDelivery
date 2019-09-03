@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.Min;
-import java.util.List;
 
 
 @NoArgsConstructor
@@ -12,12 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ContractorDto {
-    long id;
-    String name;
-    String email;
-    String image;
-    List<SectionDto> sections;
+public class ContractorSettingsDto {
     @Min(value=0, message="The value must be positive")
     int minTime;
     @Min(value=0, message="The value must be positive")

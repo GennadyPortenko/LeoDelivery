@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <thymeleaf th:replace="/include/resources :: resources"></thymeleaf>
+
+    <title>Regular home page</title>
+</head>
+<body>
+<div th:replace="/include/menu :: menu"></div>
+<div class="container-fluid food_container-fluid">
+
+    <h1 th:text="#{food.title}" class="food_title"></h1>
+    <div class="row food_categories">
+        <th:block th:each="category: ${categories}">
+            <th:block th:switch="#{locale}">
+                <div th:case="'??locale_fr_FR??'" class="btn food_category" th:text="${category.nameFr}"></div>
+                <div th:case="*" class="btn food_category" th:text="${category.nameEn}"></div>
+            </th:block>
+        </th:block>
+    </div>
+    <div class="row food_row">
+        <a th:each="restaurant : ${restaurants}" th:href="@{'/food/restaurant/' + ${restaurant.name}} " class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <div class="food_restaurant">
+                <div class="food_restaurantImage">
+                    <img th:if="${restaurant.image!= null}" th:src="@{${restaurant.image}}" alt="contractor photo">
+                    <img th:if="${restaurant.image == null}" src="/images/contractor_default.jpg" alt="contractor photo">
+                </div>
+                <div class="food_restaurantInfo">
+                    <div th:text="${restaurant.name}" class="food_restaurantName"></div>
+                    <div th:text="${restaurant.minTime + '-' + restaurant.maxTime + ' min'}" class="food_restaurantTime"></div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+</div>
+</body>
+</html>
