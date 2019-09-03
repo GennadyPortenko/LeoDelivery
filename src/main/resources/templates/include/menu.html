@@ -18,14 +18,14 @@
     <div th:classappend="${session.username} != null ? '' : hidden"
          th:if="not ${option_hideLoggingIn}" th:text=${session.username} class="topbarElem topbarElemRight topbarUsername"></div>
     <div class="topbarElem topbarElemRight">
-        <form th:if="${session.role} != 'CONTRACTOR' and not ${option_hideLoggingIn}"
+        <form th:if="${session.role} != 'PARTNER' and not ${option_hideLoggingIn}"
               th:classappend="${session.username} != null ? '' : hidden"
               th:action="@{/food/logout}" method="post" class="topbarElem topbarElemRight topbarLogoutForm">
             <input class="topbarLogout" type="submit" value="Sign Out"/>
         </form>
     </div>
     <div class="topbarElem topbarElemRight">
-        <form th:if="${session.role} == 'CONTRACTOR' and not ${option_hideLoggingIn}"
+        <form th:if="${session.role} == 'PARTNER' and not ${option_hideLoggingIn}"
               th:classappend="${session.username} != null ? '' : hidden"
               th:action="@{/logout}" method="post" class="topbarElem topbarElemRight topbarLogoutForm">
             <input class="topbarLogout" type="submit" value="Sign Out"/>
@@ -33,7 +33,7 @@
     </div>
 
     <a th:classappend="${session.username} == null ? '' : hidden" th:href="@{/food/login}" class="topbarElem topbarElemRight topbarEnter"
-       th:if="${session.role} != 'CONTRACTOR' and not ${option_hideLoggingIn}" data-toggle="modal" data-target="#clientLoginModal">
+       th:if="${session.role} != 'PARTNER' and not ${option_hideLoggingIn}" data-toggle="modal" data-target="#clientLoginModal">
         enter
     </a>
 

@@ -1,6 +1,6 @@
 package com.cmdelivery.config;
 
-import com.cmdelivery.config.component.ContractorAuthenticationSuccessHandler;
+import com.cmdelivery.config.component.PartnerAuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,21 +16,21 @@ import javax.sql.DataSource;
 @Configuration
 @Order(2)
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
-class ContractorSecurityConfig extends WebSecurityConfigurerAdapter {
+class PartnerSecurityConfig extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final DataSource dataSource;
-    private final ContractorAuthenticationSuccessHandler contractorAuthenticationSuccessHandler;
-    @Value("${spring.queries.contractor-query}")
-    private String contractorQuery;
-    @Value("${spring.queries.roles-contractor-query}")
-    private String rolesContractorQuery;
+    private final PartnerAuthenticationSuccessHandler partnerAuthenticationSuccessHandler;
+    @Value("${spring.queries.partner-query}")
+    private String partnerQuery;
+    @Value("${spring.queries.roles-partner-query}")
+    private String rolesPartnerQuery;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.
                 jdbcAuthentication()
-                .usersByUsernameQuery(contractorQuery)
-                .authoritiesByUsernameQuery(rolesContractorQuery)
+                .usersByUsernameQuery(partnerQuery)
+                .authoritiesByUsernameQuery(rolesPartnerQuery)
                 .dataSource(dataSource)
                 .passwordEncoder(bCryptPasswordEncoder);
     }
@@ -41,7 +41,7 @@ class ContractorSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatcher("/cabinet/**")
             .authorizeRequests()
                 .anyRequest()
-                .hasRole("CONTRACTOR")
+                .hasRole("PARTNER")
                 .and()
             .formLogin()
                 // .usernameParameter("email")
@@ -49,7 +49,7 @@ class ContractorSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/cabinet/login")
                 .loginProcessingUrl("/cabinet/login")
                 .failureUrl("/cabinet/login?error")
-                .permitAll().successHandler(contractorAuthenticationSuccessHandler)
+                .permitAll().successHandler(partnerAuthenticationSuccessHandler)
                 .and()
             .logout()
                 .logoutUrl("/cabinet/logout")

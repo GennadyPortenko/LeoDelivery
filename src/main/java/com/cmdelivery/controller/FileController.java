@@ -19,15 +19,15 @@ import java.util.stream.Collectors;
 public class FileController {
 
     private final IStorageService storageService;
-    @Value("${contractor.image.url}")
-    private String contractorImageUrl;
+    @Value("${partner.image.url}")
+    private String partnerImageUrl;
 
     @GetMapping("/listFiles")
     public String listAllFiles(Model model) {
 
         model.addAttribute("files", storageService.loadAll().map(
                 path -> ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path(contractorImageUrl)
+                        .path(partnerImageUrl)
                         .path(path.getFileName().toString())
                         .toUriString())
                 .collect(Collectors.toList()));
@@ -35,9 +35,9 @@ public class FileController {
         return "listFiles";
     }
 
-    @GetMapping("${contractor.image.url}{filename:.+}")
+    @GetMapping("${partner.image.url}{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> downloadContractorImageFile(@PathVariable String filename) {
+    public ResponseEntity<Resource> downloadPartnerImageFile(@PathVariable String filename) {
         Resource resource = storageService.loadAsResource(filename, IStorageService.FileType.MAIN_IMAGE);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
@@ -55,9 +55,9 @@ public class FileController {
                 .body(resource);
     }
 
-    @GetMapping("${contractor.logo.url}{filename:.+}")
+    @GetMapping("${partner.logo.url}{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> downloadContractorLogoFile(@PathVariable String filename) {
+    public ResponseEntity<Resource> downloadPartnerLogoFile(@PathVariable String filename) {
         Resource resource = storageService.loadAsResource(filename, IStorageService.FileType.LOGO_IMAGE);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,

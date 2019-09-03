@@ -3,7 +3,7 @@ package com.cmdelivery.service;
 import com.cmdelivery.dto.ProductDto;
 import com.cmdelivery.model.Product;
 import com.cmdelivery.model.Section;
-import com.cmdelivery.repository.ContractorRepository;
+import com.cmdelivery.repository.PartnerRepository;
 import com.cmdelivery.repository.ProductRepository;
 import com.cmdelivery.repository.SectionRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
 public class ProductService {
     private final ProductRepository productRepository;
     private final SectionRepository sectionRepository;
-    private final ContractorRepository contractorRepository;
+    private final PartnerRepository partnerRepository;
     private final SecurityService securityService;
 
     public Product registerNewProduct(Product product) {
         Section defaultSection =
-            sectionRepository.findByNameAndContractor(SectionService.defaultSectionName(),
-                                                      contractorRepository.findByName(securityService.getCurrentUserName()).getContractorId());
+            sectionRepository.findByNameAndPartner(SectionService.defaultSectionName(),
+                                                      partnerRepository.findByName(securityService.getCurrentUserName()).getPartnerId());
         product.setSection(defaultSection);
         return productRepository.save(product);
     }

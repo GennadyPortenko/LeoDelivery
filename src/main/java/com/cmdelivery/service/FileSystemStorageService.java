@@ -27,13 +27,13 @@ import java.util.stream.Stream;
 public class FileSystemStorageService implements IStorageService {
     @Value("${storage.location}")
     private String rootLocation;
-    @Value("${storage.image.contractor.location}")
-    private String contractorImageRootLocation;
+    @Value("${storage.image.partner.location}")
+    private String partnerImageRootLocation;
     @Value("${storage.image.product.location}")
     private String productImageRootLocation;
 
     private Path rootPath;
-    private Path contractorImageRootPath;
+    private Path partnerImageRootPath;
     private Path productImageRootPath;
 
     @Override
@@ -41,10 +41,10 @@ public class FileSystemStorageService implements IStorageService {
     public void init() {
         try {
             rootPath = Paths.get(rootLocation);
-            contractorImageRootPath = Paths.get(contractorImageRootLocation);
+            partnerImageRootPath = Paths.get(partnerImageRootLocation);
             productImageRootPath = Paths.get(productImageRootLocation);
             Files.createDirectories(rootPath);
-            Files.createDirectories(contractorImageRootPath);
+            Files.createDirectories(partnerImageRootPath);
             Files.createDirectories(productImageRootPath);
         } catch (Exception e) {
             throw new StorageException("Could not initialize storage location", e);
@@ -66,7 +66,7 @@ public class FileSystemStorageService implements IStorageService {
             try (InputStream inputStream = file.getInputStream()) {
                 switch (fileType) {
                     case MAIN_IMAGE:
-                        Files.copy(inputStream, this.contractorImageRootPath.resolve(filename),
+                        Files.copy(inputStream, this.partnerImageRootPath.resolve(filename),
                             StandardCopyOption.REPLACE_EXISTING);
                         break;
                     case PRODUCT_IMAGE:
@@ -100,7 +100,7 @@ public class FileSystemStorageService implements IStorageService {
     public Path load(String filename, FileType fileType) {
         switch (fileType) {
             case MAIN_IMAGE:
-                return contractorImageRootPath.resolve(filename);
+                return partnerImageRootPath.resolve(filename);
             case PRODUCT_IMAGE:
                 return productImageRootPath.resolve(filename);
         }
@@ -127,7 +127,7 @@ public class FileSystemStorageService implements IStorageService {
 
     @Override
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(contractorImageRootPath.toFile());
+        FileSystemUtils.deleteRecursively(partnerImageRootPath.toFile());
         FileSystemUtils.deleteRecursively(productImageRootPath.toFile());
     }
 }

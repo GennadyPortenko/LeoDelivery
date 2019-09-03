@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ContractorDto {
+public class PartnerDto {
     long id;
     String name;
     String email;

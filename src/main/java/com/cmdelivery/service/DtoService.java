@@ -1,10 +1,10 @@
 package com.cmdelivery.service;
 
-import com.cmdelivery.dto.ContractorDto;
-import com.cmdelivery.dto.ContractorSettingsDto;
+import com.cmdelivery.dto.PartnerDto;
+import com.cmdelivery.dto.PartnerSettingsDto;
 import com.cmdelivery.dto.ProductDto;
 import com.cmdelivery.dto.SectionDto;
-import com.cmdelivery.model.Contractor;
+import com.cmdelivery.model.Partner;
 import com.cmdelivery.model.Product;
 import com.cmdelivery.model.Section;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 public class DtoService {
     private final ModelMapper modelMapper;
 
-    @Value("${contractor.image.url}")
-    private String contractorImageUrl;
+    @Value("${partner.image.url}")
+    private String partnerImageUrl;
     @Value("${product.image.url}")
     private String productImageUrl;
 
@@ -63,26 +63,26 @@ public class DtoService {
         return section;
     }
 
-    public ContractorDto convertToDto(Contractor contractor) {
-        ContractorDto contractorDto = modelMapper.map(contractor, ContractorDto.class);
-        contractorDto.setId(contractor.getContractorId());
-        contractorDto.setSections(contractor.getSections().stream().map(this::convertToDto).collect(Collectors.toList()));
-        String contractorImage = contractor.getImage();
-        contractorDto.setImage(contractorImage == null ? null :
+    public PartnerDto convertToDto(Partner partner) {
+        PartnerDto partnerDto = modelMapper.map(partner, PartnerDto.class);
+        partnerDto.setId(partner.getPartnerId());
+        partnerDto.setSections(partner.getSections().stream().map(this::convertToDto).collect(Collectors.toList()));
+        String partnerImage = partner.getImage();
+        partnerDto.setImage(partnerImage == null ? null :
                                 ServletUriComponentsBuilder.fromCurrentContextPath()
-                                    .path(contractorImageUrl)
-                                    .path(contractorImage)
+                                    .path(partnerImageUrl)
+                                    .path(partnerImage)
                                     .toUriString());
-        return contractorDto;
+        return partnerDto;
     }
 
-    public Contractor convertToContractor(ContractorDto contractorDto) {
-        Contractor contractor = modelMapper.map(contractorDto, Contractor.class);
-        return contractor;
+    public Partner convertToPartner(PartnerDto partnerDto) {
+        Partner partner = modelMapper.map(partnerDto, Partner.class);
+        return partner;
     }
 
-    public ContractorSettingsDto getContractorSettings(Contractor contractor) {
-        return new ContractorSettingsDto(contractor.getMinTime(), contractor.getMaxTime(), contractor.getMinPrice());
+    public PartnerSettingsDto getPartnerSettings(Partner partner) {
+        return new PartnerSettingsDto(partner.getMinTime(), partner.getMaxTime(), partner.getMinPrice());
     }
 
 }

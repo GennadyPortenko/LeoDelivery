@@ -1,15 +1,15 @@
 package com.cmdelivery.controller;
 
-import com.cmdelivery.dto.ContractorSettingsDto;
+import com.cmdelivery.dto.PartnerSettingsDto;
 import com.cmdelivery.dto.FileUploadResponse;
 import com.cmdelivery.dto.ProductDto;
 import com.cmdelivery.dto.SectionDto;
 import com.cmdelivery.exception.Error403Exception;
 import com.cmdelivery.exception.Error404Exception;
-import com.cmdelivery.model.Contractor;
+import com.cmdelivery.model.Partner;
 import com.cmdelivery.model.Product;
 import com.cmdelivery.model.Section;
-import com.cmdelivery.repository.ContractorRepository;
+import com.cmdelivery.repository.PartnerRepository;
 import com.cmdelivery.repository.ProductRepository;
 import com.cmdelivery.repository.SectionRepository;
 import com.cmdelivery.service.*;
@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
 @Controller
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class CabinetController {
-    private final ContractorRepository contractorRepository;
-    private final ContractorService contractorService;
+    private final PartnerRepository partnerRepository;
+    private final PartnerService partnerService;
     private final SecurityService securityService;
     private final DtoService dtoService;
     private final SectionService sectionService;
@@ -46,55 +46,55 @@ public class CabinetController {
     private final ProductRepository productRepository;
     private final IStorageService storageService;
 
-    @Value("${contractor.image.url}")
-    private String contractorImageUrl;
+    @Value("${partner.image.url}")
+    private String partnerImageUrl;
     @Value("${product.image.url}")
     private String productImageUrl;
 
-    private String contractorSettingsBindingResultString = "org.springframework.validation.BindingResult.contractorSettingsDto";
+    private String partnerSettingsBindingResultString = "org.springframework.validation.BindingResult.partnerSettingsDto";
 
     @GetMapping(value="/cabinet")
-    public ModelAndView contractorHome(ModelMap modelMap) {
-        ModelAndView modelAndView = new ModelAndView("contractor/cabinet");
+    public ModelAndView partnerHome(ModelMap modelMap) {
+        ModelAndView modelAndView = new ModelAndView("partner/cabinet");
 
-        // get ContractorSettingsDto object after redirect to this url from /cabinet/modify_contractor_settings to display Bindingresult errors
-        ContractorSettingsDto redirectContractorSettingsDto = (ContractorSettingsDto) modelMap.get("contractorSettingsDto");
-        BindingResult bindingResult = (BindingResult) modelMap.get(contractorSettingsBindingResultString);
+        // get PartnerSettingsDto object after redirect to this url from /cabinet/modify_partner_settings to display Bindingresult errors
+        PartnerSettingsDto redirectPartnerSettingsDto = (PartnerSettingsDto) modelMap.get("partnerSettingsDto");
+        BindingResult bindingResult = (BindingResult) modelMap.get(partnerSettingsBindingResultString);
         if (bindingResult != null) {
             if (bindingResult.hasErrors()) {
                 modelAndView.addObject("errorMessage", "Failed to update the settings. There are incorrect values.");
             }
         }
 
-        Contractor contractor = contractorRepository.findByName(securityService.getCurrentUserName());
-        if (contractor == null) {
+        Partner partner = partnerRepository.findByName(securityService.getCurrentUserName());
+        if (partner == null) {
             return new ModelAndView("redirect:/cabinet/login");
         }
-        modelAndView.addObject("contractor", dtoService.convertToDto(contractor));
+        modelAndView.addObject("partner", dtoService.convertToDto(partner));
         modelAndView.addObject("defaultSectionName", SectionService.defaultSectionName());
-        modelAndView.addObject("contractorSettingsDto", redirectContractorSettingsDto != null ? redirectContractorSettingsDto
-                                                                                                          : dtoService.getContractorSettings(contractor));
+        modelAndView.addObject("partnerSettingsDto", redirectPartnerSettingsDto != null ? redirectPartnerSettingsDto
+                                                                                                          : dtoService.getPartnerSettings(partner));
         return modelAndView;
     }
 
-    @PostMapping(value="/cabinet/modify_contractor_settings")
-    public ModelAndView modifyContractorSettings(@ModelAttribute @Valid ContractorSettingsDto contractorSettingsDto, BindingResult bindingResult,
+    @PostMapping(value="/cabinet/modify_partner_settings")
+    public ModelAndView modifyPartnerSettings(@ModelAttribute @Valid PartnerSettingsDto partnerSettingsDto, BindingResult bindingResult,
                                                  RedirectAttributes redirectAttributes) {
         ModelAndView modelAndView = new ModelAndView("redirect:/cabinet");
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute(contractorSettingsBindingResultString, bindingResult);
-            redirectAttributes.addFlashAttribute("contractorSettingsDto", contractorSettingsDto);
+            redirectAttributes.addFlashAttribute(partnerSettingsBindingResultString, bindingResult);
+            redirectAttributes.addFlashAttribute("partnerSettingsDto", partnerSettingsDto);
             return modelAndView;
         }
-        Contractor contractor = contractorRepository.findByName(securityService.getCurrentUserName());
-        if (contractor == null) {
+        Partner partner = partnerRepository.findByName(securityService.getCurrentUserName());
+        if (partner == null) {
             return modelAndView;
         }
-        contractor.setMinTime(contractorSettingsDto.getMinTime());
-        contractor.setMaxTime(contractorSettingsDto.getMaxTime());
-        contractor.setMinPrice(contractorSettingsDto.getMinPrice());
-        Contractor savedContractor = contractorRepository.save(contractor);
-        if (savedContractor == null) {
+        partner.setMinTime(partnerSettingsDto.getMinTime());
+        partner.setMaxTime(partnerSettingsDto.getMaxTime());
+        partner.setMinPrice(partnerSettingsDto.getMinPrice());
+        Partner savedPartner = partnerRepository.save(partner);
+        if (savedPartner == null) {
             modelAndView.addObject("errorMessage", "Failed to update the settings");
         }
 
@@ -103,7 +103,7 @@ public class CabinetController {
 
     @GetMapping(value="/cabinet/new_section")
     public ModelAndView newSection() {
-        ModelAndView modelAndView = new ModelAndView("contractor/new_section");
+        ModelAndView modelAndView = new ModelAndView("partner/new_section");
         modelAndView.addObject("sectionDto", new SectionDto());
         return modelAndView;
     }
@@ -111,7 +111,7 @@ public class CabinetController {
     @GetMapping(value="/cabinet/modify_product/{productId}")
     public ModelAndView modifyProduct(@PathVariable long productId, ModelMap modelMap) {
 
-        ModelAndView modelAndView = new ModelAndView("contractor/modify_product");
+        ModelAndView modelAndView = new ModelAndView("partner/modify_product");
 
         String errorMessage = (String) modelMap.get("errorMessage");
         if (errorMessage != null) {
@@ -122,7 +122,7 @@ public class CabinetController {
         if (product == null) {
             throw new Error404Exception();
         }
-        if (!product.getSection().getContractor().getName().equals(securityService.getCurrentUserName())) {
+        if (!product.getSection().getPartner().getName().equals(securityService.getCurrentUserName())) {
             throw new Error403Exception();
         }
         modelAndView.addObject("product", dtoService.convertToDto(product));
@@ -142,7 +142,7 @@ public class CabinetController {
             redirectAttributes.addFlashAttribute("errorMessage", "Failed to modify product. Product not found.");
             return modelAndView;
         }
-        if (!product.getSection().getContractor().getName().equals(securityService.getCurrentUserName())) {
+        if (!product.getSection().getPartner().getName().equals(securityService.getCurrentUserName())) {
             throw new Error403Exception();
         }
         productService.modifyProduct(product, productDto);
@@ -156,7 +156,7 @@ public class CabinetController {
 
     @GetMapping(value="/cabinet/modify_section/{sectionId}")
     public ModelAndView modifySection(@PathVariable long sectionId) {
-        ModelAndView modelAndView = new ModelAndView("contractor/modify_section");
+        ModelAndView modelAndView = new ModelAndView("partner/modify_section");
         Optional<Section> section = sectionRepository.findById(sectionId);
         if (!section.isPresent()) {
             throw new Error404Exception();
@@ -164,7 +164,7 @@ public class CabinetController {
         if (sectionService.isDefault(section.get())) {
             throw new Error404Exception();
         }
-        if (!section.get().getContractor().getName().equals(securityService.getCurrentUserName())) {
+        if (!section.get().getPartner().getName().equals(securityService.getCurrentUserName())) {
             throw new Error403Exception();
         }
         modelAndView.addObject("sectionDto", dtoService.convertToDto(section.get()));
@@ -179,7 +179,7 @@ public class CabinetController {
             modelAndView.addObject("errorMessage", "Failed to modify section");
             return modelAndView;
         }
-        if (!section.getContractor().getName().equals(securityService.getCurrentUserName())) {
+        if (!section.getPartner().getName().equals(securityService.getCurrentUserName())) {
             throw new Error403Exception();
         }
         sectionService.modifySection(section, sectionDto);
@@ -192,8 +192,8 @@ public class CabinetController {
 
     @PostMapping(value="/cabinet/add_section")
     public ModelAndView addSection(@ModelAttribute SectionDto sectionDto, BindingResult bindingResult) {
-        String currentContractor = securityService.getCurrentUserName();
-        if (currentContractor == null) {
+        String currentPartner = securityService.getCurrentUserName();
+        if (currentPartner == null) {
             return new ModelAndView("redirect:/cabinet");
         }
         if (sectionRepository.findByName(sectionDto.getName()) != null) {
@@ -202,7 +202,7 @@ public class CabinetController {
             return errorModelAndView;
         }
         Section newSection = dtoService.convertToSection(sectionDto);
-        newSection.setContractor(contractorRepository.findByName(currentContractor));
+        newSection.setPartner(partnerRepository.findByName(currentPartner));
         Section registeredSection = sectionService.registerNewSection(newSection);
         if (registeredSection == null) {
             ModelAndView errorModelAndView = new ModelAndView("redirect:/cabinet/new_section");
@@ -217,9 +217,9 @@ public class CabinetController {
     @PostMapping(value="/cabinet/remove_section/{sectionId}")
     public ResponseEntity<?> removeSection(@PathVariable Integer sectionId) {
         Section section = sectionRepository.findBySectionId(sectionId);
-        Contractor sectionContractor = section.getContractor();
-        Section defaultSection = contractorService.getDefaultSection(sectionContractor.getContractorId());
-        if (!(sectionContractor.getName().equals(securityService.getCurrentUserName()))) {
+        Partner sectionPartner = section.getPartner();
+        Section defaultSection = partnerService.getDefaultSection(sectionPartner.getPartnerId());
+        if (!(sectionPartner.getName().equals(securityService.getCurrentUserName()))) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         if (sectionService.isDefault(section)) {
@@ -235,8 +235,8 @@ public class CabinetController {
     @PostMapping(value="/cabinet/remove_product/{productId}")
     public ResponseEntity<?> removeProduct(@PathVariable Integer productId) {
         Product product = productRepository.findByProductId(productId);
-        Contractor productContractor = product.getSection().getContractor();
-        if (!(productContractor.getName().equals(securityService.getCurrentUserName()))) {
+        Partner productPartner = product.getSection().getPartner();
+        if (!(productPartner.getName().equals(securityService.getCurrentUserName()))) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         productRepository.delete(product);
@@ -245,7 +245,7 @@ public class CabinetController {
 
     @GetMapping(value="/cabinet/new_product")
     public ModelAndView newProduct() {
-        ModelAndView modelAndView = new ModelAndView("contractor/new_product");
+        ModelAndView modelAndView = new ModelAndView("partner/new_product");
         modelAndView.addObject("productDto", new ProductDto());
         return modelAndView;
     }
@@ -253,9 +253,9 @@ public class CabinetController {
     @PostMapping(value="/cabinet/new_product")
     public ModelAndView addProduct(@ModelAttribute ProductDto productDto, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView("redirect:/cabinet");
-        ModelAndView errorModelAndView = new ModelAndView("contractor/new_product");
-        String currentContractor = securityService.getCurrentUserName();
-        if (currentContractor == null) {
+        ModelAndView errorModelAndView = new ModelAndView("partner/new_product");
+        String currentPartner = securityService.getCurrentUserName();
+        if (currentPartner == null) {
             return modelAndView;
         }
         if (productRepository.findByName(productDto.getName()) != null) {
@@ -275,8 +275,8 @@ public class CabinetController {
     @ResponseBody
     public ResponseEntity<?> uploadMainImage(@RequestParam("file") @ValidImage MultipartFile image) {
         String name;
-        Contractor contractor = contractorRepository.findByName(securityService.getCurrentUserName());
-        String filename = "" + contractor.getContractorId();
+        Partner partner = partnerRepository.findByName(securityService.getCurrentUserName());
+        String filename = "" + partner.getPartnerId();
         try {
             name = storageService.store(image, filename, IStorageService.FileType.MAIN_IMAGE);
         } catch (Exception e) {
@@ -284,11 +284,11 @@ public class CabinetController {
             return new ResponseEntity<>(new FileUploadResponse(), HttpStatus.NO_CONTENT);
         }
         String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(contractorImageUrl)
+                .path(partnerImageUrl)
                 .path(filename)
                 .toUriString();
-        contractor.setImage(Long.toString(contractor.getContractorId()));
-        contractorRepository.save(contractor);
+        partner.setImage(Long.toString(partner.getPartnerId()));
+        partnerRepository.save(partner);
 
         return new ResponseEntity<>(new FileUploadResponse(name, uri, image.getContentType(), image.getSize()), HttpStatus.OK);
     }

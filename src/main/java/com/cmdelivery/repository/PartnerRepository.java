@@ -1,11 +1,11 @@
 package com.cmdelivery.repository;
 
-import com.cmdelivery.model.Contractor;
+import com.cmdelivery.model.Partner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository()
-public interface ContractorRepository extends JpaRepository<Contractor, Long> {
+public interface PartnerRepository extends JpaRepository<Partner, Long> {
     void deleteAll();
-    Contractor findByName(String name);
+    Partner findByName(String name);
 }

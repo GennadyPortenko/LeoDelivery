@@ -15,10 +15,10 @@ import java.util.Set;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(exclude = {"sections"})
-public class Contractor {
+public class Partner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long contractorId;
+    long partnerId;
 
     @NonNull
     @NotEmpty
@@ -51,10 +51,10 @@ public class Contractor {
 
     @ToString.Exclude
     @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name = "contractor_role", joinColumns = @JoinColumn(name = "contractor_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "partner_role", joinColumns = @JoinColumn(name = "partner_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     Set<Role> roles = new HashSet<>();
 
     @ToString.Exclude
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="contractor")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="partner")
     Set<Section> sections = new HashSet<>();
 }

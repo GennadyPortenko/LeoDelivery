@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <thymeleaf th:replace="/include/resources :: resources (option_contractorCabinet = true)"></thymeleaf>
+    <thymeleaf th:replace="/include/resources :: resources (option_partnerCabinet = true)"></thymeleaf>
 
     <script th:inline="javascript">
       /*<![CDATA[*/
@@ -32,19 +32,19 @@
     <section>
         <div class="cabinet_blockTitle">Image & logo</div>
         <div class="cabinet_image">
-            <img th:if="${contractor.image != null}" th:src="@{${contractor.image}}" alt="contractor photo">
-            <img th:if="${contractor.image == null}" src="/images/contractor_default.jpg" alt="contractor photo">
+            <img th:if="${partner.image != null}" th:src="@{${partner.image}}" alt="partner photo">
+            <img th:if="${partner.image == null}" src="/images/partner_default.jpg" alt="partner photo">
         </div>
-        <form class="cabinet_imageUploadForm" method="POST" enctype="multipart/form-data" name="loadContractorImageForm" th:action="@{/cabinet/upload_image}">
-            <input type="file" name="file" id="loadContractorImageInput">
-            <button type="submit" class="btn" id="loadContractorImageBtn">Upload</button>
+        <form class="cabinet_imageUploadForm" method="POST" enctype="multipart/form-data" name="loadPartnerImageForm" th:action="@{/cabinet/upload_image}">
+            <input type="file" name="file" id="loadPartnerImageInput">
+            <button type="submit" class="btn" id="loadPartnerImageBtn">Upload</button>
         </form>
     </section>
 
     <section class="cabinet_sectionsBlock">
         <div class="cabinet_blockTitle">Sections & dishes</div>
-        <div class="cabinet_empty" th:classappend="${#arrays.length(contractor.sections)} != 0 ? hidden : ''">No sections yet</div>
-        <div th:each="section : ${contractor.sections}" th:attr = "data-section-id = ${section.id}"
+        <div class="cabinet_empty" th:classappend="${#arrays.length(partner.sections)} != 0 ? hidden : ''">No sections yet</div>
+        <div th:each="section : ${partner.sections}" th:attr = "data-section-id = ${section.id}"
              th:attrappend = "default-section = ${section.name == defaultSectionName ? true : false}" class="sectionBlock">
 
             <div th:text="${section.name}" class="cabinet_sectionName"></div>
@@ -78,7 +78,7 @@
 
     <section class="cabinet_sectionsBlock">
         <div class="cabinet_blockTitle">Settings</div>
-        <form action="#" th:action="@{/cabinet/modify_contractor_settings}" th:object="${contractorSettingsDto}" method="post"
+        <form action="#" th:action="@{/cabinet/modify_partner_settings}" th:object="${partnerSettingsDto}" method="post"
           required="true" role="form" class="cabinet_form">
             <div class="cabinet_formLabel">Minimum delivery time</div>
             <ul class="cabinet_formErrors">

@@ -26,8 +26,8 @@ public class Section {
     String description;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="contractor_fk")
-    Contractor contractor;
+    @JoinColumn(name="partner_fk")
+    Partner partner;
 
     @ToString.Exclude
     @OneToMany(fetch=FetchType.LAZY, mappedBy="section")

@@ -11,7 +11,7 @@ import javax.validation.constraints.Min;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ContractorSettingsDto {
+public class PartnerSettingsDto {
     @Min(value=0, message="The value must be positive")
     int minTime;
     @Min(value=0, message="The value must be positive")

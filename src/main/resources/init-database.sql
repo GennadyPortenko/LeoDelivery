@@ -9,9 +9,9 @@ CREATE TABLE client (
 , active INTEGER NOT NULL
 );
 
-DROP TABLE IF EXISTS contractor CASCADE;
-CREATE TABLE contractor (
-  contractor_id BIGSERIAL PRIMARY KEY
+DROP TABLE IF EXISTS partner CASCADE;
+CREATE TABLE partner (
+  partner_id BIGSERIAL PRIMARY KEY
 , name VARCHAR(50) NOT NULL
 , email VARCHAR(150) NOT NULL
 , image VARCHAR(150)
@@ -52,11 +52,11 @@ CREATE TABLE client_role (
 , CONSTRAINT client_role_pkey PRIMARY KEY (client_id, role_id)
 );
 
-DROP TABLE IF EXISTS contractor_role CASCADE;
-CREATE TABLE contractor_role (
-  contractor_id INTEGER REFERENCES contractor(contractor_id) NOT NULL
+DROP TABLE IF EXISTS partner_role CASCADE;
+CREATE TABLE partner_role (
+  partner_id INTEGER REFERENCES partner(partner_id) NOT NULL
 , role_id INTEGER REFERENCES role(role_id) NOT NULL
-, CONSTRAINT contractor_role_pkey PRIMARY KEY (contractor_id, role_id)
+, CONSTRAINT partner_role_pkey PRIMARY KEY (partner_id, role_id)
 );
 
 DROP TABLE IF EXISTS section CASCADE;
@@ -64,7 +64,7 @@ CREATE TABLE section (
   section_id BIGSERIAL PRIMARY KEY
 , name VARCHAR(50) NOT NULL
 , description TEXT
-, contractor_fk INTEGER REFERENCES contractor(contractor_id) NOT NULL -- ON UPDATE CASCADE ON DELETE CASCADE
+, partner_fk INTEGER REFERENCES partner(partner_id) NOT NULL -- ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS product CASCADE;
@@ -87,7 +87,7 @@ CREATE TABLE category (
 -- roles initialization
 
 INSERT INTO role (role_id, role)
-VALUES (1, 'ROLE_ADMIN'), (2, 'ROLE_USER'), (3, 'ROLE_CONTRACTOR');
+VALUES (1, 'ROLE_ADMIN'), (2, 'ROLE_USER'), (3, 'ROLE_PARTNER');
 
 
 -- categories initialization

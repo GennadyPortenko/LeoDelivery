@@ -30,8 +30,8 @@ import java.util.Set;
 @Controller
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class LoginController {
-    private final ContractorService contractorService;
-    private final ContractorRepository contractorRepository;
+    private final PartnerService partnerService;
+    private final PartnerRepository partnerRepository;
 
     private final ClientService clientService;
     private final ClientRepository clientRepository;
@@ -51,17 +51,17 @@ public class LoginController {
     @Transactional
     @PostConstruct
     public void init() {
-        final String CONTRACTOR_USERNAME = "rest";
-        final String CONTRACTOR_EMAIL= "r@r.com";
-        final String CONTRACTOR_PASSWORD= "rest";
-        final String CONTRACTOR2_USERNAME = "rest2";
-        final String CONTRACTOR2_EMAIL= "r2@r2.com";
-        final String CONTRACTOR2_PASSWORD= "rest2";
+        final String PARTNER_USERNAME = "rest";
+        final String PARTNER_EMAIL= "r@r.com";
+        final String PARTNER_PASSWORD= "rest";
+        final String PARTNER2_USERNAME = "rest2";
+        final String PARTNER2_EMAIL= "r2@r2.com";
+        final String PARTNER2_PASSWORD= "rest2";
 
-        if (contractorRepository.findByName(CONTRACTOR_USERNAME) == null) {
-            Contractor contractor = new Contractor(CONTRACTOR_EMAIL, CONTRACTOR_USERNAME, 30, 60, 50, CONTRACTOR_PASSWORD, categoryRepository.findByCategoryId(3));
-            contractorService.registerNewContractor(contractor);
-            Section defaultSection = sectionRepository.findByNameAndContractor(SectionService.defaultSectionName(), contractor.getContractorId());
+        if (partnerRepository.findByName(PARTNER_USERNAME) == null) {
+            Partner partner = new Partner(PARTNER_EMAIL, PARTNER_USERNAME, 30, 60, 50, PARTNER_PASSWORD, categoryRepository.findByCategoryId(3));
+            partnerService.registerNewPartner(partner);
+            Section defaultSection = sectionRepository.findByNameAndPartner(SectionService.defaultSectionName(), partner.getPartnerId());
             Set<Product> defaultProducts = new HashSet<>();
 
             Product product1 = new Product("Cheese cake", "Wonderful tasty cheese cake.");
@@ -75,7 +75,7 @@ public class LoginController {
 
             Section pizza = new Section("Pizza");
             pizza.setDescription("Different pizzas");
-            pizza.setContractor(contractor);
+            pizza.setPartner(partner);
             sectionRepository.save(pizza);
 
             Product product3 = new Product("Pizza", "Wonderful tasty pizza.");
@@ -84,9 +84,9 @@ public class LoginController {
 
         }
 
-        if (contractorRepository.findByName(CONTRACTOR2_USERNAME) == null) {
-            Contractor contractor = new Contractor(CONTRACTOR2_EMAIL, CONTRACTOR2_USERNAME, 30, 60, 50, CONTRACTOR2_PASSWORD, categoryRepository.findByCategoryId(3));
-            contractorService.registerNewContractor(contractor);
+        if (partnerRepository.findByName(PARTNER2_USERNAME) == null) {
+            Partner partner = new Partner(PARTNER2_EMAIL, PARTNER2_USERNAME, 30, 60, 50, PARTNER2_PASSWORD, categoryRepository.findByCategoryId(3));
+            partnerService.registerNewPartner(partner);
         }
 
     }
@@ -104,8 +104,8 @@ public class LoginController {
     }
 
     @GetMapping(value="/cabinet/login")
-    public ModelAndView contractorLogin() {
-        return new ModelAndView("contractor/login");
+    public ModelAndView partnerLogin() {
+        return new ModelAndView("partner/login");
     }
 
 

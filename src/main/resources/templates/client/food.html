@@ -24,8 +24,8 @@
         <a th:each="restaurant : ${restaurants}" th:href="@{'/food/restaurant/' + ${restaurant.name}} " class="col-12 col-sm-6 col-lg-4 col-xl-3">
             <div class="food_restaurant">
                 <div class="food_restaurantImage">
-                    <img th:if="${restaurant.image!= null}" th:src="@{${restaurant.image}}" alt="contractor photo">
-                    <img th:if="${restaurant.image == null}" src="/images/contractor_default.jpg" alt="contractor photo">
+                    <img th:if="${restaurant.image!= null}" th:src="@{${restaurant.image}}" alt="partner photo">
+                    <img th:if="${restaurant.image == null}" src="/images/partner_default.jpg" alt="partner photo">
                 </div>
                 <div class="food_restaurantInfo">
                     <div th:text="${restaurant.name}" class="food_restaurantName"></div>

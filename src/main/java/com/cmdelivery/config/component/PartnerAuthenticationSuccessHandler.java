@@ -1,6 +1,6 @@
 package com.cmdelivery.config.component;
 
-import com.cmdelivery.repository.ContractorRepository;
+import com.cmdelivery.repository.PartnerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -17,9 +17,9 @@ import java.security.Principal;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
-public class ContractorAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class PartnerAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final HttpSession session;
-    private final ContractorRepository repository;
+    private final PartnerRepository repository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -34,7 +34,7 @@ public class ContractorAuthenticationSuccessHandler implements AuthenticationSuc
         }
         // HttpSession session = request.getSession();
         session.setAttribute("username", userName);
-        session.setAttribute("role", "CONTRACTOR");
+        session.setAttribute("role", "PARTNER");
 
         // Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         response.sendRedirect("/cabinet");

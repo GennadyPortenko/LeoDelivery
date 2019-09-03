@@ -3,13 +3,13 @@ $(document).ready(function() {
   bindProductBtns();
   bindSectionBtns();
 
-  $("#loadContractorImageBtn").click(function(e) {
+  $("#loadPartnerImageBtn").click(function(e) {
     e.preventDefault();
-    if ($('#loadContractorImageInput').get(0).files.length === 0) {
+    if ($('#loadPartnerImageInput').get(0).files.length === 0) {
       return;
     }
     $(this).prop('disabled',true);
-    var formData = new FormData(document.forms.namedItem("loadContractorImageForm"));
+    var formData = new FormData(document.forms.namedItem("loadPartnerImageForm"));
     sendImageUploadRequest(formData,
                            function() {
                              console.log("success");

@@ -2,9 +2,9 @@ package com.cmdelivery.controller;
 
 import com.cmdelivery.dto.SectionDto;
 import com.cmdelivery.exception.Error404Exception;
-import com.cmdelivery.model.Contractor;
+import com.cmdelivery.model.Partner;
 import com.cmdelivery.repository.CategoryRepository;
-import com.cmdelivery.repository.ContractorRepository;
+import com.cmdelivery.repository.PartnerRepository;
 import com.cmdelivery.service.DtoService;
 import com.cmdelivery.service.SectionService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class MainController {
-    private final ContractorRepository contractorRepository;
+    private final PartnerRepository partnerRepository;
     private final CategoryRepository categoryRepository;
     private final DtoService dtoService;
 
@@ -29,14 +29,14 @@ public class MainController {
     public ModelAndView food() {
         ModelAndView modelAndView = new ModelAndView("client/food");
         modelAndView.addObject("restaurants",
-                contractorRepository.findAll().stream().map(dtoService::convertToDto).collect(Collectors.toList()));
+                partnerRepository.findAll().stream().map(dtoService::convertToDto).collect(Collectors.toList()));
         modelAndView.addObject("categories", categoryRepository.findAll());
         return modelAndView;
     }
 
     @GetMapping(value="/food/restaurant/{restaurantName}")
     public ModelAndView restaurant(@PathVariable String restaurantName) {
-        Contractor restaurant = contractorRepository.findByName(restaurantName);
+        Partner restaurant = partnerRepository.findByName(restaurantName);
         if (restaurant == null) {
             throw new Error404Exception();
         }
