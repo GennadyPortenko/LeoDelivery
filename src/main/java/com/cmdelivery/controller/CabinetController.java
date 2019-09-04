@@ -1,9 +1,6 @@
 package com.cmdelivery.controller;
 
-import com.cmdelivery.dto.PartnerSettingsDto;
-import com.cmdelivery.dto.FileUploadResponse;
-import com.cmdelivery.dto.ProductDto;
-import com.cmdelivery.dto.SectionDto;
+import com.cmdelivery.dto.*;
 import com.cmdelivery.exception.Error403Exception;
 import com.cmdelivery.exception.Error404Exception;
 import com.cmdelivery.model.Partner;
@@ -29,9 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
@@ -190,7 +185,7 @@ public class CabinetController {
         return modelAndView;
     }
 
-    @PostMapping(value="/cabinet/add_section")
+    @PostMapping(value="/cabinet/new_section")
     public ModelAndView addSection(@ModelAttribute SectionDto sectionDto, BindingResult bindingResult) {
         String currentPartner = securityService.getCurrentUserName();
         if (currentPartner == null) {
@@ -215,7 +210,7 @@ public class CabinetController {
 
     @ResponseBody
     @PostMapping(value="/cabinet/remove_section/{sectionId}")
-    public ResponseEntity<?> removeSection(@PathVariable Integer sectionId) {
+    public ResponseEntity<?> removeSection(@PathVariable long sectionId) {
         Section section = sectionRepository.findBySectionId(sectionId);
         Partner sectionPartner = section.getPartner();
         Section defaultSection = partnerService.getDefaultSection(sectionPartner.getPartnerId());
@@ -233,7 +228,7 @@ public class CabinetController {
 
     @ResponseBody
     @PostMapping(value="/cabinet/remove_product/{productId}")
-    public ResponseEntity<?> removeProduct(@PathVariable Integer productId) {
+    public ResponseEntity<?> removeProduct(@PathVariable long productId) {
         Product product = productRepository.findByProductId(productId);
         Partner productPartner = product.getSection().getPartner();
         if (!(productPartner.getName().equals(securityService.getCurrentUserName()))) {
@@ -314,5 +309,29 @@ public class CabinetController {
 
         return new ResponseEntity<>(new FileUploadResponse(name, uri, image.getContentType(), image.getSize()), HttpStatus.OK);
     }
+
+    @ResponseBody
+    @PostMapping(value="/cabinet/move_product_to_section/{productId}")
+    public ResponseEntity<?> moveProductToSection(@PathVariable long productId, @RequestBody MoveProductToSectionDto dto) {
+        long sectionId = dto.getSectionId();
+        Product product = productRepository.findByProductId(productId);
+        Partner productPartner = product.getSection().getPartner();
+
+        if (product.getSection().getSectionId() == sectionId) {
+            return new ResponseEntity<>(new MoveProductToSectionDto(false, "Product '" + product.getName() + "' is already in section '" + product.getSection().getName() + "'", sectionId), HttpStatus.OK);
+        }
+
+        if (!(productPartner.getName().equals(securityService.getCurrentUserName()))) {
+            return new ResponseEntity<>(new MoveProductToSectionDto(false, "Access denied", sectionId), HttpStatus.OK);
+        }
+
+        Product movedProduct = productService.moveToSection(product, sectionRepository.findBySectionId(sectionId));
+        if (movedProduct == null) {
+            return new ResponseEntity<>(new MoveProductToSectionDto(false, "Failed to move product '" + product.getName() + "' to section '" + product.getSection().getName() + "'", sectionId), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new MoveProductToSectionDto(true, "", sectionId), HttpStatus.OK);
+    }
+
 
 }

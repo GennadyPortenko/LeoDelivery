@@ -30,7 +30,7 @@ function removeProduct(productId) {
          $('[data-product-id=' + productId +']').remove();
          console.log($(sectionProducts).find('.product'));
          if ($(sectionProducts).find('.product').length == 0) {
-           $(sectionProducts).find('.cabinet_empty').removeClass('hidden');
+           $(sectionProducts).addClass('empty');
          }
        },
        function() {},
@@ -39,9 +39,9 @@ function removeProduct(productId) {
 function removeSection (sectionId) {
     sendRemoveSectionRequest(sectionId,
        function() {
-         $('[data-section-id=' + sectionId +']').find('.cabinet_empty').remove();
-         $('[default-section=true]').find('.cabinet_sectionProducts').append($('[data-section-id=' + sectionId +']').find('.cabinet_sectionProducts').html());
-         $('[data-section-id=' + sectionId +']').remove();
+         $('.sectionBlock[default-section=true]').find('.cabinet_sectionProducts').append($('[data-section-id=' + sectionId +']').find('.cabinet_sectionProducts').html());
+         $('.sectionBlock[default-section=true]').find('.cabinet_sectionProducts').removeClass('empty');
+         $('.sectionBlock[data-section-id=' + sectionId +']').remove();
        },
        function() {},
        hostURL);
@@ -61,6 +61,32 @@ function bindProductBtns() {
     $(this).click(function() {
       var productId = $(this).parent().attr('data-product-id');
       openConfirmModal(confirmModalDeleteProductMessage + ' ' + productId + '?', removeProduct, productId);
+    });
+  });
+  $('.cabinet_moveToSectionBtn').each(function(index) {
+    $(this).click(function(){
+      var product= $(this).closest('.product-col');
+      sendMoveProductToSectionRequest(
+        $(this).closest('.product').attr('data-product-id'),
+        $(this).closest('.product').find('.cabinet_moveToSectionSelect').find('option:selected').attr('data-section-id'),
+        function(data) {
+          if (!data.succeed) {
+            $('#cabinetMessageModal').find('.message').addClass('errorMessage');
+            $('#cabinetMessageModal').find('.message').text(data.errorMessage);
+            $('#cabinetMessageModal').modal('show');
+          } else {
+            var sectionProducts = product.closest('.cabinet_sectionProducts');
+            var targetSectionProducts = $('.sectionBlock[data-section-id = "' + data.sectionId + '"]').find('.cabinet_sectionProducts');
+            product.appendTo(targetSectionProducts);
+            if (sectionProducts.find('.product').length == 0) {
+              sectionProducts.addClass('empty');
+            }
+            targetSectionProducts.removeClass('empty');
+          }
+        },
+        function() {  },
+        hostURL
+      );
     });
   });
 }

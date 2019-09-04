@@ -1,9 +1,7 @@
 package com.cmdelivery.service;
 
-import com.cmdelivery.dto.PartnerDto;
-import com.cmdelivery.dto.PartnerSettingsDto;
-import com.cmdelivery.dto.ProductDto;
-import com.cmdelivery.dto.SectionDto;
+import com.cmdelivery.dto.*;
+import com.cmdelivery.model.Category;
 import com.cmdelivery.model.Partner;
 import com.cmdelivery.model.Product;
 import com.cmdelivery.model.Section;
@@ -67,6 +65,7 @@ public class DtoService {
         PartnerDto partnerDto = modelMapper.map(partner, PartnerDto.class);
         partnerDto.setId(partner.getPartnerId());
         partnerDto.setSections(partner.getSections().stream().map(this::convertToDto).collect(Collectors.toList()));
+        partnerDto.setMainCategory(convertToDto(partner.getMainCategory()));
         String partnerImage = partner.getImage();
         partnerDto.setImage(partnerImage == null ? null :
                                 ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -83,6 +82,14 @@ public class DtoService {
 
     public PartnerSettingsDto getPartnerSettings(Partner partner) {
         return new PartnerSettingsDto(partner.getMinTime(), partner.getMaxTime(), partner.getMinPrice());
+    }
+
+    public Category convertToCategory(CategoryDto categoryDto) {
+        return modelMapper.map(categoryDto, Category.class);
+    }
+
+    public CategoryDto convertToDto(Category category) {
+        return modelMapper.map(category, CategoryDto.class);
     }
 
 }

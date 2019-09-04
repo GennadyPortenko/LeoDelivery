@@ -10,14 +10,14 @@
 <body>
 <div class="container">
     <div th:replace="/include/menu :: menu"></div>
-    <h2>New Section</h2>
+    <h1 class="cabinet_title">New Section</h1>
     <section class="cabinet_errorMessageBlock" th:if="${errorMessage != null}" th:text="${errorMessage}">
     </section>
     <section>
-        <form action="#" th:action="@{/cabinet/add_section}" th:object="${sectionDto}" method="post"
+        <form action="#" th:action="@{/cabinet/new_section}" th:object="${sectionDto}" method="post"
               data-toggle="validator" required="true" role="form" class="cabinet_form">
-            <input th:field="*{name}" class="login-form-input" id="sectionName" required placeholder="Name" name="login">
-            <input th:field="*{description}" class="login-form-input" id="sectionDescription" required placeholder="Description" name="login">
+            <input th:field="*{name}" class="cabinet_formInput" id="sectionName" required placeholder="Name">
+            <input th:field="*{description}" class="cabinet_formInput" id="sectionDescription" required placeholder="Description">
             <input type="submit" class="btn submitBtn" value="Add">
         </form>
     </section>

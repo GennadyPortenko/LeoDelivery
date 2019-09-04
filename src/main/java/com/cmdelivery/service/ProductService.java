@@ -31,4 +31,12 @@ public class ProductService {
         product.setDescription(newProductDto.getDescription());
     }
 
+    public Product moveToSection(Product product, Section section) {
+        if ((product == null) || (section == null)) {
+            return null;
+        }
+        product.setSection(section);
+        return productRepository.save(product);
+    }
+
 }

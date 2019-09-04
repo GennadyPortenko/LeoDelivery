@@ -30,6 +30,10 @@
                 <div class="food_restaurantInfo">
                     <div th:text="${restaurant.name}" class="food_restaurantName"></div>
                     <div th:text="${restaurant.minTime + '-' + restaurant.maxTime + ' min'}" class="food_restaurantTime"></div>
+                    <th:block th:switch="#{locale}">
+                        <div th:case="'??locale_fr_FR??'" th:text="${restaurant.mainCategory.nameFr}" class="food_restaurantMainCategory"></div>
+                        <div th:case="*" th:text="${restaurant.mainCategory.nameEn}" class="food_restaurantMainCategory"></div>
+                    </th:block>
                 </div>
             </div>
         </a>

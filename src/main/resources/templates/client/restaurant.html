@@ -32,16 +32,18 @@
             <div class="row restaurant_sections">
                 <div class="restaurant_section container-fluid" th:each="section : ${restaurant.sections}" th:id="${'section' + section.id}" th:attr = "data-section-id = ${section.id}">
                     <div class="restaurant_sectionTitle" th:text="${section.name}"></div>
-                    <div class="row restaurant_products">
-                        <div class="restaurant_empty" th:classappend="${#arrays.length(section.products)} != 0 ? hidden : ''">No products</div>
-                        <div th:each="product : ${section.products}" th:attr = "data-product-id = ${product.id}" class="product col-12 col-sm-3">
-                            <div class="product_image">
-                                <img th:if="${product.image != null}" th:src="@{${product.image}}" alt="dish photo">
-                                <img th:if="${product.image == null}" src="/images/product_default.jpg" alt="dish photo">
-                            </div>
-                            <div class="product_info">
-                                <div th:text="${product.name}" class="product_name"></div>
-                                <div th:text="${product.description}" class="product_description"></div>
+                    <div class="row restaurant_products" th:classappend="${#arrays.length(section.products)} != 0 ? '' : empty">
+                        <div class="emptyMessage">No products</div>
+                        <div th:each="product : ${section.products}" class="product-col col-12 col-sm-3">
+                            <div class="product">
+                                <div class="product_image" th:attr = "data-product-id = ${product.id}">
+                                    <img th:if="${product.image != null}" th:src="@{${product.image}}" alt="dish photo">
+                                    <img th:if="${product.image == null}" src="/images/product_default.jpg" alt="dish photo">
+                                </div>
+                                <div class="product_info">
+                                    <div th:text="${product.name}" class="product_name"></div>
+                                    <div th:text="${product.description}" class="product_description"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

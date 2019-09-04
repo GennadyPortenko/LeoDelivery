@@ -1,5 +1,6 @@
 package com.cmdelivery.dto;
 
+import com.cmdelivery.model.Category;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -24,4 +25,5 @@ public class PartnerDto {
     int maxTime;
     @Min(value=0, message="The value must be positive")
     int minPrice;
+    CategoryDto mainCategory;
 }

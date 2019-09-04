@@ -17,7 +17,8 @@
     <title>Restaurant Cabinet</title>
 </head>
 <body>
-<div th:replace="/include/cabinetConfirmModal:: cabinetConfirmModal"></div>
+<div th:replace="/include/cabinetConfirmModal :: cabinetConfirmModal"></div>
+<div th:replace="/include/cabinetMessageModal :: cabinetMessageModal"></div>
 <div th:replace="/include/menu :: menu"></div>
 <div class="container-fluid cabinet-container-fluid">
     <h1 class="cabinet_title">Cabinet</h1>
@@ -41,9 +42,9 @@
         </form>
     </section>
 
-    <section class="cabinet_sectionsBlock">
+    <section class="cabinet_sectionsBlock" th:classappend="${#arrays.length(partner.sections)} != 0 ? '' : 'empty'">
         <div class="cabinet_blockTitle">Sections & dishes</div>
-        <div class="cabinet_empty" th:classappend="${#arrays.length(partner.sections)} != 0 ? hidden : ''">No sections yet</div>
+        <div class="emptyMessage" >No sections yet</div>
         <div th:each="section : ${partner.sections}" th:attr = "data-section-id = ${section.id}"
              th:attrappend = "default-section = ${section.name == defaultSectionName ? true : false}" class="sectionBlock">
 
@@ -54,23 +55,33 @@
             <a th:href="@{/cabinet/modify_section/} + ${section.id}" th:if="${section.name} != ${defaultSectionName}" class="cabinet_modifyBtn" title="modify">
                <i class="fas fa-pencil-alt"></i>
             </a>
-            <div class="cabinet_sectionProducts row">
-                <div class="cabinet_empty" th:classappend="${#arrays.length(section.products)} != 0 ? hidden : ''">No products</div>
-                <div th:each="product : ${section.products}" th:attr = "data-product-id = ${product.id}" class="product col-12 col-sm-3">
-                    <div class="product_image">
-                        <img th:if="${product.image != null}" th:src="@{${product.image}}" alt="dish photo">
-                        <img th:if="${product.image == null}" src="/images/product_default.jpg" alt="dish photo">
+            <div class="cabinet_sectionProducts row" th:classappend="${#arrays.length(section.products)} != 0 ? '' : empty">
+                <div class="emptyMessage">No products</div>
+                <div th:each="product : ${section.products}" class="product-col col-12 col-sm-3">
+                    <div class="product" th:attr = "data-product-id = ${product.id}">
+                        <div class="product_image">
+                            <img th:if="${product.image != null}" th:src="@{${product.image}}" alt="dish photo">
+                            <img th:if="${product.image == null}" src="/images/product_default.jpg" alt="dish photo">
+                        </div>
+                        <div class="cabinet_productBtns">
+                            <button class="cabinet_removeBtn cabinet_removeProductBtn" title="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <a th:href="@{/cabinet/modify_product/} + ${product.id}" class="cabinet_modifyBtn" title="modify">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                        </div>
+                        <div class="product_info">
+                            <div th:text="${product.name}" class="product_name"></div>
+                            <div th:text="${product.description}" class="product_description"></div>
+                        </div>
+                        <div class="cabinet_moveToSection">
+                            <button class="btn cabinet_moveToSectionBtn">Move to section</button>
+                            <select class="cabinet_moveToSectionSelect" name="newProductsSection">
+                                <option th:each="section : ${partner.sections}" th:attr='data-section-id = ${section.id}' th:text="${section.name}"></option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="product_info">
-                        <div th:text="${product.name}" class="product_name"></div>
-                        <div th:text="${product.description}" class="product_description"></div>
-                    </div>
-                    <button class="cabinet_removeBtn cabinet_removeProductBtn" title="remove">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <a th:href="@{/cabinet/modify_product/} + ${product.id}" class="cabinet_modifyBtn" title="modify">
-                        <i class="fas fa-pencil-alt"></i>
-                    </a>
                 </div>
             </div>
         </div>
