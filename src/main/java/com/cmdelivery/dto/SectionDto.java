@@ -1,6 +1,5 @@
 package com.cmdelivery.dto;
 
-import com.cmdelivery.model.Product;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

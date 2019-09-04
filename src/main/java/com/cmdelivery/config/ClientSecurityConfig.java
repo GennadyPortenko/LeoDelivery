@@ -1,6 +1,7 @@
 package com.cmdelivery.config;
 
 import com.cmdelivery.config.component.ClientAuthenticationProvider;
+import com.cmdelivery.config.component.ClientAuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +11,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import com.cmdelivery.config.component.ClientAuthenticationSuccessHandler;
 
 import javax.sql.DataSource;
 

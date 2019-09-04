@@ -1,6 +1,5 @@
 package com.cmdelivery.repository;
 
-import com.cmdelivery.model.Partner;
 import com.cmdelivery.model.Section;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

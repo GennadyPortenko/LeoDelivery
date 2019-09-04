@@ -1,21 +1,19 @@
 package com.cmdelivery.controller;
 
-import com.cmdelivery.dto.SectionDto;
 import com.cmdelivery.exception.Error404Exception;
 import com.cmdelivery.model.Partner;
 import com.cmdelivery.repository.CategoryRepository;
 import com.cmdelivery.repository.PartnerRepository;
 import com.cmdelivery.service.DtoService;
-import com.cmdelivery.service.SectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller

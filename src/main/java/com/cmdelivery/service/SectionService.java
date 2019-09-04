@@ -1,7 +1,6 @@
 package com.cmdelivery.service;
 
 import com.cmdelivery.dto.SectionDto;
-import com.cmdelivery.model.Partner;
 import com.cmdelivery.model.Product;
 import com.cmdelivery.model.Section;
 import com.cmdelivery.repository.ProductRepository;
