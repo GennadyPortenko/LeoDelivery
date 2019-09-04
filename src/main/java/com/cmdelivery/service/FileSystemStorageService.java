@@ -29,11 +29,14 @@ public class FileSystemStorageService implements IStorageService {
     private String rootLocation;
     @Value("${storage.image.partner.location}")
     private String partnerImageRootLocation;
+    @Value("${storage.image.partner.logo.location}")
+    private String partnerLogoRootLocation;
     @Value("${storage.image.product.location}")
     private String productImageRootLocation;
 
     private Path rootPath;
     private Path partnerImageRootPath;
+    private Path partnerLogoRootPath;
     private Path productImageRootPath;
 
     @Override
@@ -42,9 +45,11 @@ public class FileSystemStorageService implements IStorageService {
         try {
             rootPath = Paths.get(rootLocation);
             partnerImageRootPath = Paths.get(partnerImageRootLocation);
+            partnerLogoRootPath = Paths.get(partnerLogoRootLocation);
             productImageRootPath = Paths.get(productImageRootLocation);
             Files.createDirectories(rootPath);
             Files.createDirectories(partnerImageRootPath);
+            Files.createDirectories(partnerLogoRootPath);
             Files.createDirectories(productImageRootPath);
         } catch (Exception e) {
             throw new StorageException("Could not initialize storage location", e);
@@ -68,6 +73,10 @@ public class FileSystemStorageService implements IStorageService {
                     case MAIN_IMAGE:
                         Files.copy(inputStream, this.partnerImageRootPath.resolve(filename),
                             StandardCopyOption.REPLACE_EXISTING);
+                        break;
+                    case LOGO_IMAGE:
+                        Files.copy(inputStream, this.partnerLogoRootPath.resolve(filename),
+                                StandardCopyOption.REPLACE_EXISTING);
                         break;
                     case PRODUCT_IMAGE:
                         Files.copy(inputStream, this.productImageRootPath.resolve(filename),
@@ -101,6 +110,8 @@ public class FileSystemStorageService implements IStorageService {
         switch (fileType) {
             case MAIN_IMAGE:
                 return partnerImageRootPath.resolve(filename);
+            case LOGO_IMAGE:
+                return partnerLogoRootPath.resolve(filename);
             case PRODUCT_IMAGE:
                 return productImageRootPath.resolve(filename);
         }
@@ -128,6 +139,7 @@ public class FileSystemStorageService implements IStorageService {
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(partnerImageRootPath.toFile());
+        FileSystemUtils.deleteRecursively(partnerLogoRootPath.toFile());
         FileSystemUtils.deleteRecursively(productImageRootPath.toFile());
     }
 }

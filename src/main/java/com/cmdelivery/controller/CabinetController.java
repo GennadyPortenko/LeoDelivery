@@ -43,6 +43,8 @@ public class CabinetController {
 
     @Value("${partner.image.url}")
     private String partnerImageUrl;
+    @Value("${partner.logo.url}")
+    private String partnerLogoUrl;
     @Value("${product.image.url}")
     private String productImageUrl;
 
@@ -286,6 +288,28 @@ public class CabinetController {
         partnerRepository.save(partner);
 
         return new ResponseEntity<>(new FileUploadResponse(name, uri, image.getContentType(), image.getSize()), HttpStatus.OK);
+    }
+
+    @PostMapping(value = { "/cabinet/upload_image/logo" })
+    @ResponseBody
+    public ResponseEntity<?> uploadLogoImage(@RequestParam("file") @ValidImage MultipartFile logo) {
+        String name;
+        Partner partner = partnerRepository.findByName(securityService.getCurrentUserName());
+        String filename = "" + partner.getPartnerId();
+        try {
+            name = storageService.store(logo, filename, IStorageService.FileType.LOGO_IMAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new FileUploadResponse(), HttpStatus.NO_CONTENT);
+        }
+        String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(partnerLogoUrl)
+                .path(filename)
+                .toUriString();
+        partner.setLogo(Long.toString(partner.getPartnerId()));
+        partnerRepository.save(partner);
+
+        return new ResponseEntity<>(new FileUploadResponse(name, uri, logo.getContentType(), logo.getSize()), HttpStatus.OK);
     }
 
     @PostMapping(value = { "/cabinet/upload_image/product/{productId}" })

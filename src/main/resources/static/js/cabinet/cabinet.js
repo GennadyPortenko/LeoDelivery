@@ -12,12 +12,27 @@ $(document).ready(function() {
     var formData = new FormData(document.forms.namedItem("loadPartnerImageForm"));
     sendImageUploadRequest(formData,
                            function() {
-                             console.log("success");
                              location.reload();
                            },
                            function() {},
                            hostURL,
                            "main"
+                          );
+  });
+  $("#loadPartnerLogoBtn").click(function(e) {
+    e.preventDefault();
+    if ($('#loadPartnerLogoInput').get(0).files.length === 0) {
+      return;
+    }
+    $(this).prop('disabled',true);
+    var formData = new FormData(document.forms.namedItem("loadPartnerLogoForm"));
+    sendImageUploadRequest(formData,
+                           function() {
+                             location.reload();
+                           },
+                           function() {},
+                           hostURL,
+                           "logo"
                           );
   });
 });
@@ -28,7 +43,6 @@ function removeProduct(productId) {
          var product = $('[data-product-id=' + productId +']');
          var sectionProducts = $(product).parent()
          $('[data-product-id=' + productId +']').remove();
-         console.log($(sectionProducts).find('.product'));
          if ($(sectionProducts).find('.product').length == 0) {
            $(sectionProducts).addClass('empty');
          }

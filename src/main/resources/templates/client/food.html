@@ -26,6 +26,10 @@
                 <div class="food_restaurantImage">
                     <img th:if="${restaurant.image!= null}" th:src="@{${restaurant.image}}" alt="partner photo">
                     <img th:if="${restaurant.image == null}" src="/images/partner_default.jpg" alt="partner photo">
+                    <div class="food_restaurantLogo">
+                        <img th:if="${restaurant.logo!= null}" th:src="@{${restaurant.logo}}" alt="partner logo">
+                        <img th:if="${restaurant.logo == null}" src="/images/partner_logo_default.jpg" alt="partner logo">
+                    </div>
                 </div>
                 <div class="food_restaurantInfo">
                     <div th:text="${restaurant.name}" class="food_restaurantName"></div>

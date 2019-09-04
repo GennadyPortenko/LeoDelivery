@@ -30,6 +30,7 @@ public class Partner {
     String name;
 
     String image;
+    String logo;
 
     @NonNull
     int minTime;

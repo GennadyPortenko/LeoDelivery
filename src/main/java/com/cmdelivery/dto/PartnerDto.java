@@ -17,6 +17,7 @@ public class PartnerDto {
     String name;
     String email;
     String image;
+    String logo;
     List<SectionDto> sections;
     @Min(value=0, message="The value must be positive")
     int minTime;

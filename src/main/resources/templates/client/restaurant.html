@@ -16,8 +16,14 @@
 
                 <div class="container">
                     <div class="overlay"></div>
-                    <img th:if="${restaurant.image != null}" th:src="@{${restaurant.image}}" alt="partner photo">
-                    <img th:if="${restaurant.image == null}" src="/images/partner_default.jpg" alt="partner photo">
+                    <div class="restaurant_photo">
+                        <img th:if="${restaurant.image != null}" th:src="@{${restaurant.image}}" alt="partner photo">
+                        <img th:if="${restaurant.image == null}" src="/images/partner_default.jpg" alt="partner photo">
+                    </div>
+                    <div class="restaurant_logo">
+                        <img th:if="${restaurant.logo != null}" th:src="@{${restaurant.logo}}" alt="partner logo">
+                        <img th:if="${restaurant.logo == null}" src="/images/partner_logo_default.jpg" alt="partner logo">
+                    </div>
                     <a th:href="@{/food}" th:text="#{restaurant.link.food}" class="restaurant_info_link restaurant_info_back"></a>
                     <div class="restaurant_info_name" th:text="${restaurant.name}"></div>
                 </div>

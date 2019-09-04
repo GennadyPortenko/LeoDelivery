@@ -21,6 +21,8 @@ public class DtoService {
 
     @Value("${partner.image.url}")
     private String partnerImageUrl;
+    @Value("${partner.image.url}")
+    private String partnerLogoUrl;
     @Value("${product.image.url}")
     private String productImageUrl;
 
@@ -72,6 +74,12 @@ public class DtoService {
                                     .path(partnerImageUrl)
                                     .path(partnerImage)
                                     .toUriString());
+        String partnerLogo = partner.getLogo();
+        partnerDto.setLogo(partnerLogo == null ? null :
+                ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path(partnerLogoUrl)
+                        .path(partnerLogo)
+                        .toUriString());
         return partnerDto;
     }
 

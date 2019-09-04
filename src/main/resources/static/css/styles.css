@@ -323,6 +323,10 @@ a:hover {
   width:80%;
   height:auto;
 }
+.cabinet_logo img {
+  width:250px;
+  height:auto;
+}
 
 .cabinet_confirmModal {
   text-align:center;
@@ -406,6 +410,21 @@ a:hover {
 .food_restaurantImage {
   height:160px;
   overflow:hidden;
+  position:relative;
+}
+.food_restaurantLogo {
+  width:50px;
+  height:50px;
+  padding:5px;
+  background:white;
+  border-radius:5px;
+  position:absolute;
+  left:10px;
+  bottom:10px;
+}
+.food_restaurantLogo img {
+  width:100%;
+  height:auto;
 }
 .food_restaurantImage img {
   width:100%;
@@ -458,13 +477,34 @@ a:hover {
   background:black;
   z-index:5;
 }
-.restaurant_info img {
+.restaurant_photo {
+  left:0;
+  top:0;
   position:absolute;
   width:100%;
-  height:auto;
+  height:100%;
+  z-index:1;
+}
+.restaurant_photo img {
   left:0;
   top:-30%;
-  z-index:1;
+  width:100%;
+  height:auto;
+}
+.restaurant_logo {
+  width:140px;
+  height:140px;
+  z-index:100;
+  position:absolute;
+  right:30px;
+  bottom:30px;
+  background:white;
+  border-radius:5px;
+  padding:5px;
+}
+.restaurant_logo img {
+  width:100%;
+  height:auto;
 }
 .restaurant_info_name {
   color:white;

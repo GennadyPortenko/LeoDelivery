@@ -36,9 +36,17 @@
             <img th:if="${partner.image != null}" th:src="@{${partner.image}}" alt="partner photo">
             <img th:if="${partner.image == null}" src="/images/partner_default.jpg" alt="partner photo">
         </div>
-        <form class="cabinet_imageUploadForm" method="POST" enctype="multipart/form-data" name="loadPartnerImageForm" th:action="@{/cabinet/upload_image}">
+        <form class="cabinet_imageUploadForm" method="POST" enctype="multipart/form-data" name="loadPartnerImageForm">
             <input type="file" name="file" id="loadPartnerImageInput">
             <button type="submit" class="btn" id="loadPartnerImageBtn">Upload</button>
+        </form>
+        <div class="cabinet_logo">
+            <img th:if="${partner.logo != null}" th:src="@{${partner.logo}}" alt="partner photo">
+            <img th:if="${partner.logo == null}" src="/images/partner_logo_default.jpg" alt="partner logo">
+        </div>
+        <form class="cabinet_imageUploadForm" method="POST" enctype="multipart/form-data" name="loadPartnerLogoForm">
+            <input type="file" name="file" id="loadPartnerLogoInput">
+            <button type="submit" class="btn" id="loadPartnerLogoBtn">Upload</button>
         </form>
     </section>
 
