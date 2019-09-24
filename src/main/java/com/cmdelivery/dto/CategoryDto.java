@@ -11,6 +11,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CategoryDto {
     int id;
-    String nameEn;
-    String nameFr;
+    String name;
 }

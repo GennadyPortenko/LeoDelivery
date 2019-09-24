@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+/* Needed for CSRF on '/*' URLs */
 @Configuration
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class CommonSecurityConfig extends WebSecurityConfigurerAdapter {

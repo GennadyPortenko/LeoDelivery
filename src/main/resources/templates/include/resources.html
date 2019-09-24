@@ -6,22 +6,24 @@
     <!-- default header name is X-CSRF-TOKEN -->
     <meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"/>
 
+    <!-- Styles -->
     <link rel="stylesheet" th:href="@{/vendor/bootstrap/css/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/vendor/fontawesome-free-5.9.0-web/css/all.css}">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <!-- Scripts -->
     <script th:src="@{/vendor/jquery/js/jquery.min.js}"></script>
     <script th:src="@{/vendor/bootstrap/js/bootstrap.js}"></script>
     <script th:src="@{/vendor/jquery-maskedinput/js/jquery.maskedinput.min.js}"></script>
     <script th:src="@{/vendor/jquery-countdown/js/jquery-countdown.js}"></script>
-    <script th:src="@{/js/main.js}"></script>
 
-    <script th:src="@{/js/sendOTPRequest.js}"></script>
-    <script th:src="@{/js/sendLoginRequest.js}"></script>
-    <script th:src="@{/js/enter.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
 
-    <script th:if="${option_partnerCabinet}" th:src="@{/js/cabinet/sendRemoveSectionRequest.js}"></script>
-    <script th:if="${option_partnerCabinet}" th:src="@{/js/cabinet/sendRemoveProductRequest.js}"></script>
-    <script th:if="${option_partnerCabinet}" th:src="@{/js/cabinet/sendImageUploadRequest.js}"></script>
-    <script th:if="${option_partnerCabinet}" th:src="@{/js/cabinet/sendMoveProductToSectionRequest.js}"></script>
+    <script th:if="${option_partnerCabinet == null}" th:src="@{/js/sendOTPRequest.js}"></script>
+    <script th:if="${option_partnerCabinet == null}" th:src="@{/js/sendLoginRequest.js}"></script>
+    <script th:if="${option_partnerCabinet == null}" th:src="@{/js/enter.js}"></script>
+
+    <script th:src="@{/js/ajax/sendJsonRequest.js}"></script>
+    <script th:if="${option_partnerCabinet}" th:src="@{/js/ajax/sendImageUploadRequest.js}"></script>
 
 </head>

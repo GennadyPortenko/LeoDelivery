@@ -24,6 +24,13 @@ CREATE TABLE partner (
 , min_price INTEGER NOT NULL
 );
 
+DROP TABLE IF EXISTS partner_category CASCADE;
+CREATE TABLE partner_category (
+  partner_id INTEGER REFERENCES partner(partner_id) NOT NULL
+, category_id INTEGER REFERENCES category(category_id) NOT NULL
+, CONSTRAINT partner_category_pkey PRIMARY KEY (partner_id, category_id)
+);
+
 DROP TABLE IF EXISTS role CASCADE;
 CREATE TABLE role (
   role_id SERIAL PRIMARY KEY
@@ -94,7 +101,7 @@ VALUES (1, 'ROLE_ADMIN'), (2, 'ROLE_USER'), (3, 'ROLE_PARTNER');
 
 INSERT INTO category (category_id, name_en, name_fr)
 VALUES (1, 'Pizza', 'Pizza'), (2, 'Sushi', 'Sushi'),
-       (3, 'Burgers', 'Des Bamburgers'), (4, 'Meat', 'Moi à'),
+       (3, 'Burgers', 'Des Hamburgers'), (4, 'Meat', 'Moi à'),
        (5, 'Pies', 'Tartes'), (6, 'Fast Food', 'Fast Food'),
        (7, 'Asian', 'Asiatique'), (8, 'European', 'Européenne');
 

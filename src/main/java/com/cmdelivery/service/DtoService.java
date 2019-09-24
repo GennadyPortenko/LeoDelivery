@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -67,6 +68,7 @@ public class DtoService {
         PartnerDto partnerDto = modelMapper.map(partner, PartnerDto.class);
         partnerDto.setId(partner.getPartnerId());
         partnerDto.setSections(partner.getSections().stream().map(this::convertToDto).collect(Collectors.toList()));
+        partnerDto.setCategories(partner.getCategories().stream().map(this::convertToDto).collect(Collectors.toList()));
         partnerDto.setMainCategory(convertToDto(partner.getMainCategory()));
         String partnerImage = partner.getImage();
         partnerDto.setImage(partnerImage == null ? null :
@@ -97,7 +99,14 @@ public class DtoService {
     }
 
     public CategoryDto convertToDto(Category category) {
-        return modelMapper.map(category, CategoryDto.class);
+        CategoryDto categoryDto = modelMapper.map(category, CategoryDto.class);
+        String localeString = LocaleContextHolder.getLocale().toString();
+        if (localeString.equals("fr_FR")) {
+            categoryDto.setName(category.getNameFr());
+        } else {
+            categoryDto.setName(category.getNameEn());
+        }
+        return categoryDto;
     }
 
 }

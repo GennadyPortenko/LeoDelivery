@@ -18,8 +18,8 @@
 </head>
 <body>
 <div th:replace="/include/cabinetConfirmModal :: cabinetConfirmModal"></div>
-<div th:replace="/include/cabinetMessageModal :: cabinetMessageModal"></div>
-<div th:replace="/include/menu :: menu"></div>
+<div th:replace="/include/components :: components"></div>
+
 <div class="container-fluid cabinet-container-fluid">
     <h1 class="cabinet_title">Cabinet</h1>
     <section class="cabinet_panel">
@@ -30,7 +30,7 @@
     <section class="cabinet_errorMessageBlock" th:if="${errorMessage != null}" th:text="${errorMessage}">
     </section>
 
-    <section>
+    <section class="cabinet_section">
         <div class="cabinet_blockTitle">Image & logo</div>
         <div class="cabinet_image">
             <img th:if="${partner.image != null}" th:src="@{${partner.image}}" alt="partner photo">
@@ -50,7 +50,38 @@
         </form>
     </section>
 
-    <section class="cabinet_sectionsBlock" th:classappend="${#arrays.length(partner.sections)} != 0 ? '' : 'empty'">
+    <section class="cabinet_section cabinet_categories">
+        <div class="cabinet_blockTitle">Categories</div>
+        <div class="cabinet_categoriesTitle">
+          <span>Main category • </span>
+          <span class="cabinet_mainCategoryName" th:text="${partner.mainCategory.name}"></span>
+        </div>
+        <div class="cabinet_mainCategorySelectBlock">
+            <select class="cabinet_mainCategorySelect" name="mainCategorySelect">
+                <option th:each="category : ${categories}" th:attr='data-category-id = ${category.id}' th:text="${category.name}"></option>
+            </select>
+            <button class="btn cabinet_categoriesSubmitBtn" id="cabinet_mainCategorySubmitBtn">Set as main</button>
+        </div>
+        <div class="cabinet_categoriesTitle">
+            Categories
+        </div>
+        <div class="cabinet_categoriesList">
+            <div class="cabinet_category" th:each="category : ${partner.categories}" th:attr="data-category-id = ${category.id}">
+                <div th:text="${category.name}" class="cabinet_categoryName"></div>
+                <button class="cabinet_removeBtn cabinet_categoryRemoveBtn" title="remove">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="cabinet_addCategoryBlock">
+            <select class="cabinet_mainCategorySelect" name="mainCategorySelect">
+                <option th:each="category : ${categories}" th:attr='data-category-id = ${category.id}' th:text="${category.name}"></option>
+            </select>
+            <button class="btn cabinet_categoriesSubmitBtn" id ="cabinet_addCategorySubmitBtn">Add category</button>
+        </div>
+    </section>
+
+    <section class="cabinet_section cabinet_sectionsBlock" th:classappend="${#arrays.length(partner.sections)} != 0 ? '' : 'empty'">
         <div class="cabinet_blockTitle">Sections & dishes</div>
         <div class="emptyMessage" >No sections yet</div>
         <div th:each="section : ${partner.sections}" th:attr = "data-section-id = ${section.id}"
@@ -84,10 +115,10 @@
                             <div th:text="${product.description}" class="product_description"></div>
                         </div>
                         <div class="cabinet_moveToSection">
-                            <button class="btn cabinet_moveToSectionBtn">Move to section</button>
                             <select class="cabinet_moveToSectionSelect" name="newProductsSection">
                                 <option th:each="section : ${partner.sections}" th:attr='data-section-id = ${section.id}' th:text="${section.name}"></option>
                             </select>
+                            <button class="btn cabinet_moveToSectionBtn">Move to section</button>
                         </div>
                     </div>
                 </div>
@@ -95,7 +126,7 @@
         </div>
     </section>
 
-    <section class="cabinet_sectionsBlock">
+    <section class="cabinet_section">
         <div class="cabinet_blockTitle">Settings</div>
         <form action="#" th:action="@{/cabinet/modify_partner_settings}" th:object="${partnerSettingsDto}" method="post"
           required="true" role="form" class="cabinet_form">

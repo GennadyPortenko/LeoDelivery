@@ -5,42 +5,41 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <thymeleaf th:replace="/include/resources :: resources"></thymeleaf>
 
+    <script th:src="@{/js/client/food.js}"></script>
+
     <title>Regular home page</title>
 </head>
-<body>
-<div th:replace="/include/menu :: menu"></div>
-<div class="container-fluid food_container-fluid">
 
+<body>
+<div th:replace="/include/components :: components"></div>
+<div class="container-fluid food_container-fluid">
     <h1 th:text="#{food.title}" class="food_title"></h1>
     <div class="row food_categories">
         <th:block th:each="category: ${categories}">
-            <th:block th:switch="#{locale}">
-                <div th:case="'??locale_fr_FR??'" class="btn food_category" th:text="${category.nameFr}"></div>
-                <div th:case="*" class="btn food_category" th:text="${category.nameEn}"></div>
-            </th:block>
+            <div class="btn food_category" th:text="${category.name}"></div>
         </th:block>
     </div>
-    <div class="row food_row">
-        <a th:each="restaurant : ${restaurants}" th:href="@{'/food/restaurant/' + ${restaurant.name}} " class="col-12 col-sm-6 col-lg-4 col-xl-3">
-            <div class="food_restaurant">
-                <div class="food_restaurantImage">
-                    <img th:if="${restaurant.image!= null}" th:src="@{${restaurant.image}}" alt="partner photo">
-                    <img th:if="${restaurant.image == null}" src="/images/partner_default.jpg" alt="partner photo">
-                    <div class="food_restaurantLogo">
-                        <img th:if="${restaurant.logo!= null}" th:src="@{${restaurant.logo}}" alt="partner logo">
-                        <img th:if="${restaurant.logo == null}" src="/images/partner_logo_default.jpg" alt="partner logo">
+    <button class="btn food_applyFiltersBtn">Apply filters</button>
+    <div class="food_restaurants">
+        <div class="row food_row">
+            <a th:each="restaurant : ${restaurants}" th:href="@{'/food/restaurant/' + ${restaurant.name}} " class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                <div class="food_restaurant">
+                    <div class="food_restaurantImage">
+                        <img th:if="${restaurant.image!= null}" th:src="@{${restaurant.image}}" alt="partner photo">
+                        <img th:if="${restaurant.image == null}" src="/images/partner_default.jpg" alt="partner photo">
+                        <div class="food_restaurantLogo">
+                            <img th:if="${restaurant.logo!= null}" th:src="@{${restaurant.logo}}" alt="partner logo">
+                            <img th:if="${restaurant.logo == null}" src="/images/partner_logo_default.jpg" alt="partner logo">
+                        </div>
+                    </div>
+                    <div class="food_restaurantInfo">
+                        <div th:text="${restaurant.name}" class="food_restaurantName"></div>
+                        <div th:text="${restaurant.minTime + '-' + restaurant.maxTime + ' min'}" class="food_restaurantTime"></div>
+                        <div th:text="${restaurant.mainCategory.name}" class="food_restaurantMainCategory"></div>
                     </div>
                 </div>
-                <div class="food_restaurantInfo">
-                    <div th:text="${restaurant.name}" class="food_restaurantName"></div>
-                    <div th:text="${restaurant.minTime + '-' + restaurant.maxTime + ' min'}" class="food_restaurantTime"></div>
-                    <th:block th:switch="#{locale}">
-                        <div th:case="'??locale_fr_FR??'" th:text="${restaurant.mainCategory.nameFr}" class="food_restaurantMainCategory"></div>
-                        <div th:case="*" th:text="${restaurant.mainCategory.nameEn}" class="food_restaurantMainCategory"></div>
-                    </th:block>
-                </div>
-            </div>
-        </a>
+            </a>
+        </div>
     </div>
 
 </div>

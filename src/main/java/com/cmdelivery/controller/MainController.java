@@ -1,19 +1,20 @@
 package com.cmdelivery.controller;
 
 import com.cmdelivery.exception.Error404Exception;
+import com.cmdelivery.model.Category;
 import com.cmdelivery.model.Partner;
 import com.cmdelivery.repository.CategoryRepository;
 import com.cmdelivery.repository.PartnerRepository;
+import com.cmdelivery.service.CategoryService;
 import com.cmdelivery.service.DtoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -21,14 +22,24 @@ import java.util.stream.Collectors;
 public class MainController {
     private final PartnerRepository partnerRepository;
     private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
     private final DtoService dtoService;
 
     @RequestMapping(value="/food", method={ RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView food() {
+    public ModelAndView food(@RequestParam(required=false) List<String> categories) {
         ModelAndView modelAndView = new ModelAndView("client/food");
-        modelAndView.addObject("restaurants",
-                partnerRepository.findAll().stream().map(dtoService::convertToDto).collect(Collectors.toList()));
-        modelAndView.addObject("categories", categoryRepository.findAll());
+        modelAndView.addObject("categories", categoryRepository.findAll().stream().map(dtoService::convertToDto).collect(Collectors.toList()));
+
+        if (categories != null) {
+            List<Category> selectedCategories = categoryService.findByNameIn(categories);
+            modelAndView.addObject("selectedCategories", selectedCategories.stream().map(dtoService::convertToDto).collect(Collectors.toList()));
+            modelAndView.addObject("restaurants",
+                    partnerRepository.findByMainCategoryIn(selectedCategories).stream().map(dtoService::convertToDto).collect(Collectors.toList()));
+        } else {
+            modelAndView.addObject("restaurants",
+                    partnerRepository.findAll().stream().map(dtoService::convertToDto).collect(Collectors.toList()));
+        }
+
         return modelAndView;
     }
 

@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container">
-    <div th:replace="/include/menu :: menu"></div>
+    <div th:replace="/include/topbar :: topbar"></div>
     <h1 class="cabinet_title">Section editing</h1>
     <div th:if="${param.errorMessage != null}" class="cabinet_errorBlock">
         <div th:text="${param.errorMessage}" class="cabinet_errorMsg"></div>

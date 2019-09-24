@@ -6,6 +6,7 @@ import com.cmdelivery.exception.Error404Exception;
 import com.cmdelivery.model.Partner;
 import com.cmdelivery.model.Product;
 import com.cmdelivery.model.Section;
+import com.cmdelivery.repository.CategoryRepository;
 import com.cmdelivery.repository.PartnerRepository;
 import com.cmdelivery.repository.ProductRepository;
 import com.cmdelivery.repository.SectionRepository;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
@@ -40,6 +42,7 @@ public class CabinetController {
     private final ProductService productService;
     private final ProductRepository productRepository;
     private final IStorageService storageService;
+    private final CategoryRepository categoryRepository;
 
     @Value("${partner.image.url}")
     private String partnerImageUrl;
@@ -71,6 +74,7 @@ public class CabinetController {
         modelAndView.addObject("defaultSectionName", SectionService.defaultSectionName());
         modelAndView.addObject("partnerSettingsDto", redirectPartnerSettingsDto != null ? redirectPartnerSettingsDto
                                                                                                           : dtoService.getPartnerSettings(partner));
+        modelAndView.addObject("categories", categoryRepository.findAll().stream().map(dtoService::convertToDto).collect(Collectors.toList()));
         return modelAndView;
     }
 
@@ -217,15 +221,15 @@ public class CabinetController {
         Partner sectionPartner = section.getPartner();
         Section defaultSection = partnerService.getDefaultSection(sectionPartner.getPartnerId());
         if (!(sectionPartner.getName().equals(securityService.getCurrentUserName()))) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new AjaxResponse(false, "Access denied"), HttpStatus.OK);
         }
         if (sectionService.isDefault(section)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new AjaxResponse(false, "You can't remove default section"), HttpStatus.OK);
         }
         if (!sectionService.removeSection(section, defaultSection)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new AjaxResponse(false, "Failed to remove section"), HttpStatus.OK);
         }
-        return new ResponseEntity<>(sectionId, HttpStatus.OK);
+        return new ResponseEntity<>(new AjaxResponse(true, ""), HttpStatus.OK);
     }
 
     @ResponseBody
@@ -234,10 +238,10 @@ public class CabinetController {
         Product product = productRepository.findByProductId(productId);
         Partner productPartner = product.getSection().getPartner();
         if (!(productPartner.getName().equals(securityService.getCurrentUserName()))) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new AjaxResponse(false, "Access denied"), HttpStatus.OK);
         }
         productRepository.delete(product);
-        return new ResponseEntity<>(productId, HttpStatus.OK);
+        return new ResponseEntity<>(new AjaxResponse(true, ""), HttpStatus.OK);
     }
 
     @GetMapping(value="/cabinet/new_product")
@@ -335,27 +339,72 @@ public class CabinetController {
     }
 
     @ResponseBody
-    @PostMapping(value="/cabinet/move_product_to_section/{productId}")
-    public ResponseEntity<?> moveProductToSection(@PathVariable long productId, @RequestBody MoveProductToSectionDto dto) {
-        long sectionId = dto.getSectionId();
+    @PostMapping(value="/cabinet/move_product_to_section/{productId}/{sectionId}")
+    public ResponseEntity<?> moveProductToSection(@PathVariable long productId, @PathVariable int sectionId) {
         Product product = productRepository.findByProductId(productId);
-        Partner productPartner = product.getSection().getPartner();
-
         if (product.getSection().getSectionId() == sectionId) {
-            return new ResponseEntity<>(new MoveProductToSectionDto(false, "Product '" + product.getName() + "' is already in section '" + product.getSection().getName() + "'", sectionId), HttpStatus.OK);
+            return new ResponseEntity<>(new AjaxResponse(false, "The product is already in target section"), HttpStatus.OK);
         }
 
+        Partner productPartner = product.getSection().getPartner();
         if (!(productPartner.getName().equals(securityService.getCurrentUserName()))) {
-            return new ResponseEntity<>(new MoveProductToSectionDto(false, "Access denied", sectionId), HttpStatus.OK);
+            return new ResponseEntity<>(new AjaxResponse(false, "Access denied"), HttpStatus.OK);
         }
 
         Product movedProduct = productService.moveToSection(product, sectionRepository.findBySectionId(sectionId));
         if (movedProduct == null) {
-            return new ResponseEntity<>(new MoveProductToSectionDto(false, "Failed to move product '" + product.getName() + "' to section '" + product.getSection().getName() + "'", sectionId), HttpStatus.OK);
+            return new ResponseEntity<>(new AjaxResponse(false, "Failed to move project to target section"), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(new MoveProductToSectionDto(true, "", sectionId), HttpStatus.OK);
+        return new ResponseEntity<>(new AjaxResponse(true, ""), HttpStatus.OK);
     }
 
+    @ResponseBody
+    @PostMapping(value="/cabinet/set_main_category/{categoryId}")
+    public ResponseEntity<?> setMainCategory(@PathVariable int categoryId) {
+        String errorMessage = "Failed to set main category";
+        Partner partner = partnerRepository.findByName(securityService.getCurrentUserName());
+        if (partner == null) {
+            return new ResponseEntity<>(new AjaxResponse(false, "Access denied"), HttpStatus.OK);
+        }
+        if (partner.getMainCategory().getCategoryId() == categoryId) {
+            return new ResponseEntity<>(new AjaxResponse(false, "Target category is already set as a main category"), HttpStatus.OK);
+        }
+        if (partnerService.setMainCategory(partner, categoryId) == null) {
+            return new ResponseEntity<>(new AjaxResponse(false, errorMessage), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new AjaxResponse(true, ""), HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping(value="/cabinet/add_category/{categoryId}")
+    public ResponseEntity<?> addPartnerCategory(@PathVariable int categoryId) {
+        String errorMessage = "Failed to add the category";
+        Partner partner = partnerRepository.findByName(securityService.getCurrentUserName());
+        if (partner == null) {
+            return new ResponseEntity<>(new AjaxResponse(false, "Access denied"), HttpStatus.OK);
+        }
+        if (partner.getCategories().contains(categoryRepository.findByCategoryId(categoryId))) {
+            return new ResponseEntity<>(new AjaxResponse(false, "The category has been added already"), HttpStatus.OK);
+        }
+        if (partnerService.addCategory(partner, categoryId) == null) {
+            return new ResponseEntity<>(new AjaxResponse(false, errorMessage), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new AjaxResponse(true, ""), HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping(value="/cabinet/remove_category/{categoryId}")
+    public ResponseEntity<?> removePartnerCategory(@PathVariable int categoryId) {
+        String errorMessage = "Failed to remove the category";
+        Partner partner = partnerRepository.findByName(securityService.getCurrentUserName());
+        if (partner == null) {
+            return new ResponseEntity<>(new AjaxResponse(false, "Access denied"), HttpStatus.OK);
+        }
+        if (partnerService.removeCategory(partner, categoryId) == null) {
+            return new ResponseEntity<>(new AjaxResponse(false, errorMessage), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new AjaxResponse(true, ""), HttpStatus.OK);
+    }
 
 }

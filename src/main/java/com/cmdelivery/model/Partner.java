@@ -14,7 +14,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode(exclude = {"sections"})
+@EqualsAndHashCode(exclude = {"sections", "categories"})
 public class Partner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +49,11 @@ public class Partner {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="main_category_fk")
     Category mainCategory;
+
+    @ToString.Exclude
+    @ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name = "partner_category", joinColumns = @JoinColumn(name = "partner_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    Set<Category> categories = new HashSet<>();
 
     @ToString.Exclude
     @ManyToMany(fetch=FetchType.LAZY)

@@ -1,12 +1,12 @@
-function sendRemoveProductRequest(productId, onSuccess, onError, hostURL) {
+function sendJsonRequest(url, data, onError, onSuccess) {
   $.ajax({
     headers: {
       'X-CSRF-TOKEN' : $('meta[name="_csrf"]').attr('content'),
     },
     type: "POST",
     contentType: "application/json",
-    url: hostURL + "/cabinet/remove_product/" + productId,
-    data: {},
+    url: url,
+    data: data,
     dataType: "json",
     cache: false,
     success: function(data, textStatus, response) {
@@ -14,7 +14,10 @@ function sendRemoveProductRequest(productId, onSuccess, onError, hostURL) {
     },
     error: function(response, textStatus, errorThrown) {
       console.log(response.responseText);
-      onError();
+      if (response.status == 403) {
+        location.reload();
+      }
+      onError(response);
     }
   });
 }

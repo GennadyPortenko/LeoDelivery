@@ -1,10 +1,16 @@
 package com.cmdelivery.config;
 
+import com.cmdelivery.dto.CategoryDto;
+import com.cmdelivery.dto.PartnerDto;
+import com.cmdelivery.model.Category;
+import com.cmdelivery.model.Partner;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
@@ -17,8 +23,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class AppConfig {
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        ModelMapper mm = new ModelMapper();
+
+        mm.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT);
+
+        return mm;
     }
+
+
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

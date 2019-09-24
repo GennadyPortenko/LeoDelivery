@@ -1,8 +1,7 @@
-<div th:fragment="menu" class="topbar container-fluid">
+<div th:fragment="topbar" class="topbar container-fluid">
 
     <a th:href="@{/food}" class="topbarElem">Leo Food</a>
     <a th:href="@{/cabinet}" class="topbarElem">cabinet</a>
-
 
     <div th:if="not ${option_hideLangSwitcher}" class="topbarElem topbarElemRight">
         <div class="langSwitcher">
@@ -36,7 +35,6 @@
        th:if="${session.role} != 'PARTNER' and not ${option_hideLoggingIn}" data-toggle="modal" data-target="#clientLoginModal">
         enter
     </a>
-
 
     <div th:if="not ${option_hideLoggingIn}" class="modal" id="clientLoginModal">
         <div class="modal-dialog">

@@ -1,0 +1,6 @@
+<th:block th:fragment="components">
+    <div th:replace="/include/topbar :: topbar (option_hideLoggingIn = ${option_hideLoggingIn})"></div>
+
+    <div th:replace="/component/messageModal :: messageModal"></div>
+    <script th:src="@{/js/component/messageModal.js}"></script>
+</th:block>
