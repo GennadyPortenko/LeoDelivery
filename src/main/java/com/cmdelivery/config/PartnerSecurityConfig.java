@@ -53,6 +53,7 @@ class PartnerSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .logout()
                 .logoutUrl("/cabinet/logout")
+                .logoutSuccessUrl("/cabinet/login")
                 .permitAll();
     }
 

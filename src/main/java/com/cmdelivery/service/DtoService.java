@@ -106,6 +106,7 @@ public class DtoService {
         } else {
             categoryDto.setName(category.getNameEn());
         }
+        categoryDto.setId(category.getCategoryId());
         return categoryDto;
     }
 

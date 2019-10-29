@@ -11,6 +11,29 @@
 </head>
 
 <body>
+
+
+<div class="modal" id="clientLoginModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button class="closeBtn" data-dismiss="modal"><i class="fas fa-times"></i></button>
+                <div class="clientLoginContent">
+                    <form id="loginForm" class="loginForm" th:action="@{/food/login}" method="post">
+                        <div class="loginBlock">
+                            <input class="loginInput" id="loginPhoneInput" type="text" name="phone" placeholder="Your phone"/>
+                            <input class="loginInput hidden" id="loginPasswordInput" type="text" name="password" placeholder="code"/>
+                            <span class="loginTimer" id="loginTimer"></span>
+                            <!-- <button id="loginSubmitBtn" class="loginSubmitBtn btn" value="Sign In">Send</button> -->
+                            <div class="loginWrongOtp hidden">Code is incorrect</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div th:replace="/include/components :: components"></div>
 <div class="container-fluid food_container-fluid">
     <h1 th:text="#{food.title}" class="food_title"></h1>

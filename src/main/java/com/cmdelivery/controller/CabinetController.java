@@ -74,7 +74,7 @@ public class CabinetController {
         modelAndView.addObject("defaultSectionName", SectionService.defaultSectionName());
         modelAndView.addObject("partnerSettingsDto", redirectPartnerSettingsDto != null ? redirectPartnerSettingsDto
                                                                                                           : dtoService.getPartnerSettings(partner));
-        modelAndView.addObject("categories", categoryRepository.findAll().stream().map(dtoService::convertToDto).collect(Collectors.toList()));
+        modelAndView.addObject("categories", categoryRepository.findAll().stream().map(dtoService::convertToDto).peek(c -> System.out.println(c.getId())).collect(Collectors.toList()));
         return modelAndView;
     }
 
